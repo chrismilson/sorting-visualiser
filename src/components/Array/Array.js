@@ -26,11 +26,14 @@ class Array extends React.Component {
     const ctx = this.refs.canvas.getContext('2d')
 
     if (this.width < this.height) {
-      ctx.rotate(Math.PI / 2)
+      ctx.translate(0, this.height)
+      ctx.rotate(-Math.PI / 2)
+
       var temp = this.width
       this.width = this.height
-      this.height = -temp
+      this.height = temp
     }
+
     this.barWidth = 10 * this.width / (11 * this.props.nums.length - 1)
 
     ctx.fillStyle = '#57a3cf'
