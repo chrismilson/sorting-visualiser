@@ -19,22 +19,40 @@
     top: 1rem;
     left: 1rem;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    background-color: rgba(87, 163, 207, 0.7);
+    overflow: hidden;
+    
+    background-color: rgb(87, 163, 207);
     padding: 1rem;
     border-radius: 0.5rem;
-    width: 3rem;
-    overflow: hidden;
 
-    .item {
-      &.active {
-        font-weight: bold;
+    
+    .col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: width 1s ease-in-out;
+      white-space: nowrap;
+      padding: 0 1rem;
+
+      .item {
+        padding: 0.5rem 0;
+        
+        &.active, &:hover {
+          color: white;
+        }
       }
 
-      &:not(:first-child) {
-        padding-top: 1rem;
+      &.invisible {
+        display: none;
+      }
+    }
+
+    @media only screen and (min-width: 800px) {
+      opacity: 0.2;
+      transition: opacity 0.5s ease-in-out;
+      
+      &:hover {
+        opacity: 1;
       }
     }
   }

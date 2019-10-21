@@ -3,48 +3,62 @@ import './App.scss'
 
 import Array from './components/Array'
 import Menu from './components/Menu'
-import {
-  // BubbleSort,
-  MergeSortBF
-} from './Algorithms'
+import Algorithms from './Algorithms'
 
 class App extends React.Component {
   constructor (props) {
     super(props)
 
-    var nums = []
-    for (var i = 0; i < 100; i++) {
-      nums.push(Math.random())
-    }
-
+    var n = this.newArray()
+    var sort = Algorithms.MergeSortBF
     this.state = {
-      // mergeSort: new MergeSort(nums),
-      rate: 0,
-      nums: [...nums],
-      orig: nums
+      check: -1,
+      compare: -1,
+      nums: [...n],
+      orig: n,
+      rate: 50,
+      sort: sort,
+      sortInstance: sort.algorithm([...n])
     }
-
-    // this.sort = BubbleSort([...nums])
-    this.sort = MergeSortBF([...nums])
 
     this.step = this.step.bind(this)
     this.play = this.play.bind(this)
     this.pause = this.pause.bind(this)
     this.reset = this.reset.bind(this)
+    this.setSort = this.setSort.bind(this)
+  }
+
+  newArray (size = 100) {
+    var nums = []
+    for (var i = 0; i < size; i++) {
+      nums.push(Math.random())
+    }
+
+    return nums
+  }
+
+  setSort (sort) {
+    this.setState({
+      sort: sort,
+      sortInstance: sort.algorithm([...this.state.nums])
+    })
   }
 
   reset () {
-    this.setState({ check: -1, compare: -1, nums: [...this.state.orig] })
-    // this.sort = BubbleSort([...this.state.orig])
-    this.sort = MergeSortBF([...this.state.orig])
+    this.setState({
+      check: -1,
+      compare: -1,
+      nums: [...this.state.orig],
+      sortInstance: this.state.sort.algorithm([...this.state.orig])
+    })
   }
 
   step () {
     var finished = false
     this.setState(() => {
-      var check = this.sort.next().value
-      var compare = this.sort.next().value
-      var nums = this.sort.next().value
+      var check = this.state.sortInstance.next().value
+      var compare = this.state.sortInstance.next().value
+      var nums = this.state.sortInstance.next().value
       if (!nums) finished = true
       return {
         check,
@@ -96,6 +110,9 @@ class App extends React.Component {
               action: this.reset
             }
           ]}
+
+          algorithms={Object.values(Algorithms)}
+          setSort={this.setSort}
         />
         <Array {...this.state} />
       </div>
