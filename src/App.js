@@ -3,8 +3,8 @@ import './App.scss'
 
 import Array from './components/Array'
 import {
-  // MergeSort,
-  BubbleSort
+  // BubbleSort,
+  MergeSortBF
 } from './Algorithms'
 
 class App extends React.Component {
@@ -12,18 +12,19 @@ class App extends React.Component {
     super(props)
 
     var nums = []
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < 1800; i++) {
       nums.push(Math.random())
     }
 
     this.state = {
       // mergeSort: new MergeSort(nums),
-      rate: 5,
+      rate: 0,
       nums: [...nums],
       orig: nums
     }
 
-    this.sort = BubbleSort([...nums])
+    // this.sort = BubbleSort([...nums])
+    this.sort = MergeSortBF([...nums])
 
     this.step = this.step.bind(this)
     this.play = this.play.bind(this)
@@ -33,7 +34,8 @@ class App extends React.Component {
 
   reset () {
     this.setState({ check: -1, compare: -1, nums: [...this.state.orig] })
-    this.sort = BubbleSort([...this.state.orig])
+    // this.sort = BubbleSort([...this.state.orig])
+    this.sort = MergeSortBF([...this.state.orig])
   }
 
   step () {
@@ -57,6 +59,7 @@ class App extends React.Component {
     this.player = setInterval(() => {
       if (this.step()) {
         clearInterval(this.player)
+        console.log('done')
         this.playing = false
       }
     }, this.state.rate)
