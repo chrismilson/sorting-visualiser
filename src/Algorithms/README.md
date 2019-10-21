@@ -2,9 +2,8 @@
 
 These are the different sorting algorithms implemented in JavaScript.
 
-Each algorithm keeps an internal state and acts like an iterator. Each object
-implements a next function, which returns three objects:
+Each algorithm if a Javascript generator, which will yield three times for each
+comparison. 
 
-- The current array
-- A check index
-- A compare index
+- Twice to yield each index being compared
+- Once to return the array in its current state
