@@ -13,9 +13,10 @@
     height: 100%;
   }
 
-  .button {
+  .buttons {
     position: fixed;
     top: 1rem;
     left: 1rem;
+    display: flex;
   }
 }
