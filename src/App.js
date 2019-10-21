@@ -16,7 +16,7 @@ class App extends React.Component {
       compare: -1,
       nums: [...n],
       orig: n,
-      rate: 50,
+      speed: 50,
       sort: sort,
       sortInstance: sort.algorithm([...n])
     }
@@ -77,7 +77,7 @@ class App extends React.Component {
         console.log('done')
         this.setState({ playing: false })
       }
-    }, this.state.rate)
+    }, Math.pow(101 - this.state.speed, 1.5))
     this.setState({ playing: true })
   }
 
@@ -110,9 +110,14 @@ class App extends React.Component {
               action: this.reset
             }
           ]}
-
           algorithms={Object.values(Algorithms)}
           setSort={this.setSort}
+          speed={this.state.speed}
+          setSpeed={(event, speed) => {
+            this.setState({ speed })
+            this.pause()
+            this.play()
+          }}
         />
         <Array {...this.state} />
       </div>

@@ -20,10 +20,12 @@
     left: 1rem;
     display: flex;
     overflow: hidden;
+    opacity: 0.8;
     
     background-color: rgb(87, 163, 207);
     padding: 1rem;
     border-radius: 0.5rem;
+    max-width: calc(100% - 2rem);
 
     
     .col {
@@ -31,13 +33,13 @@
       flex-direction: column;
       align-items: center;
       transition: width 1s ease-in-out;
-      white-space: nowrap;
+      text-align: center;
       padding: 0 1rem;
 
       .item {
         padding: 0.5rem 0;
         
-        &.active, &:hover {
+        &.active {
           color: white;
         }
       }
@@ -47,12 +49,20 @@
       }
     }
 
+    .slider {
+      height: 100%;
+    }
+
     @media only screen and (min-width: 800px) {
       opacity: 0.2;
       transition: opacity 0.5s ease-in-out;
       
       &:hover {
         opacity: 1;
+      }
+
+      .col .item:hover {
+        color: white;
       }
     }
   }
