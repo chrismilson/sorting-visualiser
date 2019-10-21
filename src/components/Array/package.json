@@ -1,0 +1,5 @@
+{
+  "name": "array",
+  "description": "A simple module to hold an array of integers and display them with an HTML5 canvas",
+  "main": "Array.js"
+}

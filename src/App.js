@@ -1,14 +1,30 @@
 import React from 'react'
 import './App.scss'
 
-function App () {
-  return (
-    <div className='App'>
-      <h1>Sorting Visualiser</h1>
+import Array from './components/Array'
 
-      <p>Welcome to the 'Sorting Visualiser' by Shlappas.</p>
-    </div>
-  )
+class App extends React.Component {
+  constructor (props) {
+    super(props)
+
+    var nums = []
+    for (var i = 0; i < 100; i++) {
+      nums.push(Math.random())
+    }
+
+    this.state = {
+      nums: nums
+    }
+  }
+
+  render () {
+    return (
+      <div className='App'>
+        <div className='button' onClick={this.sort}>Sort</div>
+        <Array nums={this.state.nums} />
+      </div>
+    )
+  }
 }
 
 export default App
