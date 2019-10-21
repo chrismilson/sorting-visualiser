@@ -51,6 +51,7 @@ class Array extends React.Component {
 
   componentDidUpdate () {
     const ctx = this.refs.canvas.getContext('2d')
+    this.barWidth = 10 * this.width / (11 * this.props.nums.length - 1)
 
     ctx.clearRect(0, 0, this.width, this.height)
 

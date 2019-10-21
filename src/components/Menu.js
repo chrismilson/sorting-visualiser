@@ -4,20 +4,24 @@ import Slider from '@material-ui/core/Slider'
 function Menu (props) {
   var [algs, setAlgs] = useState(false)
   var [speed, setSpeed] = useState(false)
+  var [length, setLength] = useState(false)
 
   const setOpen = (name) => {
+    setAlgs(false)
+    setSpeed(false)
+    setLength(false)
+
     switch (name.toLowerCase()) {
       case 'algs':
-        setSpeed(false)
         setAlgs(true)
         break
       case 'speed':
         setSpeed(true)
-        setAlgs(false)
+        break
+      case 'length':
+        setLength(true)
         break
       default:
-        setAlgs(false)
-        setSpeed(false)
     }
   }
 
@@ -61,6 +65,16 @@ function Menu (props) {
         >
           Speed
         </div>
+        <div
+          className={[
+            'item',
+            'speed',
+            length ? 'active' : 'inactive'
+          ].join(' ')}
+          onMouseOver={() => setOpen('length')}
+        >
+          Size
+        </div>
       </div>
       <div
         className={[
@@ -96,6 +110,19 @@ function Menu (props) {
           orientation='vertical'
           value={props.speed}
           onChange={props.setSpeed}
+        />
+      </div>
+      <div
+        className={[
+          'col',
+          'speed',
+          length ? 'visible' : 'invisible'
+        ].join(' ')}
+      >
+        <Slider
+          orientation='vertical'
+          value={props.length}
+          onChange={props.setLength}
         />
       </div>
     </div>

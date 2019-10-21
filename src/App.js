@@ -12,11 +12,12 @@ class App extends React.Component {
     var n = this.newArray()
     var sort = Algorithms.MergeSortBF
     this.state = {
+      speed: 80,
       check: -1,
       compare: -1,
       nums: [...n],
       orig: n,
-      speed: 50,
+      len: 10,
       sort: sort,
       sortInstance: sort.algorithm([...n])
     }
@@ -28,7 +29,7 @@ class App extends React.Component {
     this.setSort = this.setSort.bind(this)
   }
 
-  newArray (size = 100) {
+  newArray (size = 144) {
     var nums = []
     for (var i = 0; i < size; i++) {
       nums.push(Math.random())
@@ -113,10 +114,25 @@ class App extends React.Component {
           algorithms={Object.values(Algorithms)}
           setSort={this.setSort}
           speed={this.state.speed}
-          setSpeed={(event, speed) => {
+          setSpeed={(e, speed) => {
+            e.preventDefault()
             this.setState({ speed })
             this.pause()
             this.play()
+          }}
+          length={this.state.len}
+          setLength={(e, length) => {
+            e.preventDefault()
+            this.pause()
+            var n = this.newArray(Math.pow(length + 2, 1.5))
+            this.setState({
+              check: -1,
+              compare: -1,
+              nums: [...n],
+              orig: n,
+              len: length,
+              sortInstance: this.state.sort.algorithm([...n])
+            })
           }}
         />
         <Array {...this.state} />
