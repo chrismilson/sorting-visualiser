@@ -2,6 +2,7 @@ import React from 'react'
 import './App.scss'
 
 import Array from './components/Array'
+import Menu from './components/Menu'
 import {
   // BubbleSort,
   MergeSortBF
@@ -12,7 +13,7 @@ class App extends React.Component {
     super(props)
 
     var nums = []
-    for (var i = 0; i < 1800; i++) {
+    for (var i = 0; i < 100; i++) {
       nums.push(Math.random())
     }
 
@@ -55,31 +56,47 @@ class App extends React.Component {
   }
 
   play () {
-    if (this.playing) return
+    if (this.state.playing) return
     this.player = setInterval(() => {
       if (this.step()) {
         clearInterval(this.player)
         console.log('done')
-        this.playing = false
+        this.setState({ playing: false })
       }
     }, this.state.rate)
-    this.playing = true
+    this.setState({ playing: true })
   }
 
   pause () {
     clearInterval(this.player)
-    this.playing = false
+    this.setState({ playing: false })
   }
 
   render () {
     return (
       <div className='App'>
-        <div className='buttons'>
-          <div className='button' onClick={this.play}>Play</div>
-          <div className='button' onClick={this.pause}>Pause</div>
-          <div className='button' onClick={this.step}>Step</div>
-          <div className='button' onClick={this.reset}>Reset</div>
-        </div>
+        <Menu
+          options={[
+            {
+              title: 'Play',
+              action: this.play,
+              active: this.state.playing
+            },
+            {
+              title: 'Pause',
+              action: this.pause,
+              active: !this.state.playing
+            },
+            {
+              title: 'Step',
+              action: this.step
+            },
+            {
+              title: 'Reset',
+              action: this.reset
+            }
+          ]}
+        />
         <Array {...this.state} />
       </div>
     )

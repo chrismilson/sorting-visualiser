@@ -13,10 +13,29 @@
     height: 100%;
   }
 
-  .buttons {
+  .Menu {
+    user-select: none;
     position: fixed;
     top: 1rem;
     left: 1rem;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: rgba(87, 163, 207, 0.7);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    width: 3rem;
+    overflow: hidden;
+
+    .item {
+      &.active {
+        font-weight: bold;
+      }
+
+      &:not(:first-child) {
+        padding-top: 1rem;
+      }
+    }
   }
 }
