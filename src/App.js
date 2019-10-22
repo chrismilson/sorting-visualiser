@@ -112,6 +112,7 @@ class App extends React.Component {
             }
           ]}
           algorithms={Object.values(Algorithms)}
+          currentAlgorithm={this.state.sort.name}
           setSort={this.setSort}
           speed={this.state.speed}
           setSpeed={(e, speed) => {

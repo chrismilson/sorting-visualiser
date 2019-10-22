@@ -43,12 +43,7 @@ function SubMenu (props) {
     >
       {
         props.type === 'multi' &&
-          props.options.map((option, idx) => (
-            <Option
-              key={idx}
-              {...option}
-            />
-          ))
+        props.options
       }
       {
         props.type === 'slider' &&
@@ -69,10 +64,14 @@ function Menu (props) {
     {
       name: 'Algorithms',
       type: 'multi',
-      options: props.algorithms.map(a => ({
-        ...a,
-        action: () => props.setSort(a)
-      }))
+      options: props.algorithms.map((a, idx) => (
+        <Option
+          key={idx}
+          {...a}
+          action={() => props.setSort(a)}
+          current={props.currentAlgorithm}
+        />
+      ))
     },
     {
       name: 'Speed',
