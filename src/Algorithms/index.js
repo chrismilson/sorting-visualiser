@@ -1,7 +1,7 @@
 import BubbleSort from './BubbleSort'
-import * as MergeSort from './MergeSorts'
+import * as MergeSort from './MergeSort'
 import * as QuickSort from './QuickSort'
-import RadixSort from './RadixSort'
+import * as RadixSort from './RadixSort'
 
 export default {
   BubbleSort: {
@@ -36,8 +36,12 @@ export default {
     algorithm: QuickSort.Median,
     name: 'Quick sort - Median pivot'
   },
-  RadixSort: {
-    algorithm: RadixSort,
-    name: 'Radix sort'
+  RadixSortBF: {
+    algorithm: RadixSort.BreadthFirst,
+    name: 'Radix sort - Breadth first'
+  },
+  RadixSortDF: {
+    algorithm: RadixSort.DepthFirst,
+    name: 'Radix sort - Depth first'
   }
 }

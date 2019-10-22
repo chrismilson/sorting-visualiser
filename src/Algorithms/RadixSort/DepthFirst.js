@@ -25,14 +25,14 @@ const RadixSort = function * (values) {
       }
       yield values
     }
-    if (bin0.length > 1) {
-      left.push(l)
-      right.push(l + bin0.length)
-      depth.push(d + 1)
-    }
     if (bin1.length > 1) {
       left.push(l + bin0.length)
       right.push(r)
+      depth.push(d + 1)
+    }
+    if (bin0.length > 1) {
+      left.push(l)
+      right.push(l + bin0.length)
       depth.push(d + 1)
     }
     values.splice(l, r - l, ...bin0, ...bin1)
