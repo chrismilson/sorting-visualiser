@@ -32,6 +32,9 @@ class Array extends React.Component {
       var temp = this.width
       this.width = this.height
       this.height = temp
+    } else {
+      ctx.translate(this.width, 0)
+      this.width *= -1
     }
 
     this.barWidth = 10 * this.width / (11 * this.props.nums.length - 1)
