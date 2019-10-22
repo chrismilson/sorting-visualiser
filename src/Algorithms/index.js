@@ -2,6 +2,7 @@ import BubbleSort from './BubbleSort'
 import SelectionSort from './SelectionSort'
 import ShakerSort from './ShakerSort'
 import InsertionSort from './InsersionSort'
+import ShellSort from './ShellSort'
 import HeapSort from './HeapSort'
 import * as MergeSort from './MergeSort'
 import * as QuickSort from './QuickSort'
@@ -23,6 +24,10 @@ export default {
   ShakerSort: {
     algorithm: ShakerSort,
     name: 'Shaker sort'
+  },
+  ShellSort: {
+    algorithm: ShellSort,
+    name: 'Shell\'s sort'
   },
   HeapSort: {
     algorithm: HeapSort,
