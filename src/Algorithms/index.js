@@ -1,6 +1,8 @@
 import BubbleSort from './BubbleSort'
 import SelectionSort from './SelectionSort'
 import ShakerSort from './ShakerSort'
+import InsertionSort from './InsersionSort'
+import HeapSort from './HeapSort'
 import * as MergeSort from './MergeSort'
 import * as QuickSort from './QuickSort'
 import * as RadixSort from './RadixSort'
@@ -14,9 +16,17 @@ export default {
     algorithm: SelectionSort,
     name: 'Selection sort'
   },
+  InsertionSort: {
+    algorithm: InsertionSort,
+    name: 'Insertion sort'
+  },
   ShakerSort: {
     algorithm: ShakerSort,
     name: 'Shaker sort'
+  },
+  HeapSort: {
+    algorithm: HeapSort,
+    name: 'Heap sort'
   },
   MergeSortBF: {
     algorithm: MergeSort.BreadthFirst,
@@ -46,12 +56,16 @@ export default {
     algorithm: QuickSort.Median,
     name: 'Quick sort - Median pivot'
   },
-  RadixSortBF: {
-    algorithm: RadixSort.BreadthFirst,
-    name: 'Radix sort - Breadth first'
+  RadixSortMSDBF: {
+    algorithm: RadixSort.MSDBreadthFirst,
+    name: 'Radix sort - MSD - Breadth first'
   },
-  RadixSortDF: {
-    algorithm: RadixSort.DepthFirst,
-    name: 'Radix sort - Depth first'
+  RadixSortMSDDF: {
+    algorithm: RadixSort.MSDDepthFirst,
+    name: 'Radix sort - MSD - Depth first'
+  },
+  RadixSortLSD: {
+    algorithm: RadixSort.LSDBreadthFirst,
+    name: 'Radix sort - LSD'
   }
 }
