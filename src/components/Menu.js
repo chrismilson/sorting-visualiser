@@ -1,29 +1,90 @@
 import React, { useState } from 'react'
 import Slider from '@material-ui/core/Slider'
 
+function Option (props) {
+  return (
+    <div
+      className={[
+        'item',
+        props.active || (props.current && props.current === props.name)
+          ? 'active'
+          : 'inactive'
+      ].join(' ')}
+      onClick={props.action}
+    >
+      {props.name || props.title}
+    </div>
+  )
+}
+
+function SubTitle (props) {
+  return (
+    <div
+      className={[
+        'item',
+        props.name.toLowerCase(),
+        props.open === props.name ? 'active' : 'inactive'
+      ].join(' ')}
+      onMouseOver={() => props.setOpen(props.name)}
+    >
+      {props.name}
+    </div>
+  )
+}
+
+function SubMenu (props) {
+  return (
+    <div
+      className={[
+        'col',
+        props.name.toLowerCase(),
+        props.open === props.name ? 'visible' : 'invisible'
+      ].join(' ')}
+    >
+      {
+        props.type === 'multi' &&
+          props.options.map((option, idx) => (
+            <Option
+              key={idx}
+              {...option}
+            />
+          ))
+      }
+      {
+        props.type === 'slider' &&
+        <Slider
+          orientation='vertical'
+          value={props.value}
+          onChange={props.onChange}
+        />
+      }
+    </div>
+  )
+}
+
 function Menu (props) {
-  var [algs, setAlgs] = useState(false)
-  var [speed, setSpeed] = useState(false)
-  var [length, setLength] = useState(false)
+  var [open, setOpen] = useState('none')
 
-  const setOpen = (name) => {
-    setAlgs(false)
-    setSpeed(false)
-    setLength(false)
-
-    switch (name.toLowerCase()) {
-      case 'algs':
-        setAlgs(true)
-        break
-      case 'speed':
-        setSpeed(true)
-        break
-      case 'length':
-        setLength(true)
-        break
-      default:
+  var subMenus = [
+    {
+      name: 'Algorithms',
+      type: 'multi',
+      options: props.algorithms.map(a => ({
+        ...a,
+        action: () => props.setSort(a)
+      }))
+    },
+    {
+      name: 'Speed',
+      type: 'slider',
+      onChange: props.setSpeed
+    },
+    {
+      name: 'Size',
+      type: 'slider',
+      onChange: props.setLength
     }
-  }
+  ]
 
   return (
     <div className={'Menu'} onMouseLeave={() => setOpen('none')}>
@@ -31,74 +92,30 @@ function Menu (props) {
         {
           props.options &&
           props.options.map((option, idx) => (
-            <div
-              key={idx}
-              className={[
-                'item',
-                option.active ? 'active' : 'inactive'
-              ].join(' ')}
-              onClick={option.action}
-            >
-              {
-                option.title
-              }
-            </div>
+            <Option key={idx} {...option} />
           ))
         }
-        <div
-          className={[
-            'item',
-            'algorithms',
-            algs ? 'active' : 'inactive'
-          ].join(' ')}
-          onMouseOver={() => setOpen('algs')}
-        >
-          Algorithm
-        </div>
-        <div
-          className={[
-            'item',
-            'speed',
-            speed ? 'active' : 'inactive'
-          ].join(' ')}
-          onMouseOver={() => setOpen('speed')}
-        >
-          Speed
-        </div>
-        <div
-          className={[
-            'item',
-            'speed',
-            length ? 'active' : 'inactive'
-          ].join(' ')}
-          onMouseOver={() => setOpen('length')}
-        >
-          Size
-        </div>
-      </div>
-      <div
-        className={[
-          'col',
-          'algorithms',
-          algs ? 'visible' : 'invisible'
-        ].join(' ')}
-      >
         {
-          props.algorithms &&
-          props.algorithms.map((alg, idx) => (
-            <div
+          subMenus.map((m, idx) => (
+            <SubTitle
               key={idx}
-              className={[
-                'item',
-                props.currentAlgorithm === alg.name ? 'active' : 'inactive'
-              ].join(' ')}
-              onClick={() => props.setSort(alg)}
-            >
-              {alg.name}
-            </div>
+              {...m}
+              open={open}
+              setOpen={setOpen}
+            />
           ))
         }
       </div>
+      {
+        subMenus.map((m, idx) => (
+          <SubMenu
+            key={idx}
+            {...m}
+            open={open}
+          />
+        ))
+      }
+      {/*
       <div
         className={[
           'col',
@@ -124,7 +141,7 @@ function Menu (props) {
           value={props.length}
           onChange={props.setLength}
         />
-      </div>
+      </div> */}
     </div>
   )
 }
