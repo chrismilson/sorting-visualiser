@@ -1,8 +1,9 @@
 import BubbleSort from './BubbleSort'
+import SelectionSort from './SelectionSort'
+import ShakerSort from './ShakerSort'
 import * as MergeSort from './MergeSort'
 import * as QuickSort from './QuickSort'
 import * as RadixSort from './RadixSort'
-import SelectionSort from './SelectionSort'
 
 export default {
   BubbleSort: {
@@ -12,6 +13,10 @@ export default {
   SelectionSort: {
     algorithm: SelectionSort,
     name: 'Selection sort'
+  },
+  ShakerSort: {
+    algorithm: ShakerSort,
+    name: 'Shaker sort'
   },
   MergeSortBF: {
     algorithm: MergeSort.BreadthFirst,
