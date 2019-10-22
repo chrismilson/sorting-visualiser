@@ -1,7 +1,18 @@
 {
   "name": "Sorting Visualiser",
+  "icons": [
+		{
+			"src": "/icon/192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/icon/500.png",
+			"type": "image/png",
+			"sizes": "500x500"
+		}
+	],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#fffff0",
+  "display": "standalone"
 }
