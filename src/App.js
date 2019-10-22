@@ -9,15 +9,15 @@ class App extends React.Component {
   constructor (props) {
     super(props)
 
-    var n = this.newArray()
-    var sort = Algorithms.MergeSortBF
+    var n = this.newArray(1000)
+    var sort = Algorithms.QuickSortMedian
     this.state = {
-      speed: 80,
+      speed: 100,
       check: -1,
       compare: -1,
       nums: [...n],
       orig: n,
-      len: 10,
+      len: 100,
       sort: sort,
       sortInstance: sort.algorithm([...n])
     }
@@ -29,7 +29,7 @@ class App extends React.Component {
     this.setSort = this.setSort.bind(this)
   }
 
-  newArray (size = 144) {
+  newArray (size) {
     var nums = []
     for (var i = 0; i < size; i++) {
       nums.push(Math.random())
