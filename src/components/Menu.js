@@ -114,33 +114,6 @@ function Menu (props) {
           />
         ))
       }
-      {/*
-      <div
-        className={[
-          'col',
-          'speed',
-          speed ? 'visible' : 'invisible'
-        ].join(' ')}
-      >
-        <Slider
-          orientation='vertical'
-          value={props.speed}
-          onChange={props.setSpeed}
-        />
-      </div>
-      <div
-        className={[
-          'col',
-          'speed',
-          length ? 'visible' : 'invisible'
-        ].join(' ')}
-      >
-        <Slider
-          orientation='vertical'
-          value={props.length}
-          onChange={props.setLength}
-        />
-      </div> */}
     </div>
   )
 }
