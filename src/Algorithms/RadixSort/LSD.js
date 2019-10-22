@@ -1,7 +1,7 @@
 const RadixSort = function * (values) {
-  var depth = Math.ceil(Math.log2(values.length))
+  var depth = Math.ceil(Math.log2(values.length)) + 1
 
-  while (depth > 0) {
+  while (depth >= 0) {
     var bin0 = []
     var bin1 = []
 
