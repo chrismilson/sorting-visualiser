@@ -2,11 +2,16 @@ import BubbleSort from './BubbleSort'
 import * as MergeSort from './MergeSort'
 import * as QuickSort from './QuickSort'
 import * as RadixSort from './RadixSort'
+import SelectionSort from './SelectionSort'
 
 export default {
   BubbleSort: {
     algorithm: BubbleSort,
     name: 'Bubble sort'
+  },
+  SelectionSort: {
+    algorithm: SelectionSort,
+    name: 'Selection sort'
   },
   MergeSortBF: {
     algorithm: MergeSort.BreadthFirst,
