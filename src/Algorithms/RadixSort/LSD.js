@@ -2,25 +2,27 @@ const RadixSort = function * (values) {
   var depth = Math.ceil(Math.log2(values.length)) + 1
 
   while (depth >= 0) {
-    var bin0 = []
-    var bin1 = []
+    var bin0 = 0
 
     for (var i = 0; i < values.length; i++) {
       if (values[i].toString(2)[depth + 2] === '0') {
         yield -1
         yield i
-        bin0.push(values[i])
+        var temp = values[i]
+        for (var j = i; j > bin0; j--) {
+          values[j] = values[j - 1]
+        }
+        values[bin0] = temp
+        bin0++
       } else {
         yield i
         yield -1
-        bin1.push(values[i])
       }
       yield values
     }
 
-    yield 0
-    yield bin0.length
-    values = [...bin0, ...bin1]
+    yield -1
+    yield -1
     yield values
 
     depth -= 1
