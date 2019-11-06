@@ -27,6 +27,7 @@ class App extends React.Component {
     this.pause = this.pause.bind(this)
     this.reset = this.reset.bind(this)
     this.setSort = this.setSort.bind(this)
+    this.reverse = this.reverse.bind(this)
   }
 
   newArray (size) {
@@ -51,6 +52,17 @@ class App extends React.Component {
       compare: -1,
       nums: [...this.state.orig],
       sortInstance: this.state.sort.algorithm([...this.state.orig])
+    })
+  }
+
+  reverse () {
+    var rev = [...this.state.nums]
+    rev.reverse()
+    this.setState({
+      check: -1,
+      compare: -1,
+      nums: [...rev],
+      sortInstance: this.state.sort.algorithm([...rev])
     })
   }
 
@@ -105,6 +117,10 @@ class App extends React.Component {
             {
               title: 'Step',
               action: this.step
+            },
+            {
+              title: 'Reverse',
+              action: this.reverse
             },
             {
               title: 'Reset',
