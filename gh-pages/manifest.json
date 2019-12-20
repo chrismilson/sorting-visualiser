@@ -2,12 +2,12 @@
   "name": "Sorting Visualiser",
   "icons": [
 		{
-			"src": "/icon/192.png",
+			"src": "icon/192.png",
 			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"src": "/icon/500.png",
+			"src": "icon/500.png",
 			"type": "image/png",
 			"sizes": "500x500"
 		}
