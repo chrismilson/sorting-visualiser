@@ -2,17 +2,17 @@
   "name": "Sorting Visualiser",
   "icons": [
 		{
-			"src": "icon/192.png",
+			"src": "/sorting-visualiser/icon/192.png",
 			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"src": "icon/500.png",
+			"src": "/sorting-visualisericon/500.png",
 			"type": "image/png",
 			"sizes": "500x500"
 		}
 	],
-  "start_url": ".",
+  "start_url": "/sorting-visualiser/",
   "background_color": "#fffff0",
   "display": "standalone"
 }
