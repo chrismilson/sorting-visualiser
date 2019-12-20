@@ -131,7 +131,7 @@ body {
   height: 100vh;
 }
 
-#close {
+#close_menu {
   cursor: pointer;
   font-size: 2rem;
 }
