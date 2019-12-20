@@ -2,7 +2,32 @@
 
 A simple visualisation tool for some well known sorting algorithms.
 
-I realised something while making this. I don't have to render the array every
-time something changes. I only have to render it every 1/30th of a second or so.
+This is a rewrite of the original, which was a react app. This version has
+several differences:
 
-The icons are from Font Awesome under their [free license](https://fontawesome.com/license). 
+- The original was developed with ReactJS, and had some overhead costs
+  associated with that. This version is written with basic js so those overheads
+  are gone.
+
+- The original used window.setInterval for timing the canvas renders, this
+  version uses window.requestAnimationFrame.
+
+- The implementation of the original used generators to act as an iterator on
+  the states of the sorting. This had several setbacks:
+  
+  - The memory overhead was immense.
+  - We could only evolve in the forward direction.
+  - We could not distinguish between different types of operations in the sort
+    (comparison, swapping values, reading and setting values to and from
+    memory).
+  
+  This version instead implements the sorting algorithms with an API for these
+  operations, so each algorithm cannot directly interact with the data.
+
+  When the APIs are called, the operation is recorded and pushed to a history of
+  operations which is then navigated while rendering.
+
+  This has one setback in that the extra memory required is directly
+  proportional to the number of steps, so for inefficient algorithms on large
+  data, the memory overhead can be quite large. This memory is only read during
+  animation though so it is still much faster than the old version's generators.
