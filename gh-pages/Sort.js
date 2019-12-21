@@ -55,6 +55,7 @@ class Sort {
   }
 
   _swap (i, j) {
+    if (i === j) return
     const temp = this.values[i]
     this.values[i] = this.values[j]
     this.values[j] = temp
