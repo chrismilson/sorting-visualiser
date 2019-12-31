@@ -31,3 +31,8 @@ several differences:
   proportional to the number of steps, so for inefficient algorithms on large
   data, the memory overhead can be quite large. This memory is only read during
   animation though so it is still much faster than the old version's generators.
+
+The main reason I decided to not use react was [this
+video](https://www.youtube.com/watch?v=7Rrv9qFMWNM), on web workers and running
+off the main thread. This app runs on the main thread but I was trying to strip
+down the unneeded excess of my app.
