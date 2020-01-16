@@ -5,11 +5,14 @@
  */
 
 import React from 'react'
+import AlgorithmWorker from './algorithm-worker'
 import './style.scss'
 
 export default class Visualiser extends React.Component {
   constructor (props) {
     super(props)
+
+    this.worker = new AlgorithmWorker()
 
     this.canvas = React.createRef()
     this.resize = this.resize.bind(this)
@@ -18,11 +21,19 @@ export default class Visualiser extends React.Component {
     for (var i = 0; i < this.values.length; i++) {
       this.values[i] = Math.random()
     }
+
+    this.calculated = false
   }
 
   componentDidMount () {
     this.ctx = this.canvas.current.getContext('2d')
     this.resize()
+
+    this.worker.calculate('bubble sort', this.values)
+      .then(moves => {
+        this.calculated = true
+        this.setState({ moves })
+      })
 
     window.addEventListener('resize', this.resize)
   }
