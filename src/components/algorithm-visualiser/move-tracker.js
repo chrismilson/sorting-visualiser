@@ -15,7 +15,12 @@ export default class MoveTracker {
 
   get length () { return this._values.length }
 
-  getMoves () { return this._moves }
+  /**
+   * returns the completed moves and deletes the tracker
+   */
+  pack () {
+    return this._moves
+  }
 
   /**
    * Compares the values at indicies i and j and returns:

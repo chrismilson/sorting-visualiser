@@ -1,21 +1,22 @@
-import worker from './worker'
+import Worker from './simulator.worker'
 
 /**
- * This is a wrapper for the web worker.
+ * This is a wrapper for a web worker that will perform the calculation.
  *
  * In the main component, only some high level methods need to be called and
  * this module will communicate with the actual worker.
  *
- * The asynchronous code will be abstracted with promises.
+ * The asynchronous worker interaction will be abstracted with promises.
  */
-export default class AlgorithmWorker {
+export default class Simulator {
   constructor () {
-    const blob = new window.Blob([`(${worker.toString()})()`])
-    this.worker = new window.Worker(URL.createObjectURL(blob))
-    this.worker.onmessage = this.handleMessage
+    this.worker = new Worker()
+    this.worker.onmessage = this.handleMessage.bind(this)
     this.resolve = {}
     this.reject = {}
     this.id = 0
+
+    this.calculate = this.calculate.bind(this)
   }
 
   calculate (algorithm, values) {
@@ -36,10 +37,7 @@ export default class AlgorithmWorker {
    */
   handleMessage (message) {
     const { id, moves } = message.data
-    this.resolve[id](moves)
 
-    // clean up
-    delete this.resolve[id]
-    delete this.reject[id]
+    this.resolve[id](moves)
   }
 }
