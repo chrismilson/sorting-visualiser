@@ -113,7 +113,7 @@ export default class Untracker {
 
     switch (move.type) {
       case 'swap':
-        ctx.fillStyle('cyan')
+        ctx.fillStyle = 'cyan'
         ctx.fillRect(move.i, 0, 1, this._values[move.i])
         ctx.fillRect(move.j, 0, 1, this._values[move.j])
         break
