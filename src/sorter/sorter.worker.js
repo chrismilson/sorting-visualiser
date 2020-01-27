@@ -13,8 +13,9 @@ self.onmessage = message => {
 
       self.postMessage({
         id,
-        status: 200,
-        moves: tracker.getMoves()
+        values,
+        moves: tracker.getMoves(),
+        status: 200
       })
     } catch (e) {
       self.postMessage({

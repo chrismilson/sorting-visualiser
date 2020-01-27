@@ -1,4 +1,5 @@
 import Worker from './sorter.worker'
+import Untracker from './untracker'
 import algorithms from './sorts'
 
 /**
@@ -40,11 +41,11 @@ function Sorter () {
 
   this.worker = new Worker()
   this.worker.onmessage = message => {
-    const { id, status, moves, error } = message.data
+    const { id, status, values, moves, error } = message.data
 
     switch (status) {
       case 200:
-        this.resolve[id](moves)
+        this.resolve[id](new Untracker(values, moves))
         break
       default:
         this.reject[id](error || new Error(`Unspecified Error`))
