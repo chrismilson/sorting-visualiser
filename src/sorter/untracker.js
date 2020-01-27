@@ -27,6 +27,11 @@ export default class Untracker {
      * sorting.
      */
     this._moveIdx = -1
+
+    // bind the exposed methods correctly
+    this.next = this.next.bind(this)
+    this.prev = this.prev.bind(this)
+    this.draw = this.draw.bind(this)
   }
 
   /**
