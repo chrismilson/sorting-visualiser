@@ -40,7 +40,7 @@ export default class Tracker {
   getMoves () { return this._moves }
 
   _checkLength () {
-    if (this._moves.length > 100000) throw new Error(`Too many moves`)
+    if (this._moves.length > 1000000) throw new Error(`Too many moves`)
   }
 
   /**
