@@ -119,6 +119,7 @@ export default class Untracker {
         ctx.fillStyle = style[1 + move.result]
         ctx.fillRect(move.j, 0, 1, this._values[move.j])
         break
+      default: // draw nothing
     }
   }
 
