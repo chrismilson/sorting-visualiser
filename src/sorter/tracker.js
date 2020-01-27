@@ -148,9 +148,8 @@ export default class Tracker {
 
     for (var k = 0; k < size; k++) {
       J[j + k] = I[i + k]
+      this._moves.push({ type: 'memCopy', i, j, iBufferId, jBufferId })
+      this._checkLength()
     }
-
-    this._moves.push({ type: 'memCopy', i, j, iBufferId, jBufferId, size })
-    this._checkLength()
   }
 }
