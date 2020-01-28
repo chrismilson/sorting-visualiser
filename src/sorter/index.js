@@ -37,15 +37,16 @@ function Sorter () {
   this.algorithms = Object.keys(algorithms)
   this.resolve = {}
   this.reject = {}
+  this.values = {}
   this.ids = new IdPool()
 
   this.worker = new Worker()
   this.worker.onmessage = message => {
-    const { id, status, values, moves, error } = message.data
+    const { id, status, moves, error } = message.data
 
     switch (status) {
       case 200:
-        this.resolve[id](new Untracker(values, moves))
+        this.resolve[id](new Untracker(this.values[id], moves))
         break
       default:
         this.reject[id](error || new Error(`Unspecified Error`))
@@ -53,6 +54,8 @@ function Sorter () {
 
     delete this.resolve[id]
     delete this.reject[id]
+    delete this.values[id]
+
     this.ids.free(id)
   }
 }
@@ -67,6 +70,7 @@ Sorter.prototype.calculate = function (algorithm, values) {
     const id = this.ids.next()
     this.resolve[id] = resolve
     this.reject[id] = reject
+    this.values[id] = values
 
     this.worker.postMessage({ id, algorithm, values })
   })
