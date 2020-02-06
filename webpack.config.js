@@ -13,9 +13,7 @@ module.exports = {
         // babel-loader.
         test: /\.(mjs|js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
+        use: 'babel-loader'
       },
       {
         test: /\.s[ac]ss$/,
