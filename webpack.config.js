@@ -1,5 +1,6 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   output: {
@@ -35,6 +36,8 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './public/index.html' })
+    new HtmlPlugin({ template: './public/index.html' }),
+    // copy the static assets to the build folder.
+    new CopyPlugin(['public'])
   ]
 }
