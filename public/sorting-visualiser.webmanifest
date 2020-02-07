@@ -1,0 +1,8 @@
+{
+  "name": "Sorting Visualiser",
+  "short_name": "Sorter",
+  "start_url": "/sorting-visualiser",
+  "theme_color": "#57A3CF",
+  "background_color": "#FFFFCC",
+  "display": "standalone"
+}
