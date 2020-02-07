@@ -14,7 +14,12 @@ module.exports = {
         // babel-loader.
         test: /\.(mjs|js|jsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
+        }
       },
       {
         test: /\.s[ac]ss$/,
