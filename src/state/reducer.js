@@ -15,6 +15,10 @@ const initialState = {
  *
  * It is called when an action to update the state is run, and takes the current
  * state and the action to be run as inputs.
+ *
+ * It does not modify the state object, but returns what would be the next state
+ * after the action is performed.
+ *
  * @param {Object} state
  * @param {Object} action
  */
@@ -22,30 +26,27 @@ function todoApp (state = initialState, action) {
   const { type, payload } = action
   switch (type) {
     case ADD_TODO:
-      return Object.assign({}, state, {
-        todos: [
-          ...state.todos,
-          {
-            text: payload.text,
-            completed: false
-          }
-        ]
-      })
-    case TOGGLE_TODO:
-      return Object.assign({}, state, {
-        todos: state.todos.map((todo, idx) => {
-          if (idx === payload.id) {
-            return Object.assign({}, todo, {
-              completed: !todo.completed
-            })
-          }
-          return todo
+      return {
+        ...state,
+        todos: state.todos.concat({
+          text: payload.text,
+          completed: false
         })
-      })
+      }
+    case TOGGLE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map((todo, idx) => {
+          return idx === payload.id
+            ? { ...todo, completed: !todo.completed }
+            : todo
+        })
+      }
     case SET_VISIBILITY_FILTER:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         visibilityFilter: payload.filter
-      })
+      }
     default:
       return state
   }
