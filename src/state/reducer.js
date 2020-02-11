@@ -11,6 +11,34 @@ const initialState = {
 }
 
 /**
+ * A helper reducer for the todos array.
+ *
+ * @param {*[]} state The current todos array
+ * @param {Object} action The action being performed
+ */
+function todos (state = [], action) {
+  const { type, payload } = action
+  switch (type) {
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: payload.text,
+          completed: false
+        }
+      ]
+    case TOGGLE_TODO:
+      return state.map((todo, idx) => {
+        return idx === payload.id
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      })
+    default:
+      return state
+  }
+}
+
+/**
  * This is the main reducer for our app's state.
  *
  * It is called when an action to update the state is run, and takes the current
@@ -28,19 +56,12 @@ function todoApp (state = initialState, action) {
     case ADD_TODO:
       return {
         ...state,
-        todos: state.todos.concat({
-          text: payload.text,
-          completed: false
-        })
+        todos: todos(state.todos, action)
       }
     case TOGGLE_TODO:
       return {
         ...state,
-        todos: state.todos.map((todo, idx) => {
-          return idx === payload.id
-            ? { ...todo, completed: !todo.completed }
-            : todo
-        })
+        todos: todos(state.todos, action)
       }
     case SET_VISIBILITY_FILTER:
       return {
