@@ -1,11 +1,12 @@
 const path = require('path')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'main.js'
+    filename: 'main.[hash].js'
   },
   module: {
     rules: [
@@ -47,6 +48,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlPlugin({ template: './public/index.html' }),
     // copy the static assets to the build folder.
     new CopyPlugin(['public'])
