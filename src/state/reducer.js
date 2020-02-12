@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux'
 import {
   ADD_TODO,
   TOGGLE_TODO,
@@ -63,12 +64,15 @@ function visibilityFilter (state = VisibilityFilters.SHOW_ALL, action) {
  * It does not modify the state object, but returns what would be the next state
  * after the action is performed.
  *
+ * It takes advantage of redux's combineReducers to combine the individual todos
+ * and visibility filter reducers into a single main reducer.
+ *
  * @param {Object} state
  * @param {Object} action
  */
-function todoApp (state = initialState, action) {
-  return {
-    todos: todos(state.todos, action),
-    visibilityFilter: visibilityFilter(state.visibilityFilter, action)
-  }
-}
+const todoApp = combineReducers({
+  todos,
+  visibilityFilter
+})
+
+export default todoApp
