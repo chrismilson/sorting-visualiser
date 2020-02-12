@@ -28,7 +28,8 @@
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.3",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "worker-plugin": "^3.2.0"
   },
   "dependencies": {
     "comlink": "^4.2.0",
@@ -36,7 +37,6 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
-    "redux": "^4.0.5",
-    "redux-comlink": "^0.2.2"
+    "redux": "^4.0.5"
   }
 }
