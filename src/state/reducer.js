@@ -39,6 +39,22 @@ function todos (state = [], action) {
 }
 
 /**
+ * A helper reducer for the visibility filter.
+ *
+ * @param {string} state
+ * @param {Object} action
+ */
+function visibilityFilter (state = VisibilityFilters.SHOW_ALL, action) {
+  const { type, payload } = action
+  switch (type) {
+    case SET_VISIBILITY_FILTER:
+      return payload.filter
+    default:
+      return state
+  }
+}
+
+/**
  * This is the main reducer for our app's state.
  *
  * It is called when an action to update the state is run, and takes the current
@@ -51,20 +67,8 @@ function todos (state = [], action) {
  * @param {Object} action
  */
 function todoApp (state = initialState, action) {
-  const { type, payload } = action
-  switch (type) {
-    case ADD_TODO:
-    case TOGGLE_TODO:
-      return {
-        ...state,
-        todos: todos(state.todos, action)
-      }
-    case SET_VISIBILITY_FILTER:
-      return {
-        ...state,
-        visibilityFilter: payload.filter
-      }
-    default:
-      return state
+  return {
+    todos: todos(state.todos, action),
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action)
   }
 }
