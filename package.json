@@ -35,6 +35,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-comlink": "^0.2.2"
   }
 }
