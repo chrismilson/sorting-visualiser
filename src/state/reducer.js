@@ -54,10 +54,6 @@ function todoApp (state = initialState, action) {
   const { type, payload } = action
   switch (type) {
     case ADD_TODO:
-      return {
-        ...state,
-        todos: todos(state.todos, action)
-      }
     case TOGGLE_TODO:
       return {
         ...state,
