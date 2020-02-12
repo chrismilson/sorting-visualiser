@@ -6,11 +6,6 @@ import {
   VisibilityFilters
 } from './actions'
 
-const initialState = {
-  visibilityFilter: VisibilityFilters.SHOW_ALL,
-  todos: []
-}
-
 /**
  * A helper reducer for the todos array.
  *
