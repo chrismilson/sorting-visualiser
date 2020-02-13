@@ -24,7 +24,6 @@ export function invalidateSubreddit (subreddit) {
 }
 
 /* And these two actions will be dispatched by the network */
-
 export function requestPosts (subreddit) {
   return {
     type: REQUEST_POSTS,
