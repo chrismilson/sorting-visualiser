@@ -3,7 +3,7 @@ import ReactDom from 'react-dom'
 import { Provider } from 'react-redux'
 import App from './App'
 import { createStore } from 'redux'
-import todoApp from './reducers'
+import todoApp from './state/reducers'
 
 const store = createStore(todoApp)
 
