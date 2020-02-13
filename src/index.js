@@ -1,20 +1,15 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 import { Provider } from 'react-redux'
-import { wrap } from 'redux-omt'
 import App from './App'
+import { createStore } from 'redux'
+import todoApp from './reducers'
 
-const runAsync = async () => {
-  const store = await wrap(new Worker(
-    './state/store.worker.js',
-    { type: 'module' }
-  ))
+const store = createStore(todoApp)
 
-  ReactDom.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-  )
-}
-runAsync()
+ReactDom.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
