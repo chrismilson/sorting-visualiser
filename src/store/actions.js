@@ -41,3 +41,13 @@ export function receivePosts (subreddit, json) {
     }
   }
 }
+
+// this is a thunk action creator; it returns a function, not an action object!
+export function fetchPosts (subreddit) {
+  return dispatch => {
+    dispatch(requestPosts(subreddit))
+    return fetch('https://www.reddit.com/r/${subreddit}.json')
+      .then(response => response.json())
+      .then(json => dispatch(receivePosts(subreddit, json)))
+  }
+}
