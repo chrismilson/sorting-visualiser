@@ -1,5 +1,4 @@
 import {
-  DO_NEXT_MOVE,
   MoveTypes,
   SET_ALGORITHM
 } from './actions'
@@ -35,7 +34,7 @@ function algorithm (state = '', action) {
   }
 }
 
-function currentMove (state = 0, action) {
+function currentMove (state = -1, action) {
   const { type } = action
 
   switch (type) {

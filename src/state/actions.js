@@ -1,5 +1,4 @@
 /* Here we define the action types */
-export const DO_NEXT_MOVE = 'DO_NEXT_MOVE'
 export const SET_ALGORITHM = 'SET_ALGORITHM'
 export const RESET_TO_BEGINNING = 'RESET_TO_BEGINNING'
 
@@ -17,7 +16,11 @@ export const MoveTypes = {
 
 /* Action creators */
 export function doNextMove () {
-  return { type: DO_NEXT_MOVE }
+  return (dispatch, getState) => {
+    const { moves, currentMove } = getState()
+
+    dispatch(moves[currentMove])
+  }
 }
 
 export function setAlgorithm (algorithm) {
