@@ -5,8 +5,8 @@ export const RESET_TO_BEGINNING = 'RESET_TO_BEGINNING'
 
 /* Other constants */
 export const AlgorithmTypes = {
-  BUBBLE_SORT: 'Bubble Sort',
-  QUICK_SORT: 'Quick Sort'
+  BUBBLE_SORT: 'BUBBLE_SORT',
+  QUICK_SORT: 'QUICK_SORT'
 }
 
 /* Action creators */
