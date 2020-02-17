@@ -9,6 +9,12 @@ export const AlgorithmTypes = {
   QUICK_SORT: 'QUICK_SORT'
 }
 
+export const MoveTypes = {
+  START: 'MOVE_START',
+  SWAP: 'MOVE_SWAP',
+  COMPARE: 'MOVE_COMPARE'
+}
+
 /* Action creators */
 export function doNextMove () {
   return { type: DO_NEXT_MOVE }
