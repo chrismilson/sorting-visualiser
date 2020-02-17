@@ -1,6 +1,6 @@
 import Picker from '../components/Picker'
 import {
-  selectSubreddit
+  selectSubreddit, fetchPostsIfNeeded
 } from '../store/actions'
 import { connect } from 'react-redux'
 
@@ -12,6 +12,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onChange: subreddit => {
       dispatch(selectSubreddit(subreddit))
+      dispatch(fetchPostsIfNeeded(subreddit))
     }
   }
 }
