@@ -2,6 +2,7 @@ import React from 'react'
 
 export default function List (props) {
   const { isFetching, items = [] } = props
+  console.log(items)
 
   if (items.length === 0) {
     if (isFetching) return <h2>Loading...</h2>
@@ -10,7 +11,7 @@ export default function List (props) {
   return (
     <ul>
       {
-        this.items.map(item => <li key={item}>{item}</li>)
+        items.map(item => <li key={item}>{item}</li>)
       }
     </ul>
   )
