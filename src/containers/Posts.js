@@ -5,7 +5,7 @@ const mapStateToProps = state => {
   const posts = state.postsBySubreddit[state.selectedSubreddit]
   return {
     isFetching: posts.isFetching,
-    items: posts.items
+    items: posts.items.map(item => item.title)
   }
 }
 
