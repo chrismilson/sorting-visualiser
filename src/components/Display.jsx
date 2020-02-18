@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
+import { MoveTypes } from '../state/actions'
 import './Display.scss'
 
 /**
@@ -100,6 +101,25 @@ function drawValues (ctx, values) {
   ctx.fill()
 }
 
+function drawMove (ctx, move, values) {
+  const { type, payload } = move
+
+  if (type === MoveTypes.SWAP) {
+    ctx.fillStyle = 'cyan'
+    ctx.fillRect(payload.i, 0, 1, values[payload.i])
+    ctx.fillRect(payload.j, 0, 1, values[payload.j])
+  } else if (type === MoveTypes.COMPARE) {
+    // The smaller will be coloured green and the larger red.
+    // If they are equal then they will be orange.
+    const colors = ['green', 'orange', 'red']
+
+    ctx.fillStyle = colors[1 - payload.result]
+    ctx.fillRect(payload.i, 0, 1, values[payload.i])
+    ctx.fillStyle = colors[1 + payload.result]
+    ctx.fillRect(payload.j, 0, 1, values[payload.j])
+  }
+}
+
 /**
  * When supplied with a values array, it will display the current values in the
  * array at all times; each frame, the current state of the array will be
@@ -112,7 +132,7 @@ function drawValues (ctx, values) {
  * @param {number[]} props.values
  */
 export default function Display (props) {
-  const { values } = props
+  const { values, move } = props
   const canvasRef = useRef()
   const ctx = useDrawingContext(canvasRef, values.length)
 
@@ -124,8 +144,7 @@ export default function Display (props) {
       ctx.clearRect(0, 0, values.length, 1)
 
       drawValues(ctx, values)
-
-      // drawMove(ctx, move)
+      drawMove(ctx, move, values)
 
       window.requestAnimationFrame(draw)
     }
