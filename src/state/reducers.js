@@ -59,6 +59,8 @@ function moves (state = [], action) {
   const { type, payload } = action
 
   switch (type) {
+    case RECEIVE_MOVES:
+      return payload.moves
     default:
       return state
   }
