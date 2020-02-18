@@ -42,7 +42,7 @@ function algorithm (state = '', action) {
   }
 }
 
-function currentMove (state = -1, action) {
+function currentMove (state = 0, action) {
   const { type } = action
 
   switch (type) {
