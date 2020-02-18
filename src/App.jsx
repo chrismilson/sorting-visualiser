@@ -1,11 +1,11 @@
 import React from 'react'
+import Values from './containers/Values'
 import './App.scss'
 
 export default function App () {
   return (
     <div className='App'>
-      <h1>This is a React App.</h1>
-      <p>It is written in javascript and is built with webpack and babel.</p>
+      <Values />
     </div>
   )
 }
