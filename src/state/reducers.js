@@ -37,8 +37,6 @@ function algorithm (state = '', action) {
   const { type, payload } = action
 
   switch (type) {
-    case SET_ALGORITHM:
-      return payload.algorithm
     default:
       return state
   }
