@@ -1,14 +1,24 @@
 import {
   MoveTypes,
-  SET_ALGORITHM
+  RECEIVE_MOVES,
+  SET_ORIGINAL_VALUES
 } from './actions'
 import { combineReducers } from 'redux'
 
-function values (state = [], action) {
+function originalValues (state = [], action) {
+  const { type, payload } = action
+
+  switch (type) {
+    case SET_ORIGINAL_VALUES:
+      return payload.values
+    default:
+      return state
+  }
+}
+
+function currentValues (state = [], action) {
   const { type, payload } = action
   switch (type) {
-    case SET_ALGORITHM:
-      return []
     case MoveTypes.START:
       return payload.values
     case MoveTypes.SWAP:
@@ -57,7 +67,8 @@ function moves (state = [], action) {
 }
 
 const reducers = combineReducers({
-  values,
+  originalValues,
+  currentValues,
   algorithm,
   currentMove,
   moves
