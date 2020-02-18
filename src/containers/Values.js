@@ -3,7 +3,8 @@ import Display from '../components/Display'
 
 const mapStateToProps = state => {
   return {
-    values: state.values
+    values: state.currentValues,
+    move: state.moves[state.currentMove]
   }
 }
 
