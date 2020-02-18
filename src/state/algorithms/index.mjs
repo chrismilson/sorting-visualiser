@@ -2,12 +2,12 @@ import { MoveTypes } from '../actions'
 const { SWAP, COMPARE, START } = MoveTypes
 
 /**
- * This method calculates a sequence of actions to sort the given data.
- *
- * @param sort The sorting algorithm
- * @param origValues The original values array
+ * @param {Function} algorithm The sorting algorithm
+ * @param {number[]} origValues The original values array
+ * @returns {{ type: string, payload: * }[]} A sequence of actions to sort the
+ * given values following the given sorting algorithm.
  */
-export function calculate (sort, origValues) {
+export function calculate (algorithm, origValues) {
   const moves = [{
     type: START,
     payload: { values: origValues }
@@ -57,7 +57,7 @@ export function calculate (sort, origValues) {
   const greaterThanEq = (...args) => compare(...args) >= 0
 
   // pass the different apis to the sort
-  sort({
+  algorithm({
     swap,
     compare,
     lessThan,
