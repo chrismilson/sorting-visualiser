@@ -4,13 +4,13 @@ import '@testing-library/jest-dom/extend-expect'
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toBeSorted: () => R
+      toBeSorted(): R
     }
   }
 }
 
 expect.extend({
-  toBeSorted: (received: number[]) => {
+  toBeSorted(received: number[]) {
     let pass = true
     for (let i = 1; i < received.length; i++) {
       if (received[i - 1] > received[i]) {
