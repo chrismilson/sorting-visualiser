@@ -1,4 +1,4 @@
-import { Algorithm } from './Algorithm'
+import { Algorithm } from '.'
 
 const quickSort: Algorithm = ({ swap, compare, size }) => {
   const rec = (lo: number, hi: number) => {
