@@ -18,6 +18,10 @@ export class Tracker {
     this.compare = this.compare.bind(this)
   }
 
+  getMoves() {
+    return this.moves
+  }
+
   /**
    * Swaps the values at indicies i and j.
    */
