@@ -38,7 +38,10 @@ export default class UnTracker {
 
     switch (move.type) {
       case MoveType.SWAP:
-        console.warn('doing swap is not implemented')
+        const { i, j } = move
+        const temp = this.values[i]
+        this.values[i] = this.values[j]
+        this.values[j] = temp
         return true
       case MoveType.COMPARE:
         return true
@@ -52,7 +55,10 @@ export default class UnTracker {
 
     switch (move.type) {
       case MoveType.SWAP:
-        console.warn('undoing swap is not implemented')
+        const { i, j } = move
+        const temp = this.values[i]
+        this.values[i] = this.values[j]
+        this.values[j] = temp
         return true
       case MoveType.COMPARE:
         return true
