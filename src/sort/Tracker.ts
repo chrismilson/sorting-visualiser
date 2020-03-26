@@ -5,9 +5,13 @@ import { Move, MoveType } from './Move'
  * monitored and recorded.
  */
 export default class Tracker {
+  /** A copy of the original values that the Tracker was instantiated with. */
   private original: number[]
+  /** The current values whose modification is being tracked. */
   private values: number[]
+  /** The moves that have been done to the values. */
   private moves: Move[]
+  /** The length of the values array. */
   readonly size: number
 
   constructor(values: number[]) {
