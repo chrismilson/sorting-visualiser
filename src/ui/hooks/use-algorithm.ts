@@ -19,7 +19,7 @@ const useAlgorithm = (
     if (resetAfter) untracker.reset()
 
     return untracker
-  }, [algorithm, values])
+  }, [algorithm, values, resetAfter])
 }
 
 export default useAlgorithm
