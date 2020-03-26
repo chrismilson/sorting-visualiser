@@ -5,11 +5,13 @@ import { Move, MoveType } from './Move'
  * monitored and recorded.
  */
 export default class Tracker {
+  private original: number[]
   private values: number[]
   private moves: Move[]
   readonly size: number
 
   constructor(values: number[]) {
+    this.original = [...values]
     this.values = values
     this.size = values.length
     this.moves = []
