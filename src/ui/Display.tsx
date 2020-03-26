@@ -34,7 +34,6 @@ const Display: React.FC<{
       drawFrame()
 
       return () => {
-        console.log('cleaned up')
         cancelAnimationFrame(frame)
       }
     },
