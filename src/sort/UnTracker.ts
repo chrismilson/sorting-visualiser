@@ -64,4 +64,12 @@ export default class UnTracker {
         return true
     }
   }
+
+  /** Returns the values array to its original state. */
+  reset() {
+    for (let i = 0; i < this.values.length; i++) {
+      this.values[i] = this.original[i]
+    }
+    this.currentMove = 0
+  }
 }
