@@ -1,5 +1,4 @@
 import Tracker from './Tracker'
-import { SwapMove, MoveType, CompareMove } from './Move'
 
 describe('move tracker', () => {
   describe('swap', () => {
@@ -10,20 +9,6 @@ describe('move tracker', () => {
       tracker.swap(0, 1)
 
       expect(values).toStrictEqual([1, 0])
-    })
-
-    it('should log a valid move', () => {
-      const tracker = new Tracker([0, 1])
-
-      tracker.swap(0, 1)
-      const moves = tracker.getMoves()
-
-      expect(moves.length).toBe(1)
-      expect(moves[0]).toMatchObject<SwapMove>({
-        type: MoveType.SWAP,
-        i: 0,
-        j: 1
-      })
     })
   })
 
@@ -37,21 +22,6 @@ describe('move tracker', () => {
       const tracker = new Tracker(values)
 
       expect(tracker.compare(0, 1)).toBe(result)
-    })
-
-    it('should log a valid move', () => {
-      const tracker = new Tracker([0, 1])
-
-      const result = tracker.compare(0, 1)
-      const moves = tracker.getMoves()
-
-      expect(moves.length).toBe(1)
-      expect(moves[0]).toMatchObject<CompareMove>({
-        type: MoveType.COMPARE,
-        i: 0,
-        j: 1,
-        result
-      })
     })
   })
 })
