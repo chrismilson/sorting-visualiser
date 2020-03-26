@@ -10,7 +10,7 @@ const useAlgorithm = (algorithm: Algorithm, values: number[]) => {
   return useMemo(() => {
     const tracker = new Tracker(values)
     algorithm(tracker)
-    return tracker
+    return tracker.untrack()
   }, [algorithm, values])
 }
 
