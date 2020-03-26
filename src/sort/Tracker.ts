@@ -4,7 +4,7 @@ import { Move, MoveType } from './Move'
  * Abstracts the values array to the sorting algorithm so that the moves can be
  * monitored and recorded.
  */
-export class Tracker {
+export default class Tracker {
   private values: number[]
   private moves: Move[]
   readonly size: number
@@ -48,5 +48,3 @@ export class Tracker {
     return result
   }
 }
-
-export default Tracker
