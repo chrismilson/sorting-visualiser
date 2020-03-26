@@ -8,17 +8,19 @@ const Display: React.FC<{
   const { values } = props
 
   const draw = useCallback<DrawingMethod>(
-    (ctx, width, height) => {
-      let frame: number
-      ctx.setTransform(width / values.length, 0, 0, -height, 0, height)
+    ctx => {
+      // resize the pixels, not just a maths transform
+      ctx.canvas.width = ctx.canvas.height = values.length
+      ctx.setTransform(1, 0, 0, -values.length, 0, values.length)
 
       ctx.lineWidth = 1
 
       ctx.strokeStyle = 'rgb(87,163,207)'
       // ctx.strokeStyle = '#57A3CF'
 
+      let frame: number
       const drawFrame = () => {
-        ctx.clearRect(0, 0, width, height)
+        ctx.clearRect(0, 0, values.length, 1)
 
         ctx.beginPath()
         values.forEach((value, index) => {
