@@ -11,7 +11,7 @@ const Display: React.FC<{
     ctx => {
       // resize the pixels, not just a maths transform
       ctx.canvas.width = ctx.canvas.height = values.length
-      ctx.setTransform(1, 0, 0, -values.length, 0, values.length)
+      ctx.setTransform(1, 0, 0, -values.length, 0.5, values.length)
 
       ctx.lineWidth = 1
 
@@ -24,8 +24,8 @@ const Display: React.FC<{
 
         ctx.beginPath()
         values.forEach((value, index) => {
-          ctx.moveTo(index + 0.5, 0)
-          ctx.lineTo(index + 0.5, value)
+          ctx.moveTo(index, 0)
+          ctx.lineTo(index, value)
         })
         ctx.closePath()
         ctx.stroke()
