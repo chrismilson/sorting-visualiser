@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import useCanvas, { DrawingMethod } from 'react-hooks-use-drawing-canvas'
+import './Display.css'
 
 /** continuously displays values on the screen */
 const Display: React.FC<{
