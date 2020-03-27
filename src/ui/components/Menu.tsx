@@ -13,14 +13,19 @@ import {
 import Button from './Button'
 import './Menu.scss'
 
+interface ButtonProps {
+  handler: () => void
+  disabled?: boolean
+}
+
 const Menu: React.FC<{
-  reverse: { handler: () => void; disabled?: boolean }
-  restart: { handler: () => void; disabled?: boolean }
-  speedDown: { handler: () => void; disabled?: boolean }
-  playPause: { handler: () => void; disabled?: boolean }
-  speedUp: { handler: () => void; disabled?: boolean }
-  sizeUp: { handler: () => void; disabled?: boolean }
-  sizeDown: { handler: () => void; disabled?: boolean }
+  reverse: ButtonProps
+  restart: ButtonProps
+  speedDown: ButtonProps
+  playPause: ButtonProps
+  speedUp: ButtonProps
+  sizeUp: ButtonProps
+  sizeDown: ButtonProps
 }> = ({
   reverse,
   restart,
