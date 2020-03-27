@@ -19,6 +19,12 @@ export default class UnTracker {
     // the data. The untracker has to take this into account, so by default will
     // be finished.
     this.currentMove = this.moves.length
+
+    this.hasNext = this.hasNext.bind(this)
+    this.hasPrevious = this.hasPrevious.bind(this)
+    this.next = this.next.bind(this)
+    this.previous = this.previous.bind(this)
+    this.reset = this.reset.bind(this)
   }
 
   /** Returns true if there is a future move available to do. */
