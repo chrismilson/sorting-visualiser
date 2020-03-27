@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-  FaExchangeAlt,
+  FaSyncAlt,
   FaStepBackward,
   FaBackward,
   FaPlay,
@@ -49,7 +49,7 @@ const Menu: React.FC<{
           keyStr=" "
           {...playPause}
         />
-        <Button name="reverse" Icon={FaExchangeAlt} keyStr="`" {...reverse} />
+        <Button name="reverse" Icon={FaSyncAlt} keyStr="`" {...reverse} />
       </div>
       <Button name="speedUp" Icon={FaForward} keyCode={39} {...speedUp} />
       <div className={`extra ${extra ? 'show' : 'hide'}`}>
