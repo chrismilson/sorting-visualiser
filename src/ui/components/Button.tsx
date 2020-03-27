@@ -22,7 +22,10 @@ const Button: React.FC<{
       const listener = (e: KeyboardEvent) => {
         // By clicking the button instead of calling the callback, we make sure
         // that the callback is not fired if the button is disabled
-        if (e.key === keyStr || e.keyCode === keyCode) ref.current?.click()
+        if (e.key === keyStr || e.keyCode === keyCode) {
+          e.preventDefault()
+          ref.current?.click()
+        }
       }
       window.addEventListener('keydown', listener)
       return () => {
