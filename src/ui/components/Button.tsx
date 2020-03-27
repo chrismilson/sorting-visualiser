@@ -7,9 +7,9 @@ const Button: React.FC<{
   handler: () => void
   Icon: IconType
   disabled?: boolean
-  key?: string
+  keyStr?: string
   keyCode?: number
-}> = ({ name, handler, Icon, disabled = false, key, keyCode }) => {
+}> = ({ name, handler, Icon, disabled = false, keyStr, keyCode }) => {
   const camelCaseName = name
     .replace(/^(.)/, (_x, y) => y.toLowerCase())
     .replace(/ (.)/, (_x, y) => y.toUpperCase())
@@ -18,16 +18,18 @@ const Button: React.FC<{
   // the button.
   const ref = useRef<HTMLButtonElement>(null)
   useEffect(() => {
-    if (key !== undefined || keyCode !== undefined) {
+    if (keyStr !== undefined || keyCode !== undefined) {
       const listener = (e: KeyboardEvent) => {
-        if (e.key === key || e.keyCode === keyCode) ref.current?.click()
+        // By clicking the button instead of calling the callback, we make sure
+        // that the callback is not fired if the button is disabled
+        if (e.key === keyStr || e.keyCode === keyCode) ref.current?.click()
       }
       window.addEventListener('keydown', listener)
       return () => {
         window.removeEventListener('keydown', listener)
       }
     }
-  }, [ref, key, keyCode])
+  }, [ref, keyStr, keyCode])
 
   return (
     <button
