@@ -7,6 +7,17 @@
   display: flex;
   align-items: flex-end;
 
+  .playPauseWithReverse {
+    position: relative;
+
+    .reverse {
+      position: absolute;
+      top: -1.3em;
+      right: -1.3em;
+      transform: scale(0.55, 0.55);
+    }
+  }
+
   .extra {
     display: flex;
     flex-direction: column-reverse;

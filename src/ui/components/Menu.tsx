@@ -39,11 +39,18 @@ const Menu: React.FC<{
 
   return (
     <div className="Menu">
-      <Button name="reverse" Icon={FaExchangeAlt} {...reverse} />
-      <Button name="restart" Icon={FaStepBackward} {...restart} />
-      <Button name="speedDown" Icon={FaBackward} {...speedDown} />
-      <Button name="playPause" Icon={FaPlay} {...playPause} />
-      <Button name="speedUp" Icon={FaForward} {...speedUp} />
+      <Button name="restart" Icon={FaStepBackward} keyStr="r" {...restart} />
+      <Button name="speedDown" Icon={FaBackward} keyCode={37} {...speedDown} />
+      <div className="playPauseWithReverse">
+        <Button
+          name="playPause"
+          Icon={playPause.play ? FaPause : FaPlay}
+          keyStr=" "
+          {...playPause}
+        />
+        <Button name="reverse" Icon={FaExchangeAlt} keyStr="`" {...reverse} />
+      </div>
+      <Button name="speedUp" Icon={FaForward} keyCode={39} {...speedUp} />
       <div className={`extra ${extra ? 'show' : 'hide'}`}>
         <Button
           name="toggle"
