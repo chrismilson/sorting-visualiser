@@ -1,0 +1,26 @@
+.Menu {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 1em;
+
+  display: flex;
+  align-items: flex-end;
+
+  .extra {
+    display: flex;
+    flex-direction: column-reverse;
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+
+      transition: visibility 1s, opacity 1s;
+    }
+
+    &.hide .buttons {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+}
