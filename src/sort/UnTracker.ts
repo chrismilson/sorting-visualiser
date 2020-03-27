@@ -22,17 +22,17 @@ export default class UnTracker {
   }
 
   /** Returns true if there is a future move available to do. */
-  private isNext() {
+  hasNext() {
     return this.currentMove < this.moves.length
   }
 
   /** Returns true if there is a previous move available to undo. */
-  private isPrevious() {
+  hasPrevious() {
     return this.currentMove > 0
   }
 
   next() {
-    if (!this.isNext()) return false
+    if (!this.hasNext()) return
 
     const move = this.moves[this.currentMove++]
 
@@ -42,14 +42,16 @@ export default class UnTracker {
         const temp = this.values[i]
         this.values[i] = this.values[j]
         this.values[j] = temp
-        return true
+        break
       case MoveType.COMPARE:
-        return true
+        break
     }
+
+    return move
   }
 
   previous() {
-    if (!this.isPrevious()) return
+    if (!this.hasPrevious()) return
 
     const move = this.moves[--this.currentMove]
 
@@ -59,10 +61,12 @@ export default class UnTracker {
         const temp = this.values[i]
         this.values[i] = this.values[j]
         this.values[j] = temp
-        return true
+        break
       case MoveType.COMPARE:
-        return true
+        break
     }
+
+    return move
   }
 
   /** Returns the values array to its original state. */
