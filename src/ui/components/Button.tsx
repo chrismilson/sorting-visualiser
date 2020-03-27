@@ -9,7 +9,8 @@ const Button: React.FC<{
   disabled?: boolean
   keyStr?: string
   keyCode?: number
-}> = ({ name, handler, Icon, disabled = false, keyStr, keyCode }) => {
+  style?: React.CSSProperties
+}> = ({ name, handler, Icon, disabled = false, keyStr, keyCode, style }) => {
   const camelCaseName = name
     .replace(/^(.)/, (_x, y) => y.toLowerCase())
     .replace(/ (.)/, (_x, y) => y.toUpperCase())
@@ -23,7 +24,6 @@ const Button: React.FC<{
         // By clicking the button instead of calling the callback, we make sure
         // that the callback is not fired if the button is disabled
         if (e.key === keyStr || e.keyCode === keyCode) {
-          e.preventDefault()
           ref.current?.click()
         }
       }
@@ -41,6 +41,7 @@ const Button: React.FC<{
       title={name}
       onClick={handler}
       disabled={disabled}
+      style={style}
     >
       <Icon />
     </button>
