@@ -59,8 +59,8 @@ const Menu: React.FC<{
           handler={() => setExtra(!extra)}
         />
         <div className="buttons">
-          <Button name="Size Up" Icon={FaPlus} {...sizeUp} />
-          <Button name="Size Down" Icon={FaMinus} {...sizeDown} />
+          <Button name="Size Up" Icon={FaPlus} keyCode={38} {...sizeUp} />
+          <Button name="Size Down" Icon={FaMinus} keyCode={40} {...sizeDown} />
           <Button
             name="algorithm"
             Icon={FaCode}
