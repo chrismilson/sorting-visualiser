@@ -20,22 +20,14 @@ interface ButtonProps {
 }
 
 const Menu: React.FC<{
-  reverse: ButtonProps
+  reverse: ButtonProps & { status: boolean }
   restart: ButtonProps
   speedDown: ButtonProps
-  playPause: ButtonProps & { play: boolean }
+  play: ButtonProps & { status: boolean }
   speedUp: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
-}> = ({
-  reverse,
-  restart,
-  speedDown,
-  playPause,
-  speedUp,
-  sizeUp,
-  sizeDown
-}) => {
+}> = ({ reverse, restart, speedDown, play, speedUp, sizeUp, sizeDown }) => {
   const [extra, setExtra] = useState(false)
 
   return (
@@ -44,10 +36,14 @@ const Menu: React.FC<{
       <Button name="speedDown" Icon={FaBackward} keyCode={37} {...speedDown} />
       <div className="playPauseWithReverse">
         <Button
-          name="playPause"
-          Icon={playPause.play ? FaPause : FaPlay}
+          name="play"
+          Icon={play.status ? FaPause : FaPlay}
           keyStr=" "
-          {...playPause}
+          style={{
+            transition: 'transform 100ms',
+            transform: `rotate(${reverse.status ? 180 : 0}deg)`
+          }}
+          {...play}
         />
         <Button name="reverse" Icon={FaSyncAlt} keyStr="`" {...reverse} />
       </div>
