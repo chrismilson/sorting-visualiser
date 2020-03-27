@@ -8,7 +8,8 @@ import {
   FaEllipsisV,
   FaCode,
   FaPlus,
-  FaMinus
+  FaMinus,
+  FaPause
 } from 'react-icons/fa'
 import Button from './Button'
 import './Menu.scss'
@@ -22,7 +23,7 @@ const Menu: React.FC<{
   reverse: ButtonProps
   restart: ButtonProps
   speedDown: ButtonProps
-  playPause: ButtonProps
+  playPause: ButtonProps & { play: boolean }
   speedUp: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
