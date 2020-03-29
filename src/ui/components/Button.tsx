@@ -43,7 +43,7 @@ const Button: React.FC<{
       disabled={disabled}
       style={style}
     >
-      <Icon />
+      <Icon className="icon" />
     </button>
   )
 }

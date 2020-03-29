@@ -10,14 +10,14 @@
   border: none;
   outline: none;
   border-radius: 100%;
-  
+
   background-color: darken(rgb(87, 163, 207), 10%);
 
   &:active {
     opacity: 0.7;
   }
 
-  * {
+  .icon {
     pointer-events: none;
   }
 }
