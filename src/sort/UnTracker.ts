@@ -1,4 +1,5 @@
 import { Move, MoveType } from './Move'
+import Direction from './Direction'
 
 /**
  * Just as the Tracker class is for recording the algorithms. The UnTracker is
@@ -84,16 +85,16 @@ export default class Untracker {
   }
 
   /** Advances the untracker in a direction determined by the reverse boolean */
-  step(reverse: boolean) {
-    return reverse ? this.previous() : this.next()
+  step(direction: Direction) {
+    return direction === Direction.FORWARD ? this.next() : this.previous()
   }
 
   /**
    * Returns true if the untracker has a valid move available in the determined
    * direction
    */
-  hasStep(reverse: boolean) {
-    return reverse ? this.hasPrevious() : this.hasNext()
+  hasStep(direction: Direction) {
+    return direction === Direction.FORWARD ? this.hasNext() : this.hasPrevious()
   }
 
   /**
@@ -105,13 +106,13 @@ export default class Untracker {
    */
   animateStepsPerFrame(
     stepsPerFrame: number,
-    reverse: boolean,
+    direction: Direction,
     onCompletion: () => void
   ) {
     let frame: number
     const run = () => {
-      for (let i = 0; i < stepsPerFrame; i++) this.step(reverse)
-      if (this.hasStep(reverse)) frame = requestAnimationFrame(run)
+      for (let i = 0; i < stepsPerFrame; i++) this.step(direction)
+      if (this.hasStep(direction)) frame = requestAnimationFrame(run)
       else onCompletion()
     }
     run()
@@ -122,12 +123,13 @@ export default class Untracker {
 
   animateUntilCompletion(
     timeUntilCompletion: number,
-    reverse: boolean,
+    direction: Direction,
     onCompletion: () => void
   ) {
-    const stepsRemaining = reverse
-      ? this.currentMove
-      : this.moves.length - this.currentMove
+    const stepsRemaining =
+      direction === Direction.FORWARD
+        ? this.moves.length - this.currentMove
+        : this.currentMove
 
     // there are 0.06 frames per millisecond
     const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
@@ -135,15 +137,15 @@ export default class Untracker {
     if (stepsPerFrame > 1) {
       return this.animateStepsPerFrame(
         Math.round(stepsPerFrame),
-        reverse,
+        direction,
         onCompletion
       )
     }
 
     const timePerStep = timeUntilCompletion / stepsRemaining
     const interval = setInterval(() => {
-      this.step(reverse)
-      if (!this.hasStep(reverse)) {
+      this.step(direction)
+      if (!this.hasStep(direction)) {
         clearInterval(interval)
         onCompletion()
       }
