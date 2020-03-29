@@ -140,7 +140,7 @@ export default class Untracker {
         direction,
         onCompletion
       )
-    }
+    } else if (stepsRemaining === 0) return
 
     const timePerStep = timeUntilCompletion / stepsRemaining
     const interval = setInterval(() => {
