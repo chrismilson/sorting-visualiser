@@ -83,65 +83,73 @@ export default class Untracker {
     this.currentMove = 0
   }
 
-  /** Wraps an untracker and provides some apis for interacting with it. */
-  wrap(reverse: boolean) {
-    const step = (direction = reverse) => {
-      return direction ? this.previous() : this.next()
+  /** Advances the untracker in a direction determined by the reverse boolean */
+  step(reverse: boolean) {
+    return reverse ? this.previous() : this.next()
+  }
+
+  /**
+   * Returns true if the untracker has a valid move available in the determined
+   * direction
+   */
+  hasStep(reverse: boolean) {
+    return reverse ? this.hasPrevious() : this.hasNext()
+  }
+
+  /**
+   * Animates the advancement of steps in a given direction.
+   *
+   * @param stepsPerFrame The number of steps to be advanced per frame
+   * @param onCompletion A callback to be run if all of the steps have been
+   * completed.
+   */
+  animateStepsPerFrame(
+    stepsPerFrame: number,
+    reverse: boolean,
+    onCompletion: () => void
+  ) {
+    let frame: number
+    const run = () => {
+      for (let i = 0; i < stepsPerFrame; i++) this.step(reverse)
+      if (this.hasStep(reverse)) frame = requestAnimationFrame(run)
+      else onCompletion()
     }
-    const hasStep = (direction = reverse) => {
-      return direction ? this.hasPrevious() : this.hasNext()
+    run()
+    return () => {
+      cancelAnimationFrame(frame)
+    }
+  }
+
+  animateUntilCompletion(
+    timeUntilCompletion: number,
+    reverse: boolean,
+    onCompletion: () => void
+  ) {
+    const stepsRemaining = reverse
+      ? this.currentMove
+      : this.moves.length - this.currentMove
+
+    // there are 0.06 frames per millisecond
+    const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
+
+    if (stepsPerFrame > 1) {
+      return this.animateStepsPerFrame(
+        Math.round(stepsPerFrame),
+        reverse,
+        onCompletion
+      )
     }
 
-    const animateStepsPerFrame = (steps: number, onCompletion: () => void) => {
-      let frame: number
-      const run = () => {
-        for (let i = 0; i < steps; i++) step()
-        if (hasStep()) frame = requestAnimationFrame(run)
-        else onCompletion()
-      }
-      frame = requestAnimationFrame(run)
-      return () => {
-        cancelAnimationFrame(frame)
-      }
-    }
-
-    /**
-     * Completes all of the this's remaining moves.
-     *
-     * @param timeUntilCompletion The number of milliseconds until the animation
-     * should be complete.
-     */
-    const animateUntilCompletion = (
-      timeUntilCompletion: number,
-      onCompletion: () => void
-    ) => {
-      const stepsRemaining = reverse
-        ? this.currentMove
-        : this.moves.length - this.currentMove
-
-      const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
-
-      if (stepsPerFrame > 1) {
-        return animateStepsPerFrame(Math.floor(stepsPerFrame), onCompletion)
-      }
-      const timePerStep = timeUntilCompletion / stepsRemaining
-      const interval = setInterval(() => {
-        step()
-        if (!hasStep()) {
-          onCompletion()
-          clearInterval(interval)
-        }
-      }, timePerStep)
-      return () => {
+    const timePerStep = timeUntilCompletion / stepsRemaining
+    const interval = setInterval(() => {
+      this.step(reverse)
+      if (!this.hasStep(reverse)) {
         clearInterval(interval)
+        onCompletion()
       }
-    }
-
-    return {
-      step,
-      hasStep,
-      animateStepsPerFrame,
-      animateUntilCompletion
+    }, timePerStep)
+    return () => {
+      clearInterval(interval)
     }
   }
 }
