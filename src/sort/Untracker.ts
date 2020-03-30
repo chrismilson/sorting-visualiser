@@ -107,8 +107,11 @@ export default class Untracker {
   animateStepsPerFrame(
     stepsPerFrame: number,
     direction: Direction,
-    onCompletion?: () => void
+    options: {
+      onCompletion?: () => void
+    } = {}
   ) {
+    const { onCompletion } = options
     let frame: number
     const run = () => {
       for (let i = 0; i < stepsPerFrame; i++) this.step(direction)
@@ -124,8 +127,11 @@ export default class Untracker {
   animateUntilCompletion(
     timeUntilCompletion: number,
     direction: Direction,
-    onCompletion?: () => void
+    options: {
+      onCompletion?: () => void
+    } = {}
   ) {
+    const { onCompletion } = options
     const stepsRemaining =
       direction === Direction.FORWARD
         ? this.moves.length - this.currentMove
@@ -135,11 +141,7 @@ export default class Untracker {
     const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
 
     if (stepsPerFrame > 1) {
-      return this.animateStepsPerFrame(
-        Math.round(stepsPerFrame),
-        direction,
-        onCompletion
-      )
+      return this.animateStepsPerFrame(Math.round(stepsPerFrame), options)
     } else if (stepsRemaining === 0) return
 
     const timePerStep = timeUntilCompletion / stepsRemaining
