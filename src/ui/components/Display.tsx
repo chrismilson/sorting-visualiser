@@ -74,7 +74,7 @@ const Display: React.FC<{
         cancelAnimationFrame(frame)
       }
     },
-    [values]
+    [values, moveRef]
   )
 
   const canvasRef = useCanvas(draw)
