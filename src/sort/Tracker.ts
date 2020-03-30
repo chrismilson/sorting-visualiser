@@ -1,5 +1,5 @@
 import { Move, MoveType } from './Move'
-import UnTracker from './UnTracker'
+import Untracker from './Untracker'
 
 /**
  * Abstracts the values array to the sorting algorithm so that the moves can be
@@ -26,7 +26,7 @@ export default class Tracker {
   }
 
   untrack() {
-    return new UnTracker(this.moves, this.values, this.original)
+    return new Untracker(this.moves, this.values, this.original)
   }
 
   /**
