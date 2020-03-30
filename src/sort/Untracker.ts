@@ -126,17 +126,32 @@ export default class Untracker {
         }
       : () => base(stepsPerFrame)
 
-    let frame: number
-    const run = () => {
-      withRecord()
-      if (this.hasStep(direction)) frame = requestAnimationFrame(run)
-      else if (onCompletion) onCompletion()
+    const withAnimationFrame = () => {
+      let frame: number
+      const run = () => {
+        withRecord()
+        if (this.hasStep(direction)) frame = requestAnimationFrame(run)
+        else if (onCompletion) onCompletion()
+      }
+      run()
+      return () => {
+        cancelAnimationFrame(frame)
+      }
+    }
+    const withInterval = () => {
+      const interval = setInterval(() => {
+        withRecord()
+        if (!this.hasStep(direction)) {
+          clearInterval(interval)
+          if (onCompletion) onCompletion()
+        }
+      }, 1 / (0.06 * stepsPerFrame))
+      return () => {
+        clearInterval(interval)
+      }
     }
 
-    run()
-    return () => {
-      cancelAnimationFrame(frame)
-    }
+    return stepsPerFrame >= 1 ? withAnimationFrame() : withInterval()
   }
 
   animateUntilCompletion(
@@ -147,7 +162,6 @@ export default class Untracker {
       moveRef?: React.MutableRefObject<Move | undefined>
     } = {}
   ) {
-    const { onCompletion, moveRef } = options
     const stepsRemaining =
       direction === Direction.FORWARD
         ? this.moves.length - this.currentMove
@@ -156,25 +170,6 @@ export default class Untracker {
     // there are 0.06 frames per millisecond
     const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
 
-    if (stepsPerFrame > 1) {
-      return this.animateStepsPerFrame(
-        Math.round(stepsPerFrame),
-        direction,
-        options
-      )
-    } else if (stepsRemaining === 0) return
-
-    const timePerStep = timeUntilCompletion / stepsRemaining
-    const interval = setInterval(() => {
-      const move = this.step(direction)
-      if (moveRef) moveRef.current = move
-      if (!this.hasStep(direction)) {
-        clearInterval(interval)
-        if (onCompletion) onCompletion()
-      }
-    }, timePerStep)
-    return () => {
-      clearInterval(interval)
-    }
+    return this.animateStepsPerFrame(stepsPerFrame, direction, options)
   }
 }
