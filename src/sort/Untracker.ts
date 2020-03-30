@@ -109,15 +109,30 @@ export default class Untracker {
     direction: Direction,
     options: {
       onCompletion?: () => void
+      moveRef?: React.MutableRefObject<Move | undefined>
     } = {}
   ) {
-    const { onCompletion } = options
+    const { onCompletion, moveRef } = options
+
+    const base = (stepsPerFrame: number) => {
+      for (let i = 0; i < stepsPerFrame; i++) this.step(direction)
+    }
+
+    // if the moveRef is defined then record the last move
+    const withRecord = moveRef
+      ? () => {
+          base(stepsPerFrame - 1)
+          moveRef.current = this.step(direction)
+        }
+      : () => base(stepsPerFrame)
+
     let frame: number
     const run = () => {
-      for (let i = 0; i < stepsPerFrame; i++) this.step(direction)
+      withRecord()
       if (this.hasStep(direction)) frame = requestAnimationFrame(run)
       else if (onCompletion) onCompletion()
     }
+
     run()
     return () => {
       cancelAnimationFrame(frame)
@@ -129,9 +144,10 @@ export default class Untracker {
     direction: Direction,
     options: {
       onCompletion?: () => void
+      moveRef?: React.MutableRefObject<Move | undefined>
     } = {}
   ) {
-    const { onCompletion } = options
+    const { onCompletion, moveRef } = options
     const stepsRemaining =
       direction === Direction.FORWARD
         ? this.moves.length - this.currentMove
@@ -141,12 +157,17 @@ export default class Untracker {
     const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
 
     if (stepsPerFrame > 1) {
-      return this.animateStepsPerFrame(Math.round(stepsPerFrame), options)
+      return this.animateStepsPerFrame(
+        Math.round(stepsPerFrame),
+        direction,
+        options
+      )
     } else if (stepsRemaining === 0) return
 
     const timePerStep = timeUntilCompletion / stepsRemaining
     const interval = setInterval(() => {
-      this.step(direction)
+      const move = this.step(direction)
+      if (moveRef) moveRef.current = move
       if (!this.hasStep(direction)) {
         clearInterval(interval)
         if (onCompletion) onCompletion()
