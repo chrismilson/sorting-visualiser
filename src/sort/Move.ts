@@ -17,3 +17,4 @@ export interface CompareMove {
 }
 
 export type Move = SwapMove | CompareMove
+export default Move
