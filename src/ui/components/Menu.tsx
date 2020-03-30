@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import {
-  FaSyncAlt,
-  FaStepBackward,
+  FaRedoAlt,
   FaBackward,
+  FaStepBackward,
   FaPlay,
+  FaSyncAlt,
   FaForward,
+  FaStepForward,
   FaEllipsisV,
   FaCode,
   FaPlus,
@@ -16,6 +18,8 @@ import './Menu.scss'
 
 interface ButtonProps {
   handler: () => void
+  keyStr?: string
+  keyCode?: number
   disabled?: boolean
 }
 
@@ -23,17 +27,30 @@ const Menu: React.FC<{
   reverse: ButtonProps & { status: boolean }
   restart: ButtonProps
   speedDown: ButtonProps
+  stepBack: ButtonProps
   play: ButtonProps & { status: boolean }
+  stepForward: ButtonProps
   speedUp: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
-}> = ({ reverse, restart, speedDown, play, speedUp, sizeUp, sizeDown }) => {
+}> = ({
+  reverse,
+  restart,
+  speedDown,
+  stepBack,
+  play,
+  stepForward,
+  speedUp,
+  sizeUp,
+  sizeDown
+}) => {
   const [extra, setExtra] = useState(false)
 
   return (
     <div className="Menu">
-      <Button name="restart" Icon={FaStepBackward} keyStr="r" {...restart} />
-      <Button name="speedDown" Icon={FaBackward} keyCode={37} {...speedDown} />
+      <Button name="restart" Icon={FaRedoAlt} {...restart} />
+      <Button name="speed down" Icon={FaBackward} {...speedDown} />
+      <Button name="step back" Icon={FaStepBackward} {...stepBack} />
       <div className="playPauseWithReverse">
         <Button
           name="play"
@@ -45,18 +62,19 @@ const Menu: React.FC<{
           }}
           {...play}
         />
-        <Button name="reverse" Icon={FaSyncAlt} keyStr="`" {...reverse} />
+        <Button name="reverse" Icon={FaSyncAlt} {...reverse} />
       </div>
-      <Button name="speedUp" Icon={FaForward} keyCode={39} {...speedUp} />
+      <Button name="step forward" Icon={FaStepForward} {...stepForward} />
+      <Button name="speed up" Icon={FaForward} {...speedUp} />
       <div className={`extra ${extra ? 'show' : 'hide'}`}>
         <Button
-          name="toggle"
+          name="extra options"
           Icon={FaEllipsisV}
           handler={() => setExtra(!extra)}
         />
         <div className="buttons">
-          <Button name="Size Up" Icon={FaPlus} keyCode={38} {...sizeUp} />
-          <Button name="Size Down" Icon={FaMinus} keyCode={40} {...sizeDown} />
+          <Button name="size up" Icon={FaPlus} {...sizeUp} />
+          <Button name="size down" Icon={FaMinus} {...sizeDown} />
           <Button
             name="algorithm"
             Icon={FaCode}
