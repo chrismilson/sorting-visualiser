@@ -25,8 +25,13 @@ export default class Tracker {
     this.compare = this.compare.bind(this)
   }
 
-  untrack() {
-    return new Untracker(this.moves, this.values, this.original)
+  /**
+   * Returns an untracker with the moves tracked by the tracker.
+   *
+   * @param values The array to modify while untracking
+   */
+  untrack(values = this.values) {
+    return new Untracker(this.moves, values, this.original)
   }
 
   /**
