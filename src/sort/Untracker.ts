@@ -1,4 +1,4 @@
-import { Move, MoveType } from './Move'
+import Move, { MoveType } from './Move'
 import Direction from './Direction'
 
 /**
