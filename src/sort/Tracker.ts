@@ -59,6 +59,9 @@ export default class Tracker {
 
     this.swap = this.swap.bind(this)
     this.compare = this.compare.bind(this)
+    this.malloc = this.malloc.bind(this)
+    this.memcpy = this.memcpy.bind(this)
+    this.free = this.free.bind(this)
   }
 
   /**
@@ -132,14 +135,6 @@ export default class Tracker {
 
   /**
    * Copies a value from one buffer to another.
-   *
-   * @param size The number of elements to copy.
-   * @param from.buffer The id of the buffer to copy from. (defaults to the main
-   * array)
-   * @param from.index The first index in the from buffer to copy from.
-   * @param to.buffer The id of the buffer to copy to. (defaults to the main
-   * array)
-   * @param to.index The first index in the to buffer to copy from.
    */
   memcpy(
     from: { buffer: BufferId; index: number } | number,
