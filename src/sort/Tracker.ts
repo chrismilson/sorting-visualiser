@@ -17,6 +17,15 @@ class BufferIdPool {
     this._inUse.delete(id)
     this._free.push(id)
   }
+
+  inUse(id: BufferId) {
+    return this._inUse.has(id)
+  }
+
+  /** Iterates over the keys in use. */
+  [Symbol.iterator]() {
+    return this._inUse[Symbol.iterator]()
+  }
 }
 
 /**
