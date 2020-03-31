@@ -8,14 +8,14 @@ export enum MoveType {
 
 export interface SwapMove {
   type: MoveType.SWAP
-  i: number
-  j: number
+  i: { buffer: number; index: number }
+  j: { buffer: number; index: number }
 }
 
 export interface CompareMove {
   type: MoveType.COMPARE
-  i: number
-  j: number
+  i: { buffer: number; index: number }
+  j: { buffer: number; index: number }
   result: number
 }
 
@@ -28,14 +28,8 @@ export interface MallocMove {
 export interface MemcpyMove {
   type: MoveType.MEMCPY
   size: number
-  from: {
-    buffer: number
-    index: number
-  }
-  to: {
-    buffer: number
-    index: number
-  }
+  from: { buffer: number; index: number }
+  to: { buffer: number; index: number }
 }
 
 export interface FreeMove {
