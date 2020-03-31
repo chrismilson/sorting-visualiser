@@ -74,10 +74,20 @@ export default class Tracker {
   /**
    * Swaps the values at indicies i and j.
    */
-  swap(i: number, j: number) {
-    const temp = this.values[i]
-    this.values[i] = this.values[j]
-    this.values[j] = temp
+  swap(
+    i: { buffer: BufferId; index: number } | number,
+    j: { buffer: BufferId; index: number } | number
+  ): void {
+    // normalise the inputs
+    i = this.normaliseIndex(i)
+    j = this.normaliseIndex(j)
+
+    const iBuffer = this.buffers[i.buffer]
+    const jBuffer = this.buffers[j.buffer]
+
+    const temp = iBuffer[i.index]
+    iBuffer[i.index] = jBuffer[j.index]
+    jBuffer[j.index] = temp
 
     this.moves.push({ type: MoveType.SWAP, i, j })
   }
@@ -89,8 +99,17 @@ export default class Tracker {
    * - **0** If the value at i is equal to the value at j; or,
    * - **1** If the value at i is greater than the value at j.
    */
-  compare(i: number, j: number) {
-    const result = Math.sign(this.values[i] - this.values[j])
+  compare(
+    i: { buffer: BufferId; index: number } | number,
+    j: { buffer: BufferId; index: number } | number
+  ) {
+    i = this.normaliseIndex(i)
+    j = this.normaliseIndex(j)
+
+    const iBuffer = this.buffers[i.buffer]
+    const jBuffer = this.buffers[j.buffer]
+
+    const result = Math.sign(iBuffer[i.index] - jBuffer[j.index])
 
     this.moves.push({ type: MoveType.COMPARE, i, j, result })
 
@@ -123,18 +142,11 @@ export default class Tracker {
    */
   memcpy(
     size: number,
-    fromOptions: {
-      buffer?: BufferId
-      index: number
-    },
-    toOptions: {
-      buffer?: BufferId
-      index: number
-    }
+    from: { buffer: BufferId; index: number } | number,
+    to: { buffer: BufferId; index: number } | number
   ) {
-    // buffer 0 is the main values array
-    const from = Object.assign({}, { buffer: 0 }, fromOptions)
-    const to = Object.assign({}, { buffer: 0 }, toOptions)
+    from = this.normaliseIndex(from)
+    to = this.normaliseIndex(to)
 
     for (let i = 0; i < size; i++) {
       // copy
@@ -159,5 +171,15 @@ export default class Tracker {
       this.bufferIdPool.free(buffer)
       this.moves.push({ type: MoveType.FREE, buffer })
     }
+  }
+
+  /**
+   * Normalises an index so that it has a buffer property. Most of the functions
+   * will work by just passing a number as the index, which should index the
+   * main values array.
+   */
+  private normaliseIndex(index: { buffer: BufferId; index: number } | number) {
+    if (typeof index === 'number') return { buffer: 0, index }
+    return index
   }
 }
