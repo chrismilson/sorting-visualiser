@@ -34,8 +34,8 @@ const Display: React.FC<{
               const { i, j } = move
               ctx.save()
               ctx.fillStyle = 'cyan'
-              ctx.fillRect(i.index, 0, 1, i.value)
-              ctx.fillRect(j.index, 0, 1, j.value)
+              ctx.fillRect(i.index, 0, 1, j.value)
+              ctx.fillRect(j.index, 0, 1, i.value)
               ctx.restore()
 
               // We make sure that the values are repainted on the next frame by
