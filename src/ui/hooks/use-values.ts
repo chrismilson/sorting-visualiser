@@ -9,7 +9,7 @@ const useValues = (size: number) => {
   return useMemo(() => {
     const values = []
 
-    for (let i = 1; i <= size; i++) values.push(i / size)
+    for (let i = 1; i <= size; i++) values.push(i)
 
     return values
   }, [size])

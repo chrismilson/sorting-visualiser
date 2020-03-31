@@ -14,7 +14,7 @@ const Display: React.FC<{
     ctx => {
       // resize the pixels, not just a maths transform
       ctx.canvas.width = ctx.canvas.height = values.length
-      ctx.setTransform(1, 0, 0, -values.length, 0, values.length)
+      ctx.setTransform(1, 0, 0, -1, 0, values.length)
 
       ctx.fillStyle = 'rgb(87,163,207)'
 
@@ -60,7 +60,7 @@ const Display: React.FC<{
         frame = requestAnimationFrame(drawFrame)
         for (let i = 0; i < values.length; i++) {
           if (currentValues[i] !== values[i]) {
-            ctx.clearRect(i, 0, 1, 1)
+            ctx.clearRect(i, 0, 1, values.length)
             ctx.fillRect(i, 0, 1, values[i])
             currentValues[i] = values[i]
           }
