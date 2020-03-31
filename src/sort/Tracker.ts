@@ -77,19 +77,18 @@ export default class Tracker {
    * Swaps the values at indicies i and j.
    */
   swap(
-    i: { buffer: BufferId; index: number } | number,
-    j: { buffer: BufferId; index: number } | number
+    iIndex: { buffer: BufferId; index: number } | number,
+    jIndex: { buffer: BufferId; index: number } | number
   ): void {
     // normalise the inputs
-    i = this.normaliseIndex(i)
-    j = this.normaliseIndex(j)
+    const i = this.normaliseIndex(iIndex)
+    const j = this.normaliseIndex(jIndex)
 
     const iBuffer = this.buffers[i.buffer]
     const jBuffer = this.buffers[j.buffer]
 
-    const temp = iBuffer[i.index]
-    iBuffer[i.index] = jBuffer[j.index]
-    jBuffer[j.index] = temp
+    iBuffer[i.index] = j.value
+    jBuffer[j.index] = i.value
 
     this.moves.push({ type: MoveType.SWAP, i, j })
   }
@@ -102,16 +101,13 @@ export default class Tracker {
    * - **1** If the value at i is greater than the value at j.
    */
   compare(
-    i: { buffer: BufferId; index: number } | number,
-    j: { buffer: BufferId; index: number } | number
+    iIndex: { buffer: BufferId; index: number } | number,
+    jIndex: { buffer: BufferId; index: number } | number
   ) {
-    i = this.normaliseIndex(i)
-    j = this.normaliseIndex(j)
+    const i = this.normaliseIndex(iIndex)
+    const j = this.normaliseIndex(jIndex)
 
-    const iBuffer = this.buffers[i.buffer]
-    const jBuffer = this.buffers[j.buffer]
-
-    const result = Math.sign(iBuffer[i.index] - jBuffer[j.index])
+    const result = Math.sign(i.value - j.value)
 
     this.moves.push({ type: MoveType.COMPARE, i, j, result })
 
@@ -152,7 +148,7 @@ export default class Tracker {
     // paste
     this.buffers[to.buffer][to.index] = value
 
-    this.moves.push({ type: MoveType.MEMCPY, from, to, original })
+    this.moves.push({ type: MoveType.MEMCPY, from, to, value, original })
   }
 
   /**
@@ -175,7 +171,8 @@ export default class Tracker {
    * main values array.
    */
   private normaliseIndex(index: { buffer: BufferId; index: number } | number) {
-    if (typeof index === 'number') return { buffer: 0, index }
-    return index
+    if (typeof index === 'number') index = { buffer: 0, index }
+    const value = this.buffers[index.buffer][index.index]
+    return { ...index, value }
   }
 }
