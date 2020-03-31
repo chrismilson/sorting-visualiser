@@ -20,9 +20,7 @@ const Display: React.FC<{
 
       ctx.fillStyle = 'rgb(87,163,207)'
 
-      const currentValues: { [key: number]: number[] } = {
-        0: [...values]
-      }
+      const currentValues = [...values]
       values.forEach((value, index) => {
         ctx.fillRect(index, 0, 1, value)
       })
@@ -34,37 +32,45 @@ const Display: React.FC<{
           case MoveType.SWAP:
             {
               const { i, j } = move
-              const iBuffer = currentValues[i.buffer]
-              const jBuffer = currentValues[j.buffer]
               ctx.save()
               ctx.fillStyle = 'cyan'
-              ctx.fillRect(i.index, 0, 1, iBuffer[i.index])
-              ctx.fillRect(j.index, 0, 1, jBuffer[j.index])
+              ctx.fillRect(i.index, 0, 1, i.value)
+              ctx.fillRect(j.index, 0, 1, j.value)
               ctx.restore()
 
               // We make sure that the values are repainted on the next frame by
               // setting the current value to NaN.
-              iBuffer[i.index] = jBuffer[j.index] = NaN
+              currentValues[i.index] = currentValues[j.index] = NaN
             }
             break
           case MoveType.COMPARE:
             {
               const { i, j, result } = move
-              const iBuffer = currentValues[i.buffer]
-              const jBuffer = currentValues[j.buffer]
 
               const color = ['lime', 'orange', 'red']
               ctx.save()
               ctx.fillStyle = color[1 + result]
-              ctx.fillRect(i.index, 0, 1, iBuffer[i.index])
+              ctx.fillRect(i.index, 0, 1, i.value)
 
               ctx.fillStyle = color[1 - result]
-              ctx.fillRect(j.index, 0, 1, jBuffer[j.index])
+              ctx.fillRect(j.index, 0, 1, j.value)
               ctx.restore()
 
-              // We make sure that the values are repainted on the next frame by
-              // setting the current value to NaN.
-              iBuffer[i.index] = jBuffer[j.index] = NaN
+              currentValues[i.index] = currentValues[j.index] = NaN
+            }
+            break
+          case MoveType.MEMCPY:
+            {
+              const { from, to, value } = move
+
+              ctx.save()
+              ctx.fillStyle = 'gold'
+              ctx.fillRect(from.index, 0, 1, value)
+              ctx.fillRect(to.index, 0, 1, value)
+
+              ctx.restore()
+
+              currentValues[from.index] = currentValues[to.index] = NaN
             }
             break
         }
@@ -75,18 +81,24 @@ const Display: React.FC<{
         frame = requestAnimationFrame(drawFrame)
         // check the main values
         for (let i = 0; i < values.length; i++) {
-          if (currentValues[0][i] !== values[i]) {
+          if (currentValues[i] !== values[i]) {
             ctx.clearRect(i, 0, 1, values.length)
             ctx.fillRect(i, 0, 1, values[i])
-            currentValues[0][i] = values[i]
+            currentValues[i] = values[i]
           }
         }
 
         // then the extra memory
-        untracker?.forEachInExtra((buffer, index, value) => {
-          if (currentValues[buffer][index] !== value) {
-            console.log('moo')
-          }
+        untracker?.forEachInExtra((_buffer, index, value) => {
+          ctx.save()
+          ctx.globalAlpha = 0.2
+          ctx.fillStyle = 'purple'
+
+          ctx.fillRect(index, 0, 1, value)
+          // repaint the extra values each time
+          currentValues[index] = NaN
+
+          ctx.restore()
         })
 
         drawMove()
@@ -98,7 +110,7 @@ const Display: React.FC<{
         cancelAnimationFrame(frame)
       }
     },
-    [values, moveRef]
+    [values, moveRef, untracker]
   )
 
   const canvasRef = useCanvas(draw)
