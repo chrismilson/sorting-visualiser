@@ -1,14 +1,16 @@
 import React, { useCallback } from 'react'
 import useCanvas, { DrawingMethod } from 'react-hooks-use-drawing-canvas'
-import './Display.scss'
 import Move, { MoveType } from '../../sort/Move'
+import Untracker from '../../sort/Untracker'
+import './Display.scss'
 
 /** continuously displays values on the screen */
 const Display: React.FC<{
   values: number[]
   moveRef: React.MutableRefObject<Move | undefined>
+  untracker?: Untracker
 }> = props => {
-  const { values, moveRef } = props
+  const { values, moveRef, untracker } = props
 
   const draw = useCallback<DrawingMethod>(
     ctx => {
@@ -18,7 +20,9 @@ const Display: React.FC<{
 
       ctx.fillStyle = 'rgb(87,163,207)'
 
-      const currentValues = [...values]
+      const currentValues: { [key: number]: number[] } = {
+        0: [...values]
+      }
       values.forEach((value, index) => {
         ctx.fillRect(index, 0, 1, value)
       })
@@ -28,29 +32,40 @@ const Display: React.FC<{
         if (!move) return
         switch (move.type) {
           case MoveType.SWAP:
-            ctx.save()
-            ctx.fillStyle = 'cyan'
-            ctx.fillRect(move.i, 0, 1, currentValues[move.i])
-            ctx.fillRect(move.j, 0, 1, currentValues[move.j])
-            ctx.restore()
+            {
+              const { i, j } = move
+              const iBuffer = currentValues[i.buffer]
+              const jBuffer = currentValues[j.buffer]
+              ctx.save()
+              ctx.fillStyle = 'cyan'
+              ctx.fillRect(i.index, 0, 1, iBuffer[i.index])
+              ctx.fillRect(j.index, 0, 1, jBuffer[j.index])
+              ctx.restore()
 
-            // We make sure that the values are repainted on the next frame by
-            // setting the current value to NaN.
-            currentValues[move.i] = currentValues[move.j] = NaN
+              // We make sure that the values are repainted on the next frame by
+              // setting the current value to NaN.
+              iBuffer[i.index] = jBuffer[j.index] = NaN
+            }
             break
           case MoveType.COMPARE:
-            const color = ['lime', 'orange', 'red']
-            ctx.save()
-            ctx.fillStyle = color[1 + move.result]
-            ctx.fillRect(move.i, 0, 1, currentValues[move.i])
+            {
+              const { i, j, result } = move
+              const iBuffer = currentValues[i.buffer]
+              const jBuffer = currentValues[j.buffer]
 
-            ctx.fillStyle = color[1 - move.result]
-            ctx.fillRect(move.j, 0, 1, currentValues[move.j])
-            ctx.restore()
+              const color = ['lime', 'orange', 'red']
+              ctx.save()
+              ctx.fillStyle = color[1 + result]
+              ctx.fillRect(i.index, 0, 1, iBuffer[i.index])
 
-            // We make sure that the values are repainted on the next frame by
-            // setting the current value to NaN.
-            currentValues[move.i] = currentValues[move.j] = NaN
+              ctx.fillStyle = color[1 - result]
+              ctx.fillRect(j.index, 0, 1, jBuffer[j.index])
+              ctx.restore()
+
+              // We make sure that the values are repainted on the next frame by
+              // setting the current value to NaN.
+              iBuffer[i.index] = jBuffer[j.index] = NaN
+            }
             break
         }
       }
@@ -58,13 +73,22 @@ const Display: React.FC<{
       let frame: number
       const drawFrame = () => {
         frame = requestAnimationFrame(drawFrame)
+        // check the main values
         for (let i = 0; i < values.length; i++) {
-          if (currentValues[i] !== values[i]) {
+          if (currentValues[0][i] !== values[i]) {
             ctx.clearRect(i, 0, 1, values.length)
             ctx.fillRect(i, 0, 1, values[i])
-            currentValues[i] = values[i]
+            currentValues[0][i] = values[i]
           }
         }
+
+        // then the extra memory
+        untracker?.forEachInExtra((buffer, index, value) => {
+          if (currentValues[buffer][index] !== value) {
+            console.log('moo')
+          }
+        })
+
         drawMove()
       }
 
