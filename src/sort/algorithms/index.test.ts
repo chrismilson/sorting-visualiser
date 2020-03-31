@@ -2,6 +2,7 @@ import Tracker from '../Tracker'
 import quickSort from './quick-sort'
 import bubbleSort from './bubble-sort'
 import mergeSort from './merge-sort'
+import shellSort from './shell-sort'
 
 const permute = (n: number) => {
   const numbers: number[] = []
@@ -34,7 +35,8 @@ const permute = (n: number) => {
 describe.each([
   ['quick', quickSort],
   ['bubble', bubbleSort],
-  ['merge', mergeSort]
+  ['merge', mergeSort],
+  ["Shell's", shellSort]
 ])('%s sort', (_name, sort) => {
   it.each(permute(3))('should sort %p', values => {
     sort(new Tracker(values))
