@@ -53,12 +53,8 @@ export default class Untracker {
       case MoveType.SWAP:
         {
           const { i, j } = move
-          const iBuffer = this.buffers[i.buffer]
-          const jBuffer = this.buffers[j.buffer]
-
-          const temp = iBuffer[i.index]
-          iBuffer[i.index] = jBuffer[j.index]
-          jBuffer[j.index] = temp
+          this.buffers[i.buffer][i.index] = j.value
+          this.buffers[j.buffer][j.index] = i.value
         }
         break
       case MoveType.MALLOC:
@@ -96,12 +92,8 @@ export default class Untracker {
       case MoveType.SWAP:
         {
           const { i, j } = move
-          const iBuffer = this.buffers[i.buffer]
-          const jBuffer = this.buffers[j.buffer]
-
-          const temp = iBuffer[i.index]
-          iBuffer[i.index] = jBuffer[j.index]
-          jBuffer[j.index] = temp
+          this.buffers[i.buffer][i.index] = i.value
+          this.buffers[j.buffer][j.index] = j.value
         }
         break
       case MoveType.MALLOC:
