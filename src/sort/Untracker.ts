@@ -7,13 +7,19 @@ import Direction from './Direction'
  */
 export default class Untracker {
   private original: number[]
-  private values: number[]
+  private buffers: {
+    [key: number]: number[]
+  }
+  private bufferIds: Set<number>
   private moves: Move[]
   private currentMove: number
 
   constructor(moves: Move[], values: number[], original: number[]) {
     this.moves = moves
-    this.values = values
+    this.buffers = {
+      0: values
+    }
+    this.bufferIds = new Set()
     this.original = original
 
     // A tracker is not expected to undo any of the moves that were performed on
@@ -45,12 +51,37 @@ export default class Untracker {
 
     switch (move.type) {
       case MoveType.SWAP:
-        const { i, j } = move
-        const temp = this.values[i]
-        this.values[i] = this.values[j]
-        this.values[j] = temp
+        {
+          const { i, j } = move
+          const iBuffer = this.buffers[i.buffer]
+          const jBuffer = this.buffers[j.buffer]
+
+          const temp = iBuffer[i.index]
+          iBuffer[i.index] = jBuffer[j.index]
+          jBuffer[j.index] = temp
+        }
         break
-      case MoveType.COMPARE:
+      case MoveType.MALLOC:
+        {
+          const { buffer } = move
+          this.bufferIds.add(buffer)
+          this.buffers[buffer] = []
+        }
+        break
+      case MoveType.MEMCPY:
+        {
+          const { from, to } = move
+
+          const value = this.buffers[from.buffer][from.index]
+          this.buffers[to.buffer][to.index] = value
+        }
+        break
+      case MoveType.FREE:
+        {
+          const { buffer } = move
+          this.bufferIds.delete(buffer)
+          delete this.buffers[buffer]
+        }
         break
     }
 
@@ -64,12 +95,39 @@ export default class Untracker {
 
     switch (move.type) {
       case MoveType.SWAP:
-        const { i, j } = move
-        const temp = this.values[i]
-        this.values[i] = this.values[j]
-        this.values[j] = temp
+        {
+          const { i, j } = move
+          const iBuffer = this.buffers[i.buffer]
+          const jBuffer = this.buffers[j.buffer]
+
+          const temp = iBuffer[i.index]
+          iBuffer[i.index] = jBuffer[j.index]
+          jBuffer[j.index] = temp
+        }
         break
-      case MoveType.COMPARE:
+      case MoveType.MALLOC:
+        {
+          const { buffer } = move
+          this.bufferIds.delete(buffer)
+          delete this.buffers[buffer]
+        }
+        break
+      case MoveType.MEMCPY:
+        {
+          const {
+            to: { buffer, index },
+            original
+          } = move
+
+          this.buffers[buffer][index] = original
+        }
+        break
+      case MoveType.FREE:
+        {
+          const { buffer } = move
+          this.bufferIds.add(buffer)
+          this.buffers[buffer] = []
+        }
         break
     }
 
@@ -78,9 +136,15 @@ export default class Untracker {
 
   /** Returns the values array to its original state. */
   reset() {
-    for (let i = 0; i < this.values.length; i++) {
-      this.values[i] = this.original[i]
+    // delete the extra buffers
+    this.bufferIds.forEach(id => {
+      delete this.buffers[id]
+    })
+
+    for (let i = 0; i < this.original.length; i++) {
+      this.buffers[0][i] = this.original[i]
     }
+
     this.currentMove = 0
   }
 
@@ -171,5 +235,15 @@ export default class Untracker {
     const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
 
     return this.animateStepsPerFrame(stepsPerFrame, direction, options)
+  }
+
+  forEachInExtra(
+    callback: (buffer: number, index: number, value: number) => void
+  ) {
+    this.bufferIds.forEach(buffer => {
+      this.buffers[buffer].forEach((value, index) =>
+        callback(buffer, index, value)
+      )
+    })
   }
 }
