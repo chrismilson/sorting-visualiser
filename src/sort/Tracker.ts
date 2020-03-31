@@ -35,10 +35,10 @@ class BufferIdPool {
 export default class Tracker {
   /** A copy of the original values that the Tracker was instantiated with. */
   private original: number[]
-  /** The current values whose modification is being tracked. */
-  private values: number[]
   /** A list of the current buffers in use for the sort. */
   private buffers: {
+    /** The main values array */
+    0: number[]
     [key: number]: number[]
   }
   /** An object that will give and keep track of unique keys. */
@@ -50,7 +50,6 @@ export default class Tracker {
 
   constructor(values: number[]) {
     this.original = [...values]
-    this.values = values
     this.buffers = {
       0: values
     }
@@ -67,7 +66,7 @@ export default class Tracker {
    *
    * @param values The array to modify while untracking
    */
-  untrack(values = this.values) {
+  untrack(values = this.buffers[0]) {
     return new Untracker(this.moves, values, this.original)
   }
 
