@@ -67,7 +67,6 @@ const Display: React.FC<{
               ctx.fillStyle = 'gold'
               ctx.fillRect(from.index, 0, 1, value)
               ctx.fillRect(to.index, 0, 1, value)
-
               ctx.restore()
 
               currentValues[from.index] = currentValues[to.index] = NaN
