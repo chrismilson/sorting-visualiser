@@ -80,7 +80,6 @@ export default class Untracker {
         {
           const { buffer } = move
           this.bufferIds.delete(buffer)
-          delete this.buffers[buffer]
         }
         break
     }
@@ -109,7 +108,6 @@ export default class Untracker {
         {
           const { buffer } = move
           this.bufferIds.delete(buffer)
-          delete this.buffers[buffer]
         }
         break
       case MoveType.MEMCPY:
@@ -126,7 +124,6 @@ export default class Untracker {
         {
           const { buffer } = move
           this.bufferIds.add(buffer)
-          this.buffers[buffer] = []
         }
         break
     }
