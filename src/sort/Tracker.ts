@@ -5,17 +5,15 @@ type BufferId = number
 class BufferIdPool {
   private _next = 1
   private _inUse: Set<BufferId> = new Set([])
-  private _free: BufferId[] = []
 
   next(): BufferId {
-    const id = this._free.pop() || this._next++
+    const id = this._next++
     this._inUse.add(id)
     return id
   }
 
   free(id: BufferId) {
     this._inUse.delete(id)
-    this._free.push(id)
   }
 
   inUse(id: BufferId) {
