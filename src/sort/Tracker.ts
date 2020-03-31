@@ -126,6 +126,8 @@ export default class Tracker {
     this.buffers[buffer] = new Array(size)
 
     this.moves.push({ type: MoveType.MALLOC, size, buffer })
+
+    return buffer
   }
 
   /**
