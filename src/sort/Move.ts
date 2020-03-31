@@ -27,9 +27,9 @@ export interface MallocMove {
 
 export interface MemcpyMove {
   type: MoveType.MEMCPY
-  size: number
   from: { buffer: number; index: number }
   to: { buffer: number; index: number }
+  original: number
 }
 
 export interface FreeMove {

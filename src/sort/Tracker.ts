@@ -131,7 +131,7 @@ export default class Tracker {
   }
 
   /**
-   * Copies a chunk of memory from one buffer to another.
+   * Copies a value from one buffer to another.
    *
    * @param size The number of elements to copy.
    * @param from.buffer The id of the buffer to copy from. (defaults to the main
@@ -142,22 +142,22 @@ export default class Tracker {
    * @param to.index The first index in the to buffer to copy from.
    */
   memcpy(
-    size: number,
     from: { buffer: BufferId; index: number } | number,
     to: { buffer: BufferId; index: number } | number
   ) {
     from = this.normaliseIndex(from)
     to = this.normaliseIndex(to)
 
-    for (let i = 0; i < size; i++) {
-      // copy
-      const value = this.buffers[from.buffer][i + from.index]
+    // copy
+    const value = this.buffers[from.buffer][from.index]
 
-      // paste
-      this.buffers[to.buffer][i + to.index] = value
-    }
+    // remember
+    const original = this.buffers[to.buffer][to.index]
 
-    this.moves.push({ type: MoveType.MEMCPY, size, from, to })
+    // paste
+    this.buffers[to.buffer][to.index] = value
+
+    this.moves.push({ type: MoveType.MEMCPY, from, to, original })
   }
 
   /**
