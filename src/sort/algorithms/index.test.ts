@@ -4,6 +4,7 @@ import bubbleSort from './bubble-sort'
 import mergeSort from './merge-sort'
 import shellSort from './shell-sort'
 import heapSort from './heap-sort'
+import binaryInsertionSort from './binary-insertion-sort'
 
 const permute = (n: number) => {
   const numbers: number[] = []
@@ -38,7 +39,8 @@ describe.each([
   ['bubble', bubbleSort],
   ['merge', mergeSort],
   ["Shell's", shellSort],
-  ['heap', heapSort]
+  ['heap', heapSort],
+  ['binary insertion', binaryInsertionSort]
 ])('%s sort', (_name, sort) => {
   it.each(permute(3))('should sort %p', values => {
     sort(new Tracker(values))
