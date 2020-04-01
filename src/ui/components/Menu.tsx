@@ -13,7 +13,8 @@ import {
   FaMinus,
   FaPause
 } from 'react-icons/fa'
-import Button from './Button'
+import Button, { IconButton } from './Button'
+import { Algorithm } from '../../sort/types'
 import './Menu.scss'
 
 interface ButtonProps {
@@ -33,6 +34,11 @@ const Menu: React.FC<{
   speedUp: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
+  algorithm: {
+    status: string
+    list: string[]
+    handler(key: string): void
+  }
 }> = ({
   reverse,
   restart,
@@ -42,14 +48,16 @@ const Menu: React.FC<{
   stepForward,
   speedUp,
   sizeUp,
-  sizeDown
+  sizeDown,
+  algorithm
 }) => {
-  const [extra, setExtra] = useState(false)
   const [spinning, setSpinning] = useState(false)
+  const [extra, setExtra] = useState(false)
+  const [algorithmMenu, setAlgorithmMenu] = useState(false)
 
   return (
     <div className="Menu">
-      <Button
+      <IconButton
         name="restart"
         Icon={FaRedoAlt}
         style={
@@ -67,10 +75,10 @@ const Menu: React.FC<{
           setSpinning(true)
         }}
       />
-      <Button name="speed down" Icon={FaBackward} {...speedDown} />
-      <Button name="step back" Icon={FaStepBackward} {...stepBack} />
+      <IconButton name="speed down" Icon={FaBackward} {...speedDown} />
+      <IconButton name="step back" Icon={FaStepBackward} {...stepBack} />
       <div className="playPauseWithReverse">
-        <Button
+        <IconButton
           name="play"
           Icon={play.status ? FaPause : FaPlay}
           style={{
@@ -79,26 +87,34 @@ const Menu: React.FC<{
           }}
           {...play}
         />
-        <Button name="reverse" Icon={FaSyncAlt} {...reverse} />
+        <IconButton name="reverse" Icon={FaSyncAlt} {...reverse} />
       </div>
-      <Button name="step forward" Icon={FaStepForward} {...stepForward} />
-      <Button name="speed up" Icon={FaForward} {...speedUp} />
+      <IconButton name="step forward" Icon={FaStepForward} {...stepForward} />
+      <IconButton name="speed up" Icon={FaForward} {...speedUp} />
       <div className={`extra ${extra ? 'show' : 'hide'}`}>
-        <Button
+        <IconButton
           name="extra options"
           Icon={FaEllipsisV}
+          keyCode={27}
           handler={() => setExtra(!extra)}
         />
         <div className="buttons">
-          <Button name="size up" Icon={FaPlus} {...sizeUp} />
-          <Button name="size down" Icon={FaMinus} {...sizeDown} />
-          <Button
-            name="algorithm"
-            Icon={FaCode}
-            handler={() =>
-              console.warn('Choosing an algorithm is not implemented yet.')
-            }
-          />
+          <div className="algorithms">
+            {algorithm.list.map(camelCase => (
+              <Button
+                key={camelCase}
+                handler={() => algorithm.handler(camelCase)}
+                name={camelCase}
+                className={algorithm.status === camelCase ? 'active' : ''}
+              >
+                {camelCase
+                  .replace(/([A-Z])/g, (_x, y) => ` ${y}`)
+                  .replace(/^(.)/, (_x, y) => y.toUpperCase())}
+              </Button>
+            ))}
+          </div>
+          <IconButton name="size up" Icon={FaPlus} {...sizeUp} />
+          <IconButton name="size down" Icon={FaMinus} {...sizeDown} />
         </div>
       </div>
     </div>

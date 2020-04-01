@@ -2,25 +2,27 @@ import React, { useRef, useEffect } from 'react'
 import { IconType } from 'react-icons/lib/cjs'
 import './Button.scss'
 
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   name: string
   handler: () => void
-  Icon: IconType
   disabled?: boolean
   keyStr?: string
   keyCode?: number
-}> = ({
+}
+
+const Button: React.FC<ButtonProps> = ({
   name,
   handler,
-  Icon,
-  disabled = false,
+  disabled,
   keyStr,
   keyCode,
+  children,
+  className,
   ...buttonAttributes
 }) => {
   const camelCaseName = name
     .replace(/^(.)/, (_x, y) => y.toLowerCase())
-    .replace(/ (.)/, (_x, y) => y.toUpperCase())
+    .replace(/ (.)/g, (_x, y) => y.toUpperCase())
 
   // We want to make it possible to specify a keyboard event that will also fire
   // the button.
@@ -32,6 +34,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
         // that the callback is not fired if the button is disabled
         if (e.key === keyStr || e.keyCode === keyCode) {
           ref.current?.click()
+          if (e.key === ' ') e.preventDefault()
         }
       }
       window.addEventListener('keydown', listener)
@@ -44,15 +47,24 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
   return (
     <button
       ref={ref}
-      className={`Button ${camelCaseName}`}
+      className={`Button ${className} ${camelCaseName}`}
       title={name}
       onClick={handler}
       disabled={disabled}
       {...buttonAttributes}
     >
-      <Icon className="icon" />
+      {children}
     </button>
   )
 }
+
+export const IconButton: React.FC<ButtonProps & { Icon: IconType }> = ({
+  Icon,
+  ...props
+}) => (
+  <Button {...props} className={`${props.className} Icon`}>
+    <Icon className="icon" />
+  </Button>
+)
 
 export default Button
