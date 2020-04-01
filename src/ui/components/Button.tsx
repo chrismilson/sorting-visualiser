@@ -2,15 +2,22 @@ import React, { useRef, useEffect } from 'react'
 import { IconType } from 'react-icons/lib/cjs'
 import './Button.scss'
 
-const Button: React.FC<{
+const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
   name: string
   handler: () => void
   Icon: IconType
   disabled?: boolean
   keyStr?: string
   keyCode?: number
-  style?: React.CSSProperties
-}> = ({ name, handler, Icon, disabled = false, keyStr, keyCode, style }) => {
+}> = ({
+  name,
+  handler,
+  Icon,
+  disabled = false,
+  keyStr,
+  keyCode,
+  ...buttonAttributes
+}) => {
   const camelCaseName = name
     .replace(/^(.)/, (_x, y) => y.toLowerCase())
     .replace(/ (.)/, (_x, y) => y.toUpperCase())
@@ -41,7 +48,7 @@ const Button: React.FC<{
       title={name}
       onClick={handler}
       disabled={disabled}
-      style={style}
+      {...buttonAttributes}
     >
       <Icon className="icon" />
     </button>
