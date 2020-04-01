@@ -4,10 +4,8 @@ import Menu from './components/Menu'
 import useValues from './hooks/use-values'
 import useAlgorithm, { useAlgorithmAsync } from './hooks/use-algorithm'
 import useToggle from './hooks/use-toggle'
-import shuffleAlgorithm from '../sort/algorithms/shuffle'
-import sortingAlgorithm from '../sort/algorithms/tim-sort'
-import Direction from '../sort/Direction'
-import Move from '../sort/Move'
+import algorithms, { shuffle as shuffleAlgorithm } from '../sort/algorithms'
+import { Direction, Move } from '../sort/types'
 import './App.scss'
 
 const App: React.FC = () => {
@@ -32,7 +30,8 @@ const App: React.FC = () => {
 
   const shuffle = useAlgorithm(shuffleAlgorithm, values)
 
-  const sort = useAlgorithmAsync(sortingAlgorithm, values)
+  const [algorithm, setAlgorithm] = useState('timsort')
+  const sort = useAlgorithmAsync(algorithms[algorithm], values)
 
   const moveRef = useRef<Move | undefined>()
   useEffect(() => {
@@ -63,16 +62,13 @@ const App: React.FC = () => {
         moveRef
       })
     }
-  }, [play, sort, speed, direction, changeDirection])
-
-  // useEffect(() => {
-  //   if (!play) moveRef.current = undefined
-  // }, [play])
+  }, [play, sort, speed, direction, changeDirection, moveRef])
 
   return (
     <div className="App">
       <Menu
         restart={{
+          disabled: blocking,
           keyStr: 'r',
           handler: () => {
             changeDirection(Direction.FORWARD)
@@ -85,23 +81,27 @@ const App: React.FC = () => {
           }
         }}
         speedDown={{
+          disabled: blocking,
           // if playing leftArrow decreases speed
           keyCode: play ? 37 : undefined,
           handler: () => setSpeed(Math.max(minSpeed, speed - 1))
         }}
         stepBack={{
+          disabled: blocking,
           // if not playing leftArrow steps back
           keyCode: play ? undefined : 37,
           handler: () => {
-            if (!blocking) moveRef.current = sort?.step(Direction.BACKWARD)
+            moveRef.current = sort?.step(Direction.BACKWARD)
           }
         }}
         play={{
+          disabled: blocking,
           handler: () => setPlay(!play),
-          status: play,
-          disabled: blocking
+          keyStr: ' ',
+          status: play
         }}
         reverse={{
+          disabled: blocking,
           keyStr: '`',
           handler: () => {
             const oppositeDirection =
@@ -113,13 +113,15 @@ const App: React.FC = () => {
           status: direction === Direction.BACKWARD
         }}
         stepForward={{
+          disabled: blocking,
           // if not playing rightArrow steps forward
           keyCode: play ? undefined : 39,
           handler: () => {
-            if (!blocking) moveRef.current = sort?.step(Direction.FORWARD)
+            moveRef.current = sort?.step(Direction.FORWARD)
           }
         }}
         speedUp={{
+          disabled: blocking,
           // if playing rightArrow increases speed
           keyCode: play ? 39 : undefined,
           handler: () => setSpeed(Math.min(maxSpeed, speed + 1))
@@ -131,6 +133,38 @@ const App: React.FC = () => {
         sizeDown={{
           keyCode: 40,
           handler: () => setSize(Math.max(minSize, size - 1))
+        }}
+        algorithm={{
+          status: algorithm,
+          list: Object.keys(algorithms),
+          handler: algorithm => {
+            if (algorithm in algorithms) {
+              if (sort) {
+                setBlocking(true)
+                changeDirection(Direction.FORWARD)
+                setPlay(false)
+
+                const onCompletion = () => {
+                  setAlgorithm(algorithm)
+                  setBlocking(false)
+                }
+
+                if (sort.hasStep(Direction.FORWARD)) {
+                  sort.animateUntilCompletion(500, Direction.BACKWARD, {
+                    onCompletion
+                  })
+                } else {
+                  // the sort has finished, just run the shuffle again
+                  shuffle.reset()
+                  shuffle.animateUntilCompletion(500, Direction.FORWARD, {
+                    onCompletion
+                  })
+                }
+              } else {
+                setAlgorithm(algorithm)
+              }
+            }
+          }
         }}
       />
       <Display values={values} moveRef={moveRef} untracker={sort} />
