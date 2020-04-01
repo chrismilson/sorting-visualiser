@@ -1,12 +1,13 @@
 import { Algorithm } from '.'
 
-interface Chunk {
+interface Slice {
   base: number
-  size: number
+  len: number
 }
 
 class MergeState {
-  pending: Chunk[] = []
+  pending: Slice[] = []
+  minGallop = 7
 }
 
 /**
@@ -32,20 +33,52 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     return n - low
   }
 
+  /**
+   * Simmilar to binary search, except first finds a good lower and upper bound
+   * before searching.
+   */
   const gallopLeft = (
     mark: number,
     from: number,
-    length: number,
+    size: number,
     hint: number
   ) => {
-    // hint is used in the galloping version of timsort
-    void hint
+    const base = from + hint
+    let lastOffset = 0
+    let offset = 1
 
-    let offset = 0
-    while (offset < length && compare(mark, from + offset) > 0) {
-      offset++
+    if (compare(base, mark) < 0) {
+      // mark should be somwhere in [hint, size]
+      const maxOffset = size - hint
+      while (offset < maxOffset && compare(base + offset, mark) < 0) {
+        lastOffset = offset
+        offset = (offset << 1) + 1
+        if (offset <= 0) offset = maxOffset
+      }
+      if (offset > maxOffset) offset = maxOffset
+      // translate so that offset is relative to from not base
+      lastOffset = hint + lastOffset
+      offset = hint + offset
+    } else {
+      const maxOffset = hint
+      while (offset < maxOffset && compare(base - offset, mark) >= 0) {
+        lastOffset = offset
+        offset = (offset << 1) + 1
+        if (offset <= 0) offset = maxOffset
+      }
+      if (offset > maxOffset) offset = maxOffset
+      // translate so that offset is relative to from not base and lastOffset <
+      // offset
+      const temp = lastOffset
+      lastOffset = hint - offset
+      offset = hint - temp
     }
 
+    while (lastOffset < offset) {
+      const mid = lastOffset + ((offset - lastOffset) >> 1)
+      if (compare(from + mid, mark) < 0) lastOffset = mid + 1
+      else offset = mid
+    }
     return offset
   }
 
@@ -55,13 +88,42 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     length: number,
     hint: number
   ) => {
-    // hint is used in the galloping version of timsort
-    void hint
+    const base = from + hint
+    let lastOffset = 0
+    let offset = 1
 
-    let offset = 0
-    while (offset < length && compare(mark, from + length - offset - 1) < 0) {
-      offset++
+    if (compare(base, mark) < 0) {
+      const maxOffset = size - hint
+      while (offset < maxOffset && compare(base + offset, mark) < 0) {
+        lastOffset = offset
+        offset = (offset << 1) + 1
+        if (offset <= 0) offset = maxOffset
+      }
+      if (offset > maxOffset) offset = maxOffset
+      // translate so that offset is relative to from not base
+      lastOffset += hint
+      offset += hint
+    } else {
+      const maxOffset = hint
+      while (offset < maxOffset && compare(base - offset, mark) >= 0) {
+        lastOffset = offset
+        offset = (offset << 1) + 1
+        if (offset <= 0) offset = maxOffset
+      }
+      if (offset > maxOffset) offset = maxOffset
+      // translate so that offset is relative to from not base and lastOffset <
+      // offset
+      const temp = lastOffset
+      lastOffset = hint - offset
+      offset = hint - temp
     }
+
+    while (lastOffset < offset) {
+      const mid = lastOffset + ((offset - lastOffset) >> 1)
+      if (compare(from + mid, mark) < 0) lastOffset = mid + 1
+      else offset = mid
+    }
+
     return offset
   }
 
@@ -163,36 +225,38 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     free(buffer)
   }
 
+  /** Merges two slices */
   const mergeAt = (mergeState: MergeState, i: number) => {
-    const { base: pA, size: nA } = mergeState.pending[i]
-    const { base: pB, size: nB } = mergeState.pending[i + 1]
+    const { pending } = mergeState
+    let pA = pending[i].base
+    let nA = pending[i].len
+    const pB = pending[i + 1].base
+    let nB = pending[i + 1].len
 
     // record the length of the combined runs.
-    mergeState.pending[i].size = nA + nB
+    pending[i].len = nA + nB
     // remove the chunk that will be merged.
-    mergeState.pending.splice(i + 1, 1)
+    pending.splice(i + 1, 1)
 
     // Where does b start in a? Elements before that can be ignored.
-    const ignoreAtFront = gallopLeft(pB, pA, nA, 0)
+    const ignoreAtFront = gallopRight(pB, pA, nA, 0)
+    pA += ignoreAtFront
+    nA -= ignoreAtFront
 
-    const ignoreAtBack = gallopRight(pA + nA - 1, pB, nB, nB - 1)
+    nB = gallopLeft(pA + nA - 1, pB, nB, nB - 1)
 
-    const merge = nA - ignoreAtFront <= nB - ignoreAtBack ? mergeHi : mergeLo
-    merge(pA + ignoreAtFront, nA - ignoreAtFront, pB, nB - ignoreAtBack)
+    const merge = nA <= nB ? mergeHi : mergeLo
+    merge(pA, nA, pB, nB)
   }
 
   const mergeCollapse = (mergeState: MergeState) => {
     const { pending } = mergeState
     while (pending.length > 1) {
-      console.log([...mergeState.pending])
       let n = pending.length - 2
-      if (
-        n > 0 &&
-        pending[n - 1].size <= pending[n].size + pending[n + 1].size
-      ) {
-        if (pending[n - 1].size < pending[n + 1].size) n -= 1
+      if (n > 0 && pending[n - 1].len <= pending[n].len + pending[n + 1].len) {
+        if (pending[n - 1].len < pending[n + 1].len) n -= 1
         mergeAt(mergeState, n)
-      } else if (pending[n].size <= pending[n + 1].size) {
+      } else if (pending[n].len <= pending[n + 1].len) {
         mergeAt(mergeState, n)
       } else break
     }
@@ -202,7 +266,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     const { pending } = mergeState
     while (pending.length > 1) {
       let n = pending.length - 2
-      if (n > 0 && pending[n - 1].size < pending[n + 1].size) n -= 1
+      if (n > 0 && pending[n - 1].len < pending[n + 1].len) n -= 1
       mergeAt(mergeState, n)
     }
   }
@@ -242,7 +306,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     // push run onto pending stack and maybe merge
     mergeState.pending.push({
       base: low,
-      size: n
+      len: n
     })
     mergeCollapse(mergeState)
 
