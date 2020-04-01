@@ -100,7 +100,10 @@ const Menu: React.FC<{
             {algorithm.list.map(camelCase => (
               <Button
                 key={camelCase}
-                handler={() => algorithm.handler(camelCase)}
+                handler={() => {
+                  setExtra(false)
+                  algorithm.handler(camelCase)
+                }}
                 name={camelCase}
                 className={algorithm.status === camelCase ? 'active' : ''}
               >

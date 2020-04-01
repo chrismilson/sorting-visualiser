@@ -147,6 +147,7 @@ const App: React.FC = () => {
                 const onCompletion = () => {
                   setAlgorithm(algorithm)
                   setBlocking(false)
+                  setPlay(true)
                 }
 
                 if (sort.hasStep(Direction.FORWARD)) {
