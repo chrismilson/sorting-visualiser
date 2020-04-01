@@ -45,17 +45,34 @@ const Menu: React.FC<{
   sizeDown
 }) => {
   const [extra, setExtra] = useState(false)
+  const [spinning, setSpinning] = useState(false)
 
   return (
     <div className="Menu">
-      <Button name="restart" Icon={FaRedoAlt} {...restart} />
+      <Button
+        name="restart"
+        Icon={FaRedoAlt}
+        style={
+          spinning
+            ? {
+                transition: 'transform 300ms',
+                transform: `rotate(${360}deg)`
+              }
+            : {}
+        }
+        onTransitionEnd={() => setSpinning(false)}
+        {...restart}
+        handler={() => {
+          restart.handler()
+          setSpinning(true)
+        }}
+      />
       <Button name="speed down" Icon={FaBackward} {...speedDown} />
       <Button name="step back" Icon={FaStepBackward} {...stepBack} />
       <div className="playPauseWithReverse">
         <Button
           name="play"
           Icon={play.status ? FaPause : FaPlay}
-          keyStr=" "
           style={{
             transition: 'transform 100ms',
             transform: `rotate(${reverse.status ? 180 : 0}deg)`
