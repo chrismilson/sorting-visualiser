@@ -1,22 +1,21 @@
-import Move, { MoveType } from './Move'
+import { MoveType, Move, Index } from './types'
 import Untracker from './Untracker'
 
-type BufferId = number
 class BufferIdPool {
   private _next = 1
-  private _inUse: Set<BufferId> = new Set([])
+  private _inUse: Set<number> = new Set([])
 
-  next(): BufferId {
+  next(): number {
     const id = this._next++
     this._inUse.add(id)
     return id
   }
 
-  free(id: BufferId) {
+  free(id: number) {
     this._inUse.delete(id)
   }
 
-  inUse(id: BufferId) {
+  inUse(id: number) {
     return this._inUse.has(id)
   }
 
@@ -74,10 +73,7 @@ export default class Tracker {
   /**
    * Swaps the values at indicies i and j.
    */
-  swap(
-    iIndex: { buffer: BufferId; index: number } | number,
-    jIndex: { buffer: BufferId; index: number } | number
-  ): void {
+  swap(iIndex: Index | number, jIndex: Index | number): void {
     // normalise the inputs
     const i = this.normaliseIndex(iIndex)
     const j = this.normaliseIndex(jIndex)
@@ -98,10 +94,7 @@ export default class Tracker {
    * - **0** If the value at i is equal to the value at j; or,
    * - **1** If the value at i is greater than the value at j.
    */
-  compare(
-    iIndex: { buffer: BufferId; index: number } | number,
-    jIndex: { buffer: BufferId; index: number } | number
-  ) {
+  compare(iIndex: Index | number, jIndex: Index | number) {
     const i = this.normaliseIndex(iIndex)
     const j = this.normaliseIndex(jIndex)
 
@@ -130,10 +123,7 @@ export default class Tracker {
   /**
    * Copies a value from one buffer to another.
    */
-  memcpy(
-    from: { buffer: BufferId; index: number } | number,
-    to: { buffer: BufferId; index: number } | number
-  ) {
+  memcpy(from: Index | number, to: Index | number) {
     from = this.normaliseIndex(from)
     to = this.normaliseIndex(to)
 
@@ -154,7 +144,7 @@ export default class Tracker {
    *
    * @param buffer The id of the buffer to free.
    */
-  free(buffer: BufferId) {
+  free(buffer: number) {
     // we cant free the main values
     if (buffer > 0) {
       delete this.buffers[buffer]
@@ -168,7 +158,7 @@ export default class Tracker {
    * will work by just passing a number as the index, which should index the
    * main values array.
    */
-  private normaliseIndex(index: { buffer: BufferId; index: number } | number) {
+  private normaliseIndex(index: Index | number): Index & { value: number } {
     if (typeof index === 'number') index = { buffer: 0, index }
     const value = this.buffers[index.buffer][index.index]
     return { ...index, value }

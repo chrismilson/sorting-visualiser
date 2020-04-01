@@ -1,4 +1,4 @@
-import { Algorithm } from '.'
+import { Algorithm } from '../types'
 
 /**
  * This algorithm does not sort an array - it shuffles an array. The original

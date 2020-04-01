@@ -1,5 +1,5 @@
-import { Algorithm } from '../../sort/algorithms'
 import { useMemo, useState, useEffect } from 'react'
+import { Algorithm } from '../../sort/types'
 import Tracker from '../../sort/Tracker'
 import Untracker from '../../sort/Untracker'
 

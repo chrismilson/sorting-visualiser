@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import useCanvas, { DrawingMethod } from 'react-hooks-use-drawing-canvas'
-import Move, { MoveType } from '../../sort/Move'
+import { MoveType, Move } from '../../sort/types'
 import Untracker from '../../sort/Untracker'
 import './Display.scss'
 

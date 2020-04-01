@@ -1,5 +1,4 @@
-import Move, { MoveType } from './Move'
-import Direction from './Direction'
+import { MoveType, Move, Direction } from './types'
 
 /**
  * Just as the Tracker class is for recording the algorithms. The UnTracker is

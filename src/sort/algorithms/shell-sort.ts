@@ -1,4 +1,4 @@
-import { Algorithm } from '.'
+import { Algorithm } from '../types'
 
 const shellSort: Algorithm = ({ compare, swap, size }) => {
   let gap = ~~(size / 2)

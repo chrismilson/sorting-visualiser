@@ -1,4 +1,4 @@
-import { Algorithm } from '.'
+import { Algorithm } from '../types'
 
 const mergeSort: Algorithm = ({ compare, malloc, memcpy, free, size }) => {
   const merge = (low: number, mid: number, high: number) => {
