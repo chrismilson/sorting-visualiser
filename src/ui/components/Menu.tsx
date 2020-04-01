@@ -8,13 +8,11 @@ import {
   FaForward,
   FaStepForward,
   FaEllipsisV,
-  FaCode,
   FaPlus,
   FaMinus,
   FaPause
 } from 'react-icons/fa'
 import Button, { IconButton } from './Button'
-import { Algorithm } from '../../sort/types'
 import './Menu.scss'
 
 interface ButtonProps {
@@ -53,7 +51,6 @@ const Menu: React.FC<{
 }) => {
   const [spinning, setSpinning] = useState(false)
   const [extra, setExtra] = useState(false)
-  const [algorithmMenu, setAlgorithmMenu] = useState(false)
 
   return (
     <div className="Menu">
