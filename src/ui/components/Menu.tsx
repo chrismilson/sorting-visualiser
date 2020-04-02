@@ -33,7 +33,7 @@ const Menu: React.FC<{
   sizeUp: ButtonProps
   sizeDown: ButtonProps
   algorithm: {
-    status: string
+    current: string
     list: string[]
     handler(key: string): void
   }
@@ -105,7 +105,7 @@ const Menu: React.FC<{
                   algorithm.handler(camelCase)
                 }}
                 name={camelCase}
-                className={algorithm.status === camelCase ? 'active' : ''}
+                className={algorithm.current === camelCase ? 'active' : ''}
               >
                 {camelCase
                   .replace(/([A-Z])/g, (_x, y) => ` ${y}`)

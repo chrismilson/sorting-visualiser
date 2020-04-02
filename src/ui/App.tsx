@@ -135,7 +135,7 @@ const App: React.FC = () => {
           handler: () => setSize(Math.max(minSize, size - 1))
         }}
         algorithm={{
-          status: algorithm,
+          current: algorithm,
           list: Object.keys(algorithms),
           handler: algorithm => {
             if (algorithm in algorithms) {
