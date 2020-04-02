@@ -38,11 +38,11 @@ const Menu: React.FC<{
     handler(key: string): void
   }
 }> = ({
-  reverse,
+  reverse: { status: reverseStatus, ...reverse },
   restart,
   speedDown,
   stepBack,
-  play,
+  play: { status: playStatus, ...play },
   stepForward,
   speedUp,
   sizeUp,
@@ -77,10 +77,10 @@ const Menu: React.FC<{
       <div className="playPauseWithReverse">
         <IconButton
           name="play"
-          Icon={play.status ? FaPause : FaPlay}
+          Icon={playStatus ? FaPause : FaPlay}
           style={{
             transition: 'transform 100ms',
-            transform: `rotate(${reverse.status ? 180 : 0}deg)`
+            transform: `rotate(${reverseStatus ? 180 : 0}deg)`
           }}
           {...play}
         />
