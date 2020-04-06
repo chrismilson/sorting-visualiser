@@ -7,8 +7,6 @@ import quickSort from './quick-sort'
 import shellSort from './shell-sort'
 import timsort from './tim-sort'
 
-import shuffle from './shuffle'
-
 const algorithms: { [key: string]: Algorithm } = {
   binaryInsertionSort,
   bubbleSort,
@@ -18,7 +16,5 @@ const algorithms: { [key: string]: Algorithm } = {
   shellSort,
   timsort
 }
-
-export { shuffle }
 
 export default algorithms

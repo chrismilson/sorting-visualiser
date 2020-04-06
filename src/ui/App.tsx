@@ -4,7 +4,8 @@ import Menu from './components/Menu'
 import useValues from './hooks/use-values'
 import useAlgorithm, { useAlgorithmAsync } from './hooks/use-algorithm'
 import useToggle from './hooks/use-toggle'
-import algorithms, { shuffle as shuffleAlgorithm } from '../sort/algorithms'
+import algorithms from '../sort/algorithms'
+import unsortingAlgorithm from '../sort/unsort/bad-shuffle'
 import { Direction, Move } from '../sort/types'
 import './App.scss'
 
@@ -28,7 +29,7 @@ const App: React.FC = () => {
 
   const values = useValues(Math.floor(Math.pow(1.5, size)))
 
-  const shuffle = useAlgorithm(shuffleAlgorithm, values)
+  const unsort = useAlgorithm(unsortingAlgorithm, values)
 
   const [algorithm, setAlgorithm] = useState('timsort')
   const sort = useAlgorithmAsync(algorithms[algorithm], values)
@@ -43,13 +44,13 @@ const App: React.FC = () => {
     setBlocking(true)
     setPlay(false)
     changeDirection(Direction.FORWARD)
-    shuffle.reset()
-    return shuffle.animateUntilCompletion(2000, Direction.FORWARD, {
+    unsort.reset()
+    return unsort.animateUntilCompletion(2000, Direction.FORWARD, {
       onCompletion: () => {
         setBlocking(false)
       }
     })
-  }, [shuffle, changeDirection])
+  }, [unsort, changeDirection])
 
   useEffect(() => {
     if (play) {
@@ -156,8 +157,8 @@ const App: React.FC = () => {
                   })
                 } else {
                   // the sort has finished, just run the shuffle again
-                  shuffle.reset()
-                  shuffle.animateUntilCompletion(500, Direction.FORWARD, {
+                  unsort.reset()
+                  unsort.animateUntilCompletion(500, Direction.FORWARD, {
                     onCompletion
                   })
                 }
