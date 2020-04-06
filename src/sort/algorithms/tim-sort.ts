@@ -40,7 +40,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
   const gallopLeft = (
     mark: number,
     from: number,
-    size: number,
+    length: number,
     hint: number
   ) => {
     const base = from + hint
@@ -49,7 +49,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
     if (compare(base, mark) < 0) {
       // mark should be somwhere in [hint, size]
-      const maxOffset = size - hint
+      const maxOffset = length - hint
       while (offset < maxOffset && compare(base + offset, mark) < 0) {
         lastOffset = offset
         offset = (offset << 1) + 1
@@ -93,7 +93,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     let offset = 1
 
     if (compare(base, mark) < 0) {
-      const maxOffset = size - hint
+      const maxOffset = length - hint
       while (offset < maxOffset && compare(base + offset, mark) < 0) {
         lastOffset = offset
         offset = (offset << 1) + 1
@@ -273,6 +273,12 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
   /** Calculates the optimal minimum length of a run. */
   const calculateMinRun = (length: number) => {
+    // This version of timsort will be used on small data to visualise the sort.
+    // Since binary insertion sort is a different sort we will ignore it for the
+    // purposes of this project, and make the minimum run length 1
+    void length
+    return 1
+
     let r = 0 // becomes 1 if any 1 bits are shifted off.
 
     while (length >= 64) {
@@ -290,6 +296,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
   const MIN_RUN = calculateMinRun(size)
   while (remaining > 0) {
     let n = countRun(low, size)
+    console.log(n)
 
     // reverse if descending
     if (n < 0) {
