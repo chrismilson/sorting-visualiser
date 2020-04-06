@@ -296,7 +296,6 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
   const MIN_RUN = calculateMinRun(size)
   while (remaining > 0) {
     let n = countRun(low, size)
-    console.log(n)
 
     // reverse if descending
     if (n < 0) {
