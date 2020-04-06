@@ -24,12 +24,12 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
   const countRun = (low: number, high: number) => {
     if (low === high - 1) return 1
     let n = low + 1
-    if (compare(low, n) < 0) {
+    if (compare(low, n) > 0) {
       while (n < high && compare(n - 1, n) > 0) n++
       // returns negative to signify decending run
       return low - n
     }
-    while (n < high && compare(n - 1, n) < 0) n++
+    while (n < high && compare(n - 1, n) <= 0) n++
     return n - low
   }
 
