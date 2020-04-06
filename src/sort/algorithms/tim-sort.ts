@@ -1,4 +1,4 @@
-import { Algorithm } from '../types'
+import { Algorithm, Index } from '../types'
 
 interface Slice {
   base: number
@@ -38,19 +38,27 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
    * before searching.
    */
   const gallopLeft = (
-    mark: number,
+    mark: number | Index,
     from: number,
     length: number,
-    hint: number
+    hint: number,
+    fromBuffer?: number
   ) => {
+    /** Wraps an index to from with the specified buffer if needed. */
+    const indexFrom = fromBuffer
+      ? (index: number) => ({ buffer: fromBuffer, index })
+      : (index: number) => index
     const base = from + hint
     let lastOffset = 0
     let offset = 1
 
-    if (compare(base, mark) < 0) {
+    if (compare(indexFrom(base), mark) < 0) {
       // mark should be somwhere in [hint, size]
       const maxOffset = length - hint
-      while (offset < maxOffset && compare(base + offset, mark) < 0) {
+      while (
+        offset < maxOffset &&
+        compare(indexFrom(base + offset), mark) < 0
+      ) {
         lastOffset = offset
         offset = (offset << 1) + 1
         if (offset <= 0) offset = maxOffset
@@ -61,7 +69,10 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
       offset = hint + offset
     } else {
       const maxOffset = hint
-      while (offset < maxOffset && compare(base - offset, mark) >= 0) {
+      while (
+        offset < maxOffset &&
+        compare(indexFrom(base - offset), mark) >= 0
+      ) {
         lastOffset = offset
         offset = (offset << 1) + 1
         if (offset <= 0) offset = maxOffset
@@ -76,25 +87,34 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
     while (lastOffset < offset) {
       const mid = lastOffset + ((offset - lastOffset) >> 1)
-      if (compare(from + mid, mark) < 0) lastOffset = mid + 1
+      if (compare(indexFrom(from + mid), mark) < 0) lastOffset = mid + 1
       else offset = mid
     }
     return offset
   }
 
   const gallopRight = (
-    mark: number,
+    mark: number | Index,
     from: number,
     length: number,
-    hint: number
+    hint: number,
+    /** optionally set the buffer that from should access */
+    fromBuffer?: number
   ) => {
+    /** Wraps an index to from with the specified buffer if needed. */
+    const indexFrom = fromBuffer
+      ? (index: number) => ({ buffer: fromBuffer, index })
+      : (index: number) => index
     const base = from + hint
     let lastOffset = 0
     let offset = 1
 
-    if (compare(base, mark) < 0) {
+    if (compare(indexFrom(base), mark) < 0) {
       const maxOffset = length - hint
-      while (offset < maxOffset && compare(base + offset, mark) < 0) {
+      while (
+        offset < maxOffset &&
+        compare(indexFrom(base + offset), mark) < 0
+      ) {
         lastOffset = offset
         offset = (offset << 1) + 1
         if (offset <= 0) offset = maxOffset
@@ -105,7 +125,10 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
       offset += hint
     } else {
       const maxOffset = hint
-      while (offset < maxOffset && compare(base - offset, mark) >= 0) {
+      while (
+        offset < maxOffset &&
+        compare(indexFrom(base - offset), mark) >= 0
+      ) {
         lastOffset = offset
         offset = (offset << 1) + 1
         if (offset <= 0) offset = maxOffset
@@ -120,7 +143,7 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
     while (lastOffset < offset) {
       const mid = lastOffset + ((offset - lastOffset) >> 1)
-      if (compare(from + mid, mark) < 0) lastOffset = mid + 1
+      if (compare(indexFrom(from + mid), mark) < 0) lastOffset = mid + 1
       else offset = mid
     }
 
