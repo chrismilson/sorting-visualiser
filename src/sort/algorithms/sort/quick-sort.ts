@@ -1,4 +1,4 @@
-import { Algorithm } from '../types'
+import { Algorithm } from '../../types'
 
 /**
  * Quick sort is a recursive sorting algorithm that will sort an array of `n`

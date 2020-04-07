@@ -1,20 +1,12 @@
 import { Algorithm } from '../types'
-import binaryInsertionSort from './binary-insertion-sort'
-import bubbleSort from './bubble-sort'
-import heapSort from './heap-sort'
-import mergeSort from './merge-sort'
-import quickSort from './quick-sort'
-import shellSort from './shell-sort'
-import timsort from './tim-sort'
 
-const algorithms: { [key: string]: Algorithm } = {
-  binaryInsertionSort,
-  bubbleSort,
-  heapSort,
-  mergeSort,
-  quickSort,
-  shellSort,
-  timsort
+export const combine = (...algorithms: Algorithm[]): Algorithm => tracker => {
+  algorithms.forEach(algorithm => algorithm(tracker))
 }
 
-export default algorithms
+export const repeat = (
+  algorithm: Algorithm,
+  times: number
+): Algorithm => tracker => {
+  for (let i = 0; i < times; i++) algorithm(tracker)
+}

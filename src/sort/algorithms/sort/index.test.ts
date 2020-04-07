@@ -1,4 +1,4 @@
-import Tracker from '../Tracker'
+import Tracker from '../../Tracker'
 import quickSort from './quick-sort'
 import bubbleSort from './bubble-sort'
 import mergeSort from './merge-sort'

@@ -1,4 +1,4 @@
-import { Algorithm } from '../types'
+import { Algorithm } from '../../types'
 
 /**
  * Bubble sort is a sorting algorithm that will sort an array of n comparable

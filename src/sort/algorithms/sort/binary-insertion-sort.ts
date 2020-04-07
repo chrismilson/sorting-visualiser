@@ -1,4 +1,4 @@
-import { Algorithm } from '../types'
+import { Algorithm } from '../../types'
 
 const binaryInsertionSort: Algorithm = ({ compare, swap, size }) => {
   const findIndex = (target: number) => {

@@ -1,4 +1,4 @@
-import { Algorithm } from '../types'
+import { Algorithm } from '../../types'
 
 const heapSort: Algorithm = ({ compare, swap, size }) => {
   const heapify = (current: number, max: number) => {

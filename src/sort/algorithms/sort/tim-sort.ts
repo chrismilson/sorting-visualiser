@@ -1,4 +1,4 @@
-import { Algorithm, Index } from '../types'
+import { Algorithm, Index } from '../../types'
 
 interface Slice {
   base: number

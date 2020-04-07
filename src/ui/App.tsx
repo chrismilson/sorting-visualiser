@@ -4,10 +4,12 @@ import Menu from './components/Menu'
 import useValues from './hooks/use-values'
 import useAlgorithm, { useAlgorithmAsync } from './hooks/use-algorithm'
 import useToggle from './hooks/use-toggle'
-import algorithms from '../sort/algorithms'
-import unsortingAlgorithm from '../sort/unsort/bad-shuffle'
+import sortingAlgorithms from '../sort/algorithms/sort'
+import unsortingAlgorithms from '../sort/algorithms/unsort'
 import { Direction, Move } from '../sort/types'
 import './App.scss'
+
+const unsortingAlgorithm = unsortingAlgorithms.randomise
 
 const App: React.FC = () => {
   const [direction, changeDirection] = useToggle(
@@ -32,7 +34,7 @@ const App: React.FC = () => {
   const unsort = useAlgorithm(unsortingAlgorithm, values)
 
   const [algorithm, setAlgorithm] = useState('timsort')
-  const sort = useAlgorithmAsync(algorithms[algorithm], values)
+  const sort = useAlgorithmAsync(sortingAlgorithms[algorithm], values)
 
   const moveRef = useRef<Move | undefined>()
   useEffect(() => {
@@ -137,9 +139,9 @@ const App: React.FC = () => {
         }}
         algorithm={{
           current: algorithm,
-          list: Object.keys(algorithms),
+          list: Object.keys(sortingAlgorithms),
           handler: algorithm => {
-            if (algorithm in algorithms) {
+            if (algorithm in sortingAlgorithms) {
               if (sort) {
                 setBlocking(true)
                 changeDirection(Direction.FORWARD)
