@@ -373,15 +373,12 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
   /** Calculates the optimal minimum length of a run. */
   const calculateMinRun = (length: number) => {
-    // This version of timsort will be used on small data to visualise the sort.
-    // Since binary insertion sort is a different sort we will ignore it for the
-    // purposes of this project, and make the minimum run length 1
-    void length
-    return 1
-
     let r = 0 // becomes 1 if any 1 bits are shifted off.
 
-    while (length >= 64) {
+    // The true version of timsort uses 64 as a max, min size, we will use 16 so
+    // that the merging can be seen at smaller sizes
+    // while (length >= 64) {
+    while (length >= 16) {
       r |= length & 1
       length >>= 1
     }
