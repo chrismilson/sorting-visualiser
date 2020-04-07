@@ -22,6 +22,12 @@ interface ButtonProps {
   disabled?: boolean
 }
 
+interface AlgorithmProps {
+  current: string
+  list: string[]
+  handler(key: string): void
+}
+
 const Menu: React.FC<{
   reverse: ButtonProps & { status: boolean }
   restart: ButtonProps
@@ -32,11 +38,8 @@ const Menu: React.FC<{
   speedUp: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
-  algorithm: {
-    current: string
-    list: string[]
-    handler(key: string): void
-  }
+  unsort: AlgorithmProps
+  sort: AlgorithmProps
 }> = ({
   reverse: { status: reverseStatus, ...reverse },
   restart,
@@ -47,7 +50,8 @@ const Menu: React.FC<{
   speedUp,
   sizeUp,
   sizeDown,
-  algorithm
+  unsort,
+  sort
 }) => {
   const [spinning, setSpinning] = useState(false)
   const [extra, setExtra] = useState(false)
@@ -97,21 +101,40 @@ const Menu: React.FC<{
         />
         <div className="buttons">
           <div className="algorithms">
-            {algorithm.list.map(camelCase => (
-              <Button
-                key={camelCase}
-                handler={() => {
-                  setExtra(false)
-                  algorithm.handler(camelCase)
-                }}
-                name={camelCase}
-                className={algorithm.current === camelCase ? 'active' : ''}
-              >
-                {camelCase
-                  .replace(/([A-Z])/g, (_x, y) => ` ${y}`)
-                  .replace(/^(.)/, (_x, y) => y.toUpperCase())}
-              </Button>
-            ))}
+            <div className="sort">
+              {sort.list.map(camelCase => (
+                <Button
+                  key={camelCase}
+                  handler={() => {
+                    setExtra(false)
+                    sort.handler(camelCase)
+                  }}
+                  name={camelCase}
+                  className={sort.current === camelCase ? 'active' : ''}
+                >
+                  {camelCase
+                    .replace(/([A-Z])/g, (_x, y) => ` ${y}`)
+                    .replace(/^(.)/, (_x, y) => y.toUpperCase())}
+                </Button>
+              ))}
+            </div>
+            <div className="unsort">
+              {unsort.list.map(camelCase => (
+                <Button
+                  key={camelCase}
+                  handler={() => {
+                    setExtra(false)
+                    unsort.handler(camelCase)
+                  }}
+                  name={camelCase}
+                  className={unsort.current === camelCase ? 'active' : ''}
+                >
+                  {camelCase
+                    .replace(/([A-Z])/g, (_x, y) => ` ${y}`)
+                    .replace(/^(.)/, (_x, y) => y.toUpperCase())}
+                </Button>
+              ))}
+            </div>
           </div>
           <IconButton name="size up" Icon={FaPlus} {...sizeUp} />
           <IconButton name="size down" Icon={FaMinus} {...sizeDown} />

@@ -9,8 +9,6 @@ import unsortingAlgorithms from '../sort/algorithms/unsort'
 import { Direction, Move } from '../sort/types'
 import './App.scss'
 
-const unsortingAlgorithm = unsortingAlgorithms.randomise
-
 const App: React.FC = () => {
   const [direction, changeDirection] = useToggle(
     Direction.FORWARD,
@@ -144,18 +142,49 @@ const App: React.FC = () => {
           keyCode: 40,
           handler: () => setSize(Math.max(minSize, size - 1))
         }}
-        algorithm={{
-          current: algorithm,
+        unsort={{
+          current: unsortingAlgorithm,
+          list: Object.keys(unsortingAlgorithms),
+          handler: algorithm => {
+            if (
+              algorithm in unsortingAlgorithms &&
+              algorithm !== unsortingAlgorithm
+            ) {
+              setBlocking(true)
+              changeDirection(Direction.FORWARD)
+              setPlay(false)
+
+              const onCompletion = () => {
+                setUnsort(algorithm)
+              }
+
+              if (sort?.hasStep(Direction.BACKWARD)) {
+                sort.animateUntilCompletion(500, Direction.FORWARD, {
+                  onCompletion
+                })
+              } else {
+                unsort.animateUntilCompletion(500, Direction.BACKWARD, {
+                  onCompletion
+                })
+              }
+            }
+          }
+        }}
+        sort={{
+          current: sortingAlgorithm,
           list: Object.keys(sortingAlgorithms),
           handler: algorithm => {
-            if (algorithm in sortingAlgorithms) {
+            if (
+              algorithm in sortingAlgorithms &&
+              algorithm !== sortingAlgorithm
+            ) {
               if (sort) {
                 setBlocking(true)
                 changeDirection(Direction.FORWARD)
                 setPlay(false)
 
                 const onCompletion = () => {
-                  setAlgorithm(algorithm)
+                  setSort(algorithm)
                   setBlocking(false)
                   setPlay(true)
                 }
@@ -172,7 +201,7 @@ const App: React.FC = () => {
                   })
                 }
               } else {
-                setAlgorithm(algorithm)
+                setSort(algorithm)
               }
             }
           }

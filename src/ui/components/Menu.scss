@@ -31,14 +31,27 @@
 
       .algorithms {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
 
         position: fixed;
-        top: 25%;
-        left: 25%;
+        top: 0;
+        left: 0;
+        padding: 3em;
 
-        max-width: 50vw;
+        width: calc(100% - 6em);
+        height: calc(100% - 6em);
+
+        .sort, .unsort {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .unsort .Button {
+          background-color: rgb(207, 87, 163);
+        }
       }
     }
 
