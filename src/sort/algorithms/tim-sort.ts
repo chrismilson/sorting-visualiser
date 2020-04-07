@@ -195,7 +195,13 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
    * @param pB The first index of the B buffer
    * @param nB the length of the B buffer
    */
-  const mergeLo = (pA: number, nA: number, pB: number, nB: number) => {
+  const mergeLo = (
+    mergeState: MergeState,
+    pA: number,
+    nA: number,
+    pB: number,
+    nB: number
+  ) => {
     // copy the A buffer into extra memory
     const buffer = malloc(nA)
     for (let index = 0; index < nA; index++) {
@@ -204,17 +210,51 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
     let destination = pA
     pA = 0 // this is now the index in extra memory
+    let countA = 0
+    let countB = 0
 
-    while (pA < nA && nB > 0) {
-      if (compare({ buffer, index: pA }, pB) < 0) {
-        memcpy({ buffer, index: pA++ }, destination++)
-      } else {
-        memcpy(pB++, destination++)
-        nB--
+    const gallop = () => {
+      while (
+        nA > 0 &&
+        nB > 0 &&
+        (countA >= mergeState.minGallop || countB >= mergeState.minGallop)
+      ) {
+        if (mergeState.minGallop) mergeState.minGallop -= 1
+
+        countA = gallopRight(pB, pA, nA, 0, buffer)
+        for (let i = 0; i < countA; i++) {
+          memcpy({ buffer, index: pA++ }, destination++)
+        }
+        nA -= countA
+        // if (nA === 0) return
+
+        countB = gallopLeft({ buffer, index: pA }, pB, nB, 0)
+        for (let i = 0; i < countB; i++) {
+          memcpy(pB++, destination++)
+        }
+        nB -= countB
+        // if (nB === 0) return
       }
+      mergeState.minGallop += 1
     }
 
-    while (pA < nA) memcpy({ buffer, index: pA++ }, destination++)
+    while (nA > 0 && nB > 0) {
+      if (compare({ buffer, index: pA }, pB) < 0) {
+        memcpy({ buffer, index: pA++ }, destination++)
+        nA -= 1
+        countA += 1
+        countB = 0
+      } else {
+        memcpy(pB++, destination++)
+        nB -= 1
+        countA = 0
+        countB += 1
+      }
+      // One run is winning so consistently that galloping may be a huge win.
+      if (countA + countB >= mergeState.minGallop) gallop()
+    }
+
+    while (nA-- > 0) memcpy({ buffer, index: pA++ }, destination++)
 
     free(buffer)
   }
@@ -227,7 +267,13 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
    * @param pB The first index of the B buffer
    * @param nB the length of the B buffer
    */
-  const mergeHi = (pA: number, nA: number, pB: number, nB: number) => {
+  const mergeHi = (
+    mergeState: MergeState,
+    pA: number,
+    nA: number,
+    pB: number,
+    nB: number
+  ) => {
     // copy the B buffer into memory
     const buffer = malloc(nB)
     for (let index = 0; index < nB; index++) {
@@ -235,13 +281,44 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
     }
 
     let destination = pB + nB
+    let countA = 0 // number of times A won in a row
+    let countB = 0 // number of times B won in a row
+
+    const gallop = () => {
+      while (
+        nA > 0 &&
+        nB > 0 &&
+        (countA >= mergeState.minGallop || countB >= mergeState.minGallop)
+      ) {
+        if (mergeState.minGallop) mergeState.minGallop -= 1
+        countA = nA - gallopRight({ buffer, index: nB - 1 }, pA, nA, nA - 1)
+        for (let i = 0; i < countA; i++) {
+          memcpy(pA + --nA, --destination)
+        }
+        // if (nA === 0) return
+
+        countB = nB - gallopLeft(pA + nA - 1, 0, nB, nB - 1, buffer)
+        for (let i = 0; i < countB; i++) {
+          memcpy({ buffer, index: --nB }, --destination)
+        }
+        // if (nB === 0) return
+      }
+      // punishment for not gallopping anymore
+      mergeState.minGallop += 1
+    }
 
     while (nA > 0 && nB > 0) {
-      if (compare({ buffer, index: nB - 1 }, pA + nA - 1) > 0) {
-        memcpy({ buffer, index: --nB }, --destination)
-      } else {
+      if (compare({ buffer, index: nB - 1 }, pA + nA - 1) <= 0) {
         memcpy(pA + --nA, --destination)
+        countA += 1
+        countB = 0
+      } else {
+        memcpy({ buffer, index: --nB }, --destination)
+        countA = 0
+        countB += 1
       }
+      // One run is winning so consistently that galloping may be a huge win.
+      if (countA + countB >= mergeState.minGallop) gallop()
     }
     while (nB > 0) memcpy({ buffer, index: --nB }, --destination)
 
@@ -268,8 +345,8 @@ const timsort: Algorithm = ({ compare, swap, malloc, memcpy, free, size }) => {
 
     nB = gallopLeft(pA + nA - 1, pB, nB, nB - 1)
 
-    const merge = nA <= nB ? mergeHi : mergeLo
-    merge(pA, nA, pB, nB)
+    const merge = nA <= nB ? mergeLo : mergeHi
+    merge(mergeState, pA, nA, pB, nB)
   }
 
   const mergeCollapse = (mergeState: MergeState) => {
