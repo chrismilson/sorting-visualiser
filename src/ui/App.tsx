@@ -31,10 +31,17 @@ const App: React.FC = () => {
 
   const values = useValues(Math.floor(Math.pow(1.5, size)))
 
-  const unsort = useAlgorithm(unsortingAlgorithm, values)
+  const [unsortingAlgorithm, setUnsort] = useState('randomise')
+  const { untracker: unsort, values: unsortedValues } = useAlgorithm(
+    unsortingAlgorithms[unsortingAlgorithm],
+    values
+  )
 
-  const [algorithm, setAlgorithm] = useState('timsort')
-  const sort = useAlgorithmAsync(sortingAlgorithms[algorithm], values)
+  const [sortingAlgorithm, setSort] = useState('timsort')
+  const sort = useAlgorithmAsync(
+    sortingAlgorithms[sortingAlgorithm],
+    unsortedValues
+  )
 
   const moveRef = useRef<Move | undefined>()
   useEffect(() => {
@@ -171,7 +178,7 @@ const App: React.FC = () => {
           }
         }}
       />
-      <Display values={values} moveRef={moveRef} untracker={sort} />
+      <Display values={unsortedValues} moveRef={moveRef} untracker={sort} />
     </div>
   )
 }

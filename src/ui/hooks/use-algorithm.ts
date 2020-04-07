@@ -9,18 +9,19 @@ import Untracker from '../../sort/Untracker'
  */
 const useAlgorithm = (
   algorithm: Algorithm,
-  values: number[],
+  originalValues: number[],
   resetAfter = false
 ) => {
   return useMemo(() => {
+    const values = [...originalValues]
     const tracker = new Tracker(values)
     algorithm(tracker)
 
     const untracker = tracker.untrack()
     if (resetAfter) untracker.reset()
 
-    return untracker
-  }, [algorithm, values, resetAfter])
+    return { untracker, values }
+  }, [algorithm, originalValues, resetAfter])
 }
 
 export const useAlgorithmAsync = (algorithm: Algorithm, values: number[]) => {
