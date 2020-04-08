@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import Display from './components/Display'
 import Menu from './components/Menu'
 import useValues from './hooks/use-values'
-import useAlgorithm, { useAlgorithmAsync } from './hooks/use-algorithm'
+import useAlgorithms from './hooks/use-algorithms'
 import useToggle from './hooks/use-toggle'
+import useBlock from './hooks/use-block'
 import sortingAlgorithms from '../sort/algorithms/sort'
 import unsortingAlgorithms from '../sort/algorithms/unsort'
 import { Direction, Move } from '../sort/types'
@@ -15,7 +16,7 @@ const App: React.FC = () => {
     Direction.BACKWARD
   )
   const [play, setPlay] = useState(false)
-  const [blocking, setBlocking] = useState(false)
+  const { blocking, block, unblock } = useBlock()
 
   /** The number of steps per frame is exponential in speed */
   const minSpeed = -10
@@ -29,35 +30,13 @@ const App: React.FC = () => {
 
   const values = useValues(Math.floor(Math.pow(1.5, size)))
 
-  const [unsortingAlgorithm, setUnsort] = useState('randomise')
-  const { untracker: unsort, values: unsortedValues } = useAlgorithm(
-    unsortingAlgorithms[unsortingAlgorithm],
-    values
-  )
-
-  const [sortingAlgorithm, setSort] = useState('timsort')
-  const sort = useAlgorithmAsync(
-    sortingAlgorithms[sortingAlgorithm],
-    unsortedValues
-  )
+  const { unsortWith, sort, setSort, sortString } = useAlgorithms(values)
 
   const moveRef = useRef<Move | undefined>()
   useEffect(() => {
     moveRef.current = undefined
     // Any blocking action occurring will refresh the current move.
   }, [moveRef, blocking])
-
-  useEffect(() => {
-    setBlocking(true)
-    setPlay(false)
-    changeDirection(Direction.FORWARD)
-    unsort.reset()
-    return unsort.animateUntilCompletion(2000, Direction.FORWARD, {
-      onCompletion: () => {
-        setBlocking(false)
-      }
-    })
-  }, [unsort, changeDirection])
 
   useEffect(() => {
     if (play) {
@@ -76,26 +55,26 @@ const App: React.FC = () => {
     <div className="App">
       <Menu
         restart={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           keyStr: 'r',
           handler: () => {
             changeDirection(Direction.FORWARD)
             setPlay(false)
-            setBlocking(true)
+            block()
 
             sort?.animateUntilCompletion(1000, Direction.BACKWARD, {
-              onCompletion: () => setBlocking(false)
+              onCompletion: () => unblock()
             })
           }
         }}
         speedDown={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           // if playing leftArrow decreases speed
           keyCode: play ? 37 : undefined,
           handler: () => setSpeed(Math.max(minSpeed, speed - 1))
         }}
         stepBack={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           // if not playing leftArrow steps back
           keyCode: play ? undefined : 37,
           handler: () => {
@@ -103,13 +82,13 @@ const App: React.FC = () => {
           }
         }}
         play={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           handler: () => setPlay(!play),
           keyStr: ' ',
           status: play
         }}
         reverse={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           keyStr: '`',
           handler: () => {
             const oppositeDirection =
@@ -121,7 +100,7 @@ const App: React.FC = () => {
           status: direction === Direction.BACKWARD
         }}
         stepForward={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           // if not playing rightArrow steps forward
           keyCode: play ? undefined : 39,
           handler: () => {
@@ -129,7 +108,7 @@ const App: React.FC = () => {
           }
         }}
         speedUp={{
-          disabled: blocking,
+          disabled: blocking || !sort,
           // if playing rightArrow increases speed
           keyCode: play ? 39 : undefined,
           handler: () => setSpeed(Math.min(maxSpeed, speed + 1))
@@ -143,71 +122,30 @@ const App: React.FC = () => {
           handler: () => setSize(Math.max(minSize, size - 1))
         }}
         unsort={{
-          current: unsortingAlgorithm,
+          disabled: blocking,
           list: Object.keys(unsortingAlgorithms),
           handler: algorithm => {
-            if (
-              algorithm in unsortingAlgorithms &&
-              algorithm !== unsortingAlgorithm
-            ) {
-              setBlocking(true)
-              changeDirection(Direction.FORWARD)
+            if (algorithm in unsortingAlgorithms) {
               setPlay(false)
+              changeDirection(Direction.FORWARD)
 
-              const onCompletion = () => {
-                setUnsort(algorithm)
-              }
-
-              if (sort?.hasStep(Direction.BACKWARD)) {
-                sort.animateUntilCompletion(500, Direction.FORWARD, {
-                  onCompletion
-                })
-              } else {
-                unsort.animateUntilCompletion(500, Direction.BACKWARD, {
-                  onCompletion
-                })
-              }
+              unsortWith(algorithm, block, unblock)
             }
           }
         }}
         sort={{
-          current: sortingAlgorithm,
+          current: sortString,
           list: Object.keys(sortingAlgorithms),
           handler: algorithm => {
-            if (
-              algorithm in sortingAlgorithms &&
-              algorithm !== sortingAlgorithm
-            ) {
-              if (sort) {
-                setBlocking(true)
-                changeDirection(Direction.FORWARD)
-                setPlay(false)
-
-                const onCompletion = () => {
-                  setSort(algorithm)
-                  setBlocking(false)
-                  setPlay(true)
-                }
-
-                if (sort.hasStep(Direction.FORWARD)) {
-                  sort.animateUntilCompletion(500, Direction.BACKWARD, {
-                    onCompletion
-                  })
-                } else {
-                  // the sort has finished, just run the shuffle again
-                  unsort.reset()
-                  unsort.animateUntilCompletion(500, Direction.FORWARD, {
-                    onCompletion
-                  })
-                }
-              } else {
-                setSort(algorithm)
-              }
+            if (algorithm in sortingAlgorithms && algorithm !== sortString) {
+              moveRef.current = undefined
+              unsortWith('nothing')
+              setSort(algorithm)
             }
           }
         }}
       />
-      <Display values={unsortedValues} moveRef={moveRef} untracker={sort} />
+      <Display values={values} moveRef={moveRef} untracker={sort} />
     </div>
   )
 }

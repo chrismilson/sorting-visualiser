@@ -38,8 +38,16 @@ const Menu: React.FC<{
   speedUp: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
-  unsort: AlgorithmProps
-  sort: AlgorithmProps
+  unsort: {
+    disabled: boolean
+    list: string[]
+    handler(key: string): void
+  }
+  sort: {
+    current: string
+    list: string[]
+    handler(key: string): void
+  }
 }> = ({
   reverse: { status: reverseStatus, ...reverse },
   restart,
@@ -101,6 +109,22 @@ const Menu: React.FC<{
         />
         <div className="buttons">
           <div className="algorithms">
+            <div className="unsort">
+              {unsort.list.map(camelCase => (
+                <Button
+                  key={camelCase}
+                  handler={() => {
+                    unsort.handler(camelCase)
+                  }}
+                  name={camelCase}
+                  disabled={unsort.disabled}
+                >
+                  {camelCase
+                    .replace(/([A-Z])/g, (_x, y) => ` ${y}`)
+                    .replace(/^(.)/, (_x, y) => y.toUpperCase())}
+                </Button>
+              ))}
+            </div>
             <div className="sort">
               {sort.list.map(camelCase => (
                 <Button
@@ -111,23 +135,6 @@ const Menu: React.FC<{
                   }}
                   name={camelCase}
                   className={sort.current === camelCase ? 'active' : ''}
-                >
-                  {camelCase
-                    .replace(/([A-Z])/g, (_x, y) => ` ${y}`)
-                    .replace(/^(.)/, (_x, y) => y.toUpperCase())}
-                </Button>
-              ))}
-            </div>
-            <div className="unsort">
-              {unsort.list.map(camelCase => (
-                <Button
-                  key={camelCase}
-                  handler={() => {
-                    setExtra(false)
-                    unsort.handler(camelCase)
-                  }}
-                  name={camelCase}
-                  className={unsort.current === camelCase ? 'active' : ''}
                 >
                   {camelCase
                     .replace(/([A-Z])/g, (_x, y) => ` ${y}`)

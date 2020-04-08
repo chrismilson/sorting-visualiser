@@ -24,7 +24,7 @@ export default class Untracker {
     // A tracker is not expected to undo any of the moves that were performed on
     // the data. The untracker has to take this into account, so by default will
     // be finished.
-    this.currentMove = this.moves.length
+    this.currentMove = 0
 
     this.hasNext = this.hasNext.bind(this)
     this.hasPrevious = this.hasPrevious.bind(this)
