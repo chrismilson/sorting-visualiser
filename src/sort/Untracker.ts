@@ -1,4 +1,5 @@
 import { MoveType, Move, Direction } from './types'
+import StatTracker from './StatTracker'
 
 /**
  * Just as the Tracker class is for recording the algorithms. The UnTracker is
@@ -12,6 +13,7 @@ export default class Untracker {
   private bufferIds: Set<number>
   private moves: Move[]
   private currentMove: number
+  statistics: StatTracker
 
   constructor(moves: Move[], values: number[], original: number[]) {
     this.moves = moves
@@ -25,6 +27,8 @@ export default class Untracker {
     // the data. The untracker has to take this into account, so by default will
     // be finished.
     this.currentMove = 0
+
+    this.statistics = new StatTracker()
 
     this.hasNext = this.hasNext.bind(this)
     this.hasPrevious = this.hasPrevious.bind(this)
@@ -47,6 +51,8 @@ export default class Untracker {
     if (!this.hasNext()) return
 
     const move = this.moves[this.currentMove++]
+
+    this.statistics.add(move)
 
     switch (move.type) {
       case MoveType.SWAP:
@@ -86,6 +92,8 @@ export default class Untracker {
     if (!this.hasPrevious()) return
 
     const move = this.moves[--this.currentMove]
+
+    this.statistics.subtract(move)
 
     switch (move.type) {
       case MoveType.SWAP:
