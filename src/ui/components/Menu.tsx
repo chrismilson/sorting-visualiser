@@ -10,7 +10,8 @@ import {
   FaEllipsisV,
   FaPlus,
   FaMinus,
-  FaPause
+  FaPause,
+  FaInfo
 } from 'react-icons/fa'
 import Button, { IconButton } from './Button'
 import './Menu.scss'
@@ -22,12 +23,6 @@ interface ButtonProps {
   disabled?: boolean
 }
 
-interface AlgorithmProps {
-  current: string
-  list: string[]
-  handler(key: string): void
-}
-
 const Menu: React.FC<{
   reverse: ButtonProps & { status: boolean }
   restart: ButtonProps
@@ -36,6 +31,7 @@ const Menu: React.FC<{
   play: ButtonProps & { status: boolean }
   stepForward: ButtonProps
   speedUp: ButtonProps
+  stats: ButtonProps
   sizeUp: ButtonProps
   sizeDown: ButtonProps
   unsort: {
@@ -56,6 +52,7 @@ const Menu: React.FC<{
   play: { status: playStatus, ...play },
   stepForward,
   speedUp,
+  stats,
   sizeUp,
   sizeDown,
   unsort,
@@ -143,6 +140,7 @@ const Menu: React.FC<{
               ))}
             </div>
           </div>
+          <IconButton name="show stats" Icon={FaInfo} {...stats} />
           <IconButton name="size up" Icon={FaPlus} {...sizeUp} />
           <IconButton name="size down" Icon={FaMinus} {...sizeDown} />
         </div>
