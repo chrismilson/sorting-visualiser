@@ -9,6 +9,7 @@ import sortingAlgorithms from '../sort/algorithms/sort'
 import unsortingAlgorithms from '../sort/algorithms/unsort'
 import { Direction, Move } from '../sort/types'
 import './App.scss'
+import Stats from './components/Stats'
 
 const App: React.FC = () => {
   const [direction, changeDirection] = useToggle(
@@ -16,6 +17,7 @@ const App: React.FC = () => {
     Direction.BACKWARD
   )
   const [play, setPlay] = useState(false)
+  const [displayStats, setDisplayStats] = useState(false)
   const { blocking, block, unblock } = useBlock()
 
   /** The number of steps per frame is exponential in speed */
@@ -113,6 +115,10 @@ const App: React.FC = () => {
           keyCode: play ? 39 : undefined,
           handler: () => setSpeed(Math.min(maxSpeed, speed + 1))
         }}
+        stats={{
+          keyStr: 's',
+          handler: () => setDisplayStats(v => !v)
+        }}
         sizeUp={{
           keyCode: 38,
           handler: () => setSize(Math.min(maxSize, size + 1))
@@ -145,6 +151,7 @@ const App: React.FC = () => {
           }
         }}
       />
+      <Stats stats={sort?.statistics} display={displayStats} />
       <Display values={values} moveRef={moveRef} untracker={sort} />
     </div>
   )
