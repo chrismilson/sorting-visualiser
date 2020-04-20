@@ -44,4 +44,6 @@ const speed = (state = -2, action) => {
   }
 }
 
-export default combineReducers({ play, size, speed })
+const reducer = combineReducers({ play, size, speed })
+
+export default reducer
