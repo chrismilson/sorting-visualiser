@@ -25,16 +25,18 @@ Try to modify the data in such a way that you get an idea for the algorithm. For
 example, running timsort on reverse sorted data is very fast, but quicksort is
 very slow!
 
-<img
-  src="readme-assets/timsort-reversed.gif"
-  alt="timsort on reverse sorted data"
-  title="Timsort on reversed data"
-  style="width:48%;">
-<img
-  src="readme-assets/quicksort-reversed.gif"
-  alt="quicksort on reverse sorted data"
-  title="Quicksort on reversed data"
-  style="width:48%;">
+<div style="display:flex;">
+  <img
+    src="readme-assets/timsort-reversed.gif"
+    alt="timsort on reverse sorted data"
+    title="Timsort on reversed data"
+  >
+  <img
+    src="readme-assets/quicksort-reversed.gif"
+    alt="quicksort on reverse sorted data"
+    title="Quicksort on reversed data"
+  >
+</div>
   
 ### Keyboard Shortcuts
 
