@@ -35,7 +35,6 @@ very slow!
     </td>
   </tr>
 </table>
-
   
 ### Keyboard Shortcuts
 
