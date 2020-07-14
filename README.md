@@ -33,8 +33,9 @@ very slow!
     <td>
       <img src="readme-assets/quicksort-reversed.gif" alt="quicksort on reverse sorted data" title="Quicksort on reversed data">
     </td>
-</tr>
-</div>
+  </tr>
+</table>
+
   
 ### Keyboard Shortcuts
 
