@@ -3,6 +3,7 @@ import binaryInsertionSort from './binary-insertion-sort'
 import bubbleSort from './bubble-sort'
 import heapSort from './heap-sort'
 import mergeSort from './merge-sort'
+import pancakeSort from './pancake-sort'
 import quickSort from './quick-sort'
 import shellSort from './shell-sort'
 import timsort from './tim-sort'
@@ -12,6 +13,7 @@ const algorithms: { [key: string]: Algorithm } = {
   bubbleSort,
   heapSort,
   mergeSort,
+  pancakeSort,
   quickSort,
   shellSort,
   timsort
