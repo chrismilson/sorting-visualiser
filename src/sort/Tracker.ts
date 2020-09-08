@@ -59,6 +59,7 @@ export default class Tracker {
     this.malloc = this.malloc.bind(this)
     this.memcpy = this.memcpy.bind(this)
     this.free = this.free.bind(this)
+    this.nthBitSet = this.nthBitSet.bind(this)
   }
 
   /**
@@ -151,6 +152,23 @@ export default class Tracker {
       this.bufferIdPool.free(buffer)
       this.moves.push({ type: MoveType.FREE, buffer })
     }
+  }
+
+  /**
+   * Returns a boolean that is true if and only if the nth (little endian) bit
+   * of the value at a given index is set.
+   *
+   * @param givenIndex The index of the value to check.
+   * @param n The bit (little endian) of the value to check.
+   */
+  nthBitSet(givenIndex: Index | number, n: number) {
+    const index = this.normaliseIndex(givenIndex)
+
+    const result = Boolean(index.value & (1 << n))
+
+    this.moves.push({ type: MoveType.NTH_BIT_SET, index, result })
+
+    return result
   }
 
   /**
