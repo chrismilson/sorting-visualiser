@@ -29,49 +29,46 @@ const Display: React.FC<{
         const move = moveRef.current
         if (!move) return
         switch (move.type) {
-          case MoveType.SWAP:
-            {
-              const { i, j } = move
-              ctx.save()
-              ctx.fillStyle = 'cyan'
-              ctx.fillRect(i.index, 0, 1, j.value)
-              ctx.fillRect(j.index, 0, 1, i.value)
-              ctx.restore()
+          case MoveType.SWAP: {
+            const { i, j } = move
+            ctx.save()
+            ctx.fillStyle = 'cyan'
+            ctx.fillRect(i.index, 0, 1, j.value)
+            ctx.fillRect(j.index, 0, 1, i.value)
+            ctx.restore()
 
-              // We make sure that the values are repainted on the next frame by
-              // setting the current value to NaN.
-              currentValues[i.index] = currentValues[j.index] = NaN
-            }
+            // We make sure that the values are repainted on the next frame by
+            // setting the current value to NaN.
+            currentValues[i.index] = currentValues[j.index] = NaN
             break
-          case MoveType.COMPARE:
-            {
-              const { i, j, result } = move
+          }
+          case MoveType.COMPARE: {
+            const { i, j, result } = move
 
-              const color = ['lime', 'orange', 'red']
-              ctx.save()
-              ctx.fillStyle = color[1 + result]
-              ctx.fillRect(i.index, 0, 1, i.value)
+            const color = ['lime', 'orange', 'red']
+            ctx.save()
+            ctx.fillStyle = color[1 + result]
+            ctx.fillRect(i.index, 0, 1, i.value)
 
-              ctx.fillStyle = color[1 - result]
-              ctx.fillRect(j.index, 0, 1, j.value)
-              ctx.restore()
+            ctx.fillStyle = color[1 - result]
+            ctx.fillRect(j.index, 0, 1, j.value)
+            ctx.restore()
 
-              currentValues[i.index] = currentValues[j.index] = NaN
-            }
+            currentValues[i.index] = currentValues[j.index] = NaN
             break
-          case MoveType.MEMCPY:
-            {
-              const { from, to, value } = move
+          }
+          case MoveType.MEMCPY: {
+            const { from, to, value } = move
 
-              ctx.save()
-              ctx.fillStyle = 'gold'
-              ctx.fillRect(from.index, 0, 1, value)
-              ctx.fillRect(to.index, 0, 1, value)
-              ctx.restore()
+            ctx.save()
+            ctx.fillStyle = 'gold'
+            ctx.fillRect(from.index, 0, 1, value)
+            ctx.fillRect(to.index, 0, 1, value)
+            ctx.restore()
 
-              currentValues[from.index] = currentValues[to.index] = NaN
-            }
+            currentValues[from.index] = currentValues[to.index] = NaN
             break
+          }
         }
       }
 
