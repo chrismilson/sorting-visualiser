@@ -69,6 +69,21 @@ const Display: React.FC<{
             currentValues[from.index] = currentValues[to.index] = NaN
             break
           }
+          case MoveType.NTH_BIT_SET: {
+            const {
+              index: { index },
+              result
+            } = move
+
+            ctx.save()
+            ctx.fillStyle = result ? 'white' : 'black'
+            ctx.fillRect(index + 0.1, 0, 0.8, values.length / 10)
+            ctx.restore()
+
+            currentValues[index] = NaN
+
+            break
+          }
         }
       }
 

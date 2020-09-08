@@ -9,7 +9,8 @@ export enum MoveType {
   COMPARE = 'COMPARE',
   MALLOC = 'MALLOC',
   MEMCPY = 'MEMCPY',
-  FREE = 'FREE'
+  FREE = 'FREE',
+  NTH_BIT_SET = 'NTH_BIT_SET'
 }
 
 /**
@@ -49,7 +50,19 @@ export interface FreeMove {
   buffer: number
 }
 
-export type Move = SwapMove | CompareMove | MallocMove | MemcpyMove | FreeMove
+export interface NthBitSetMove {
+  type: MoveType.NTH_BIT_SET
+  index: Index
+  result: boolean
+}
+
+export type Move =
+  | SwapMove
+  | CompareMove
+  | MallocMove
+  | MemcpyMove
+  | FreeMove
+  | NthBitSetMove
 
 /** Represents the direction of flow of an algorithm */
 export enum Direction {
