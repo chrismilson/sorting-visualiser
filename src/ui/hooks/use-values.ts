@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 /**
- * Supplies an array of length `size` with evenly spaced values in (0, 1].
+ * Supplies a sorted array containing the integers from 1 to size.
  *
  * The array reference will change when the size changes.
  */
