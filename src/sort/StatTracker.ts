@@ -23,6 +23,9 @@ export default class StatTracker {
         break
       case MoveType.FREE:
         break
+      case MoveType.NTH_BIT_SET:
+        this.reads += 1 * multiplier
+        break
     }
   }
 
