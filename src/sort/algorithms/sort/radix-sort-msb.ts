@@ -17,7 +17,6 @@ const msbRadixSort: Algorithm = ({ nthBitSet, swap, size }) => {
 
     let zero = lo
     let one = hi
-    console.log()
 
     while (zero < one) {
       while (zero < one && !nthBitSet(zero, needle)) {
