@@ -21,7 +21,7 @@ const lsbRadixSort: Algorithm = ({ nthBitSet, malloc, memcpy, free, size }) => {
       memcpy({ buffer, index: i }, i)
     }
     // then the ones
-    for (let i = 0; i < size - oneIndex; i++) {
+    for (let i = 0; i < size - oneIndex - 1; i++) {
       memcpy({ buffer, index: size - i - 1 }, zeroIndex + i)
     }
     free(buffer)
