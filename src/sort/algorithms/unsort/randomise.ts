@@ -6,8 +6,8 @@ import { Algorithm } from '../../types'
  * before one of the actual algorithms can sort it.
  */
 const shuffle: Algorithm = ({ swap, size }) => {
-  for (let i = 0; i < size; i++) {
-    const j = i + Math.floor(Math.random() * (size - i - 1))
+  for (let i = size - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
     swap(i, j)
   }
 }
