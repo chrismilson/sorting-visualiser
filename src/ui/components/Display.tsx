@@ -76,12 +76,11 @@ const Display: React.FC<{
             } = move
 
             ctx.save()
-            ctx.fillStyle = result ? 'white' : 'black'
-            ctx.fillRect(index + 0.1, 0, 0.8, values.length / 10)
+            ctx.fillStyle = result ? 'orange' : 'purple'
+            ctx.fillRect(index + 0.1, 0, 0.8, values.length)
             ctx.restore()
 
             currentValues[index] = NaN
-
             break
           }
         }
