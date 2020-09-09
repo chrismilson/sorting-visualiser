@@ -6,6 +6,7 @@ import mergeSort from './merge-sort'
 // import pancakeSort from './pancake-sort'
 import quickSort from './quick-sort'
 import radixSortLsb from './radix-sort-lsb'
+import radixSortMsb from './radix-sort-msb'
 import shellSort from './shell-sort'
 import timsort from './tim-sort'
 
@@ -17,6 +18,7 @@ const algorithms: { [key: string]: Algorithm } = {
   // pancakeSort,
   quickSort,
   radixSortLsb,
+  radixSortMsb,
   shellSort,
   timsort
 }
