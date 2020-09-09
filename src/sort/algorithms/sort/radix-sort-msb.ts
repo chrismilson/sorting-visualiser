@@ -7,7 +7,7 @@ import { Algorithm } from '../../types'
 const msbRadixSort: Algorithm = ({ nthBitSet, swap, size }) => {
   const loStack = [0]
   const hiStack = [size]
-  const needleStack = [Math.ceil(Math.log2(size))]
+  const needleStack = [Math.floor(Math.log2(size))]
 
   while (loStack.length > 0) {
     // if the lostack has a value, the histack will also have a value.
@@ -17,23 +17,26 @@ const msbRadixSort: Algorithm = ({ nthBitSet, swap, size }) => {
 
     let zero = lo
     let one = hi
+    console.log()
 
     while (zero < one) {
       while (zero < one && !nthBitSet(zero, needle)) {
         zero += 1
       }
-      while (zero < one && nthBitSet(one, needle)) {
+      while (zero < one && nthBitSet(one - 1, needle)) {
         one -= 1
       }
-      swap(zero, one)
+      if (zero < one) {
+        swap(zero, one - 1)
+      }
     }
     // the zero index is now the index of the first one
-    if (lo < zero - 1) {
+    if (lo + 1 < zero && needle > 0) {
       loStack.push(lo)
-      hiStack.push(zero - 1)
+      hiStack.push(zero)
       needleStack.push(needle - 1)
     }
-    if (zero < hi) {
+    if (zero + 1 < hi && needle > 0) {
       loStack.push(zero)
       hiStack.push(hi)
       needleStack.push(needle - 1)
