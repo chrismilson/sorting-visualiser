@@ -76,8 +76,13 @@ const Display: React.FC<{
             } = move
 
             ctx.save()
-            ctx.fillStyle = result ? 'orange' : 'purple'
-            ctx.fillRect(index + 0.1, 0, 0.8, values.length)
+            ctx.fillStyle = 'black'
+            ctx.fillRect(
+              index + 0.1,
+              result ? Math.floor(values.length / 2) : 0,
+              0.8,
+              Math.floor(values.length / 2)
+            )
             ctx.restore()
 
             currentValues[index] = NaN
