@@ -38,7 +38,7 @@ const examples = [1, 2, 5, 23, 117, 2097]
   .map(sorted => [shuffled(sorted), sorted])
 
 describe.each(Object.entries(allSorts))('%s', (name, sort) => {
-  it.each(examples)(`${name} should sort an example`, (unsorted, sorted) => {
+  it.each(examples)(`${name} should sort an array`, (unsorted, sorted) => {
     const copyUnsorted = [...unsorted]
     sort(new Tracker(copyUnsorted))
 
