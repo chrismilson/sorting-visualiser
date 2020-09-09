@@ -7,7 +7,7 @@ import { Algorithm } from '../../types'
  */
 const shuffle: Algorithm = ({ swap, size }) => {
   for (let i = 0; i < size; i++) {
-    const j = i + Math.floor(Math.random() * (size - i))
+    const j = i + Math.floor(Math.random() * (size - i - 1))
     swap(i, j)
   }
 }
