@@ -10,7 +10,6 @@ import unsortingAlgorithms from '../sort/algorithms/unsort'
 import { Direction, Move } from '../sort/types'
 import './App.scss'
 import Stats from './components/Stats'
-import { NavigatorWakeLock, WakeLockSentinel } from './wake-lock'
 
 const App: React.FC = () => {
   const [direction, changeDirection] = useToggle(
@@ -56,20 +55,18 @@ const App: React.FC = () => {
 
   // Try to prevent screen lock with the Screen WakeLock API
   useEffect(() => {
-    let lock: WakeLockSentinel<'screen'> | null = null
+    let lock: WakeLockSentinel | null = null
     let cleaned = false
 
     if (play) {
-      ;((navigator as unknown) as NavigatorWakeLock).wakeLock
-        ?.request('screen')
-        .then(sentinel => {
-          if (cleaned) {
-            sentinel.release()
-          } else {
-            lock = sentinel
-            console.log('obtained screen lock.')
-          }
-        })
+      navigator.wakeLock?.request('screen').then(sentinel => {
+        if (cleaned) {
+          sentinel.release()
+        } else {
+          lock = sentinel
+          console.log('obtained screen lock.')
+        }
+      })
     }
 
     return () => {
