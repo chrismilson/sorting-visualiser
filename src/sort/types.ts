@@ -69,3 +69,15 @@ export enum Direction {
   FORWARD = 'FORWARD',
   BACKWARD = 'BACKWARD'
 }
+
+export type CalculateMethod = (
+  type: 'sort' | 'unsort',
+  name: string,
+  values: number[]
+) => [Move[], number[]]
+
+export type CalculateMethodAsync = (
+  type: 'sort' | 'unsort',
+  name: string,
+  values: number[]
+) => Promise<[Move[], number[]]>

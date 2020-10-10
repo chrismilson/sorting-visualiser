@@ -1,5 +1,4 @@
 import { MoveType, Move, Index } from './types'
-import Untracker from './Untracker'
 
 class BufferIdPool {
   private _next = 1
@@ -41,7 +40,7 @@ export default class Tracker {
   /** An object that will give and keep track of unique keys. */
   private bufferIdPool: BufferIdPool
   /** The moves that have been done to the values. */
-  private moves: Move[]
+  moves: Move[]
   /** The length of the values array. */
   readonly size: number
 
@@ -62,13 +61,8 @@ export default class Tracker {
     this.nthBitSet = this.nthBitSet.bind(this)
   }
 
-  /**
-   * Returns an untracker with the moves tracked by the tracker.
-   *
-   * @param values The array to modify while untracking
-   */
-  untrack(values = this.buffers[0]) {
-    return new Untracker(this.moves, values, this.original)
+  get values() {
+    return this.buffers[0]
   }
 
   /**

@@ -10,7 +10,7 @@ import radixSortMsb from './radix-sort-msb'
 import shellSort from './shell-sort'
 import timsort from './tim-sort'
 
-const algorithms: { [key: string]: Algorithm } = {
+export const algorithms: { [key: string]: Algorithm } = {
   binaryInsertionSort,
   bubbleSort,
   heapSort,
@@ -23,4 +23,25 @@ const algorithms: { [key: string]: Algorithm } = {
   timsort
 }
 
-export default algorithms
+/**
+ * Strings representing the names of the implemented algorithms.
+ */
+// I would like to implement the names with something like this:
+//
+// `export const algorithmNames = Object.keys(algorithms)`
+//
+// However, Tree shaking would then include the algotithms object to retrieve
+// the keys. This will bloat the main package and is sub optimal, so I have
+// resorted to just writing them here.
+export const algorithmNames = [
+  'binaryInsertionSort',
+  'bubbleSort',
+  'heapSort',
+  'mergeSort',
+  // 'pancakeSort',
+  'quickSort',
+  'radixSortLsb',
+  'radixSortMsb',
+  'shellSort',
+  'timsort'
+]

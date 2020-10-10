@@ -7,7 +7,7 @@ import randomise from './randomise'
 import reverse from './reverse'
 import riffleShuffle from './riffle-shuffle'
 
-const algorithms: { [key: string]: Algorithm } = {
+export const algorithms: { [key: string]: Algorithm } = {
   cut,
   hinduShuffle,
   overhandShuffle,
@@ -17,4 +17,16 @@ const algorithms: { [key: string]: Algorithm } = {
   riffleShuffle
 }
 
-export default algorithms
+/**
+ * Strings representing the currently implemented unsorting algorithms.
+ */
+// see `../sort/index.ts`.
+export const algorithmNames = [
+  'cut',
+  'hinduShuffle',
+  'overhandShuffle',
+  'perfectRiffleShuffle',
+  'randomise',
+  'reverse',
+  'riffleShuffle'
+]

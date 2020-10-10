@@ -1,44 +1,38 @@
 import { useState, useCallback, useEffect } from 'react'
-import unsortingAlgorithms from '../../sort/algorithms/unsort'
-import sortingAlgorithms from '../../sort/algorithms/sort'
-import Tracker from '../../sort/Tracker'
 import Untracker from '../../sort/Untracker'
 import { Direction } from '../../sort/types'
+import calculate from '../../sort'
 
 const useAlgorithms = (values: number[]) => {
   /**
-   * The original values will be displayed on the screen.
+   * The state of the unsorted values before they have been sorted.
    *
-   * This array is intended to be modified by the unsorting algorithm so that
-   * the unsort can be untracked on the original values, and the sort can be
-   * calculated while the unsort is running.
+   * By keeping track of these values, we can calculate the sort on the unsorted
+   * values before the unsort has finished animating.
    */
   const [unsortedValues, setUnsortedValues] = useState([...values])
   useEffect(() => setUnsortedValues([...values]), [values])
 
   const unsortWith = useCallback(
-    (name: string, block?: () => void, unblock?: () => void) => {
+    async (name: string, block?: () => void, unblock?: () => void) => {
       if (name === 'nothing') {
         setUnsortedValues([...values])
         return
       }
-      if (!(name in unsortingAlgorithms)) return
-
       if (block && unblock) block()
 
-      const copy = [...values]
-      const tracker = new Tracker(copy)
+      return calculate('unsort', name, values).then(
+        ([moves, unsortedValues]) => {
+          setUnsortedValues(unsortedValues)
+          const untracker = new Untracker(moves, values)
 
-      unsortingAlgorithms[name](tracker)
-
-      setUnsortedValues(copy)
-      const untracker = tracker.untrack(values)
-
-      untracker.animateUntilCompletion(500, Direction.FORWARD, {
-        onCompletion: () => {
-          if (unblock) unblock()
+          untracker.animateUntilCompletion(500, Direction.FORWARD, {
+            onCompletion: () => {
+              if (unblock) unblock()
+            }
+          })
         }
-      })
+      )
     },
     [values]
   )
@@ -52,19 +46,12 @@ const useAlgorithms = (values: number[]) => {
   useEffect(() => {
     let invalid = false
 
-    const calculate = async () => {
-      if (!(sortString in sortingAlgorithms)) return
-      const tracker = new Tracker(unsortedValues)
-
-      // if calculation is made async we can put an await in front of this.
-      sortingAlgorithms[sortString](tracker)
-
-      const untracker = tracker.untrack(values)
-
-      return untracker
-    }
-
-    calculate().then(untracker => !invalid && setSortUntracker(untracker))
+    calculate('sort', sortString, unsortedValues)
+      .then(([moves]) => {
+        return new Untracker(moves, values)
+      })
+      .then(untracker => !invalid && setSortUntracker(untracker))
+      .catch(console.error)
 
     return () => {
       invalid = true

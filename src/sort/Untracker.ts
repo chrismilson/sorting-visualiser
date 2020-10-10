@@ -15,17 +15,14 @@ export default class Untracker {
   private currentMove: number
   statistics: StatTracker
 
-  constructor(moves: Move[], values: number[], original: number[]) {
+  constructor(moves: Move[], values: number[]) {
     this.moves = moves
     this.buffers = {
       0: values
     }
     this.bufferIds = new Set()
-    this.original = original
+    this.original = [...values]
 
-    // A tracker is not expected to undo any of the moves that were performed on
-    // the data. The untracker has to take this into account, so by default will
-    // be finished.
     this.currentMove = 0
 
     this.statistics = new StatTracker()

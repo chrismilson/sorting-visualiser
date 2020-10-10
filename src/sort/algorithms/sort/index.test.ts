@@ -1,5 +1,5 @@
 import Tracker from '../../Tracker'
-import allSorts from '.'
+import { algorithms as allSorts } from '.'
 
 /**
  * Returns an example array of randomised values

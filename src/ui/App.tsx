@@ -5,8 +5,8 @@ import useValues from './hooks/use-values'
 import useAlgorithms from './hooks/use-algorithms'
 import useToggle from './hooks/use-toggle'
 import useBlock from './hooks/use-block'
-import sortingAlgorithms from '../sort/algorithms/sort'
-import unsortingAlgorithms from '../sort/algorithms/unsort'
+import { algorithmNames as sortNames } from '../sort/algorithms/sort'
+import { algorithmNames as unsortNames } from '../sort/algorithms/unsort'
 import { Direction, Move } from '../sort/types'
 import './App.scss'
 import Stats from './components/Stats'
@@ -154,9 +154,9 @@ const App: React.FC = () => {
         }}
         unsort={{
           disabled: blocking,
-          list: Object.keys(unsortingAlgorithms),
+          list: unsortNames,
           handler: algorithm => {
-            if (algorithm in unsortingAlgorithms) {
+            if (unsortNames.includes(algorithm)) {
               setPlay(false)
               changeDirection(Direction.FORWARD)
 
@@ -166,12 +166,11 @@ const App: React.FC = () => {
         }}
         sort={{
           current: sortString,
-          list: Object.keys(sortingAlgorithms),
+          list: sortNames,
           handler: algorithm => {
-            if (algorithm in sortingAlgorithms && algorithm !== sortString) {
+            if (algorithm !== sortString) {
               moveRef.current = undefined
-              unsortWith('nothing')
-              setSort(algorithm)
+              unsortWith('nothing').then(() => setSort(algorithm))
             }
           }
         }}
