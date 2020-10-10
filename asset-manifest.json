@@ -1,22 +1,26 @@
 {
   "files": {
     "main.css": "/sorting-visualiser/static/css/main.676dc840.chunk.css",
-    "main.js": "/sorting-visualiser/static/js/main.f904be65.chunk.js",
-    "main.js.map": "/sorting-visualiser/static/js/main.f904be65.chunk.js.map",
-    "runtime-main.js": "/sorting-visualiser/static/js/runtime-main.90a137d9.js",
-    "runtime-main.js.map": "/sorting-visualiser/static/js/runtime-main.90a137d9.js.map",
-    "static/js/2.8bda38f3.chunk.js": "/sorting-visualiser/static/js/2.8bda38f3.chunk.js",
-    "static/js/2.8bda38f3.chunk.js.map": "/sorting-visualiser/static/js/2.8bda38f3.chunk.js.map",
+    "main.js": "/sorting-visualiser/static/js/main.d525cd11.chunk.js",
+    "main.js.map": "/sorting-visualiser/static/js/main.d525cd11.chunk.js.map",
+    "runtime-main.js": "/sorting-visualiser/static/js/runtime-main.ab44af46.js",
+    "runtime-main.js.map": "/sorting-visualiser/static/js/runtime-main.ab44af46.js.map",
+    "static/js/2.5396c99a.chunk.js": "/sorting-visualiser/static/js/2.5396c99a.chunk.js",
+    "static/js/2.5396c99a.chunk.js.map": "/sorting-visualiser/static/js/2.5396c99a.chunk.js.map",
+    "static/js/3.ba827a52.chunk.js": "/sorting-visualiser/static/js/3.ba827a52.chunk.js",
+    "static/js/3.ba827a52.chunk.js.map": "/sorting-visualiser/static/js/3.ba827a52.chunk.js.map",
     "index.html": "/sorting-visualiser/index.html",
-    "precache-manifest.e4e582541494981f76e303ad723bed5d.js": "/sorting-visualiser/precache-manifest.e4e582541494981f76e303ad723bed5d.js",
+    "precache-manifest.a67d37285e630621b6f43e58bf745b17.js": "/sorting-visualiser/precache-manifest.a67d37285e630621b6f43e58bf745b17.js",
     "service-worker.js": "/sorting-visualiser/service-worker.js",
     "static/css/main.676dc840.chunk.css.map": "/sorting-visualiser/static/css/main.676dc840.chunk.css.map",
-    "static/js/2.8bda38f3.chunk.js.LICENSE.txt": "/sorting-visualiser/static/js/2.8bda38f3.chunk.js.LICENSE.txt"
+    "static/js/2.5396c99a.chunk.js.LICENSE.txt": "/sorting-visualiser/static/js/2.5396c99a.chunk.js.LICENSE.txt",
+    "static/js/sort.worker.e3461a1c.worker.js": "/sorting-visualiser/static/js/sort.worker.e3461a1c.worker.js",
+    "static/js/sort.worker.e3461a1c.worker.js.map": "/sorting-visualiser/static/js/sort.worker.e3461a1c.worker.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.90a137d9.js",
-    "static/js/2.8bda38f3.chunk.js",
+    "static/js/runtime-main.ab44af46.js",
+    "static/js/2.5396c99a.chunk.js",
     "static/css/main.676dc840.chunk.css",
-    "static/js/main.f904be65.chunk.js"
+    "static/js/main.d525cd11.chunk.js"
   ]
 }
