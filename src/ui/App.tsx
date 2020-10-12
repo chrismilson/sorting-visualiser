@@ -158,11 +158,23 @@ const App: React.FC = () => {
         }}
         sizeUp={{
           keyCode: 38,
-          handler: () => setSize(Math.min(maxSize, size + 1))
+          handler: () => {
+            // Any changes in size, should stop execution of the sort and clear the
+            // currently painted move.
+            setPlay(false)
+            moveRef.current = undefined
+            setSize(Math.min(maxSize, size + 1))
+          }
         }}
         sizeDown={{
           keyCode: 40,
-          handler: () => setSize(Math.max(minSize, size - 1))
+          handler: () => {
+            // Any changes in size, should stop execution of the sort and clear the
+            // currently painted move.
+            setPlay(false)
+            moveRef.current = undefined
+            setSize(Math.max(minSize, size - 1))
+          }
         }}
         unsort={{
           disabled: blocking,
