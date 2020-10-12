@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Display from './components/Display'
 import Menu from './components/Menu'
 import useValues from './hooks/use-values'
@@ -78,6 +78,24 @@ const App: React.FC = () => {
     }
   }, [play])
 
+  const handleRestart = useCallback(
+    timeToRestart => {
+      changeDirection(Direction.FORWARD)
+      setPlay(false)
+      block()
+
+      return new Promise(resolve =>
+        sort?.animateUntilCompletion(timeToRestart, Direction.BACKWARD, {
+          onCompletion: () => {
+            unblock()
+            resolve()
+          }
+        })
+      )
+    },
+    [block, unblock, sort, changeDirection]
+  )
+
   return (
     <div className="App">
       <Menu
@@ -85,13 +103,7 @@ const App: React.FC = () => {
           disabled: blocking || !sort,
           keyStr: 'r',
           handler: () => {
-            changeDirection(Direction.FORWARD)
-            setPlay(false)
-            block()
-
-            sort?.animateUntilCompletion(1000, Direction.BACKWARD, {
-              onCompletion: () => unblock()
-            })
+            handleRestart(1000)
           }
         }}
         speedDown={{
@@ -170,7 +182,11 @@ const App: React.FC = () => {
           handler: algorithm => {
             if (algorithm !== sortString) {
               moveRef.current = undefined
-              unsortWith('nothing').then(() => setSort(algorithm))
+              const wasPlaying = play
+              handleRestart(400).then(() => {
+                setSort(algorithm)
+                setPlay(wasPlaying)
+              })
             }
           }
         }}
