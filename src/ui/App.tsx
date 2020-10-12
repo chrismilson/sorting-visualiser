@@ -80,6 +80,10 @@ const App: React.FC = () => {
 
   const handleRestart = useCallback(
     timeToRestart => {
+      // If we have nothing to reset, do nothing.
+      if (!sort?.hasStep(Direction.BACKWARD)) {
+        return Promise.resolve()
+      }
       changeDirection(Direction.FORWARD)
       setPlay(false)
       block()
