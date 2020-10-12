@@ -2,38 +2,38 @@
  * Provides an API to the ui that wraps calls to the worker etc with promises.
  */
 import * as Comlink from 'comlink'
-import { CalculateMethod, CalculateMethodAsync } from './types'
+import { WorkerCalculateMethod, MainThreadCalculateMethod } from './types'
+import Untracker from './Untracker'
 
 /**
  * A proxy (via comlink) to an off thread calculation method.
  */
-let proxy: Comlink.Remote<CalculateMethod> | undefined
+let proxy: Comlink.Remote<WorkerCalculateMethod> | undefined
 
 const init = (async () => {
   const Worker = (await import('worker-loader!./sort.worker.ts')).default
   const worker = new Worker()
-  proxy = Comlink.wrap<CalculateMethod>(worker)
+  proxy = Comlink.wrap<WorkerCalculateMethod>(worker)
 })()
 
-const calculate: CalculateMethodAsync = async (
+const calculate: MainThreadCalculateMethod = async (
   type: 'sort' | 'unsort',
   name: string,
-  values: number[]
+  valuesToSort: number[],
+  valuesToTrack: number[]
 ) => {
   // Wait until the worker is initialised.
   await init
 
   console.log(`Main Thread: Deploying ${type}: ${name}`)
 
-  const result = await (proxy as Comlink.Remote<CalculateMethod>)(
-    type,
-    name,
-    values
-  )
+  const [buffer, numMoves, calculatedValues] = await (proxy as Comlink.Remote<
+    WorkerCalculateMethod
+  >)(type, name, valuesToSort)
 
   console.log(`Main Thread: Received ${type} data: ${name}`)
 
-  return result
+  return [new Untracker(buffer, numMoves, valuesToTrack), calculatedValues]
 }
 
 export default calculate

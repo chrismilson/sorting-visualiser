@@ -1,16 +1,17 @@
 import Tracker from './Tracker'
+import Untracker from './Untracker'
 
 /** The type that each sorting algorithm should implement */
 export type Algorithm = (tracker: Tracker) => void
 
 /** The different types of moves an algorithm can use */
 export enum MoveType {
-  SWAP = 'SWAP',
-  COMPARE = 'COMPARE',
-  MALLOC = 'MALLOC',
-  MEMCPY = 'MEMCPY',
-  FREE = 'FREE',
-  NTH_BIT_SET = 'NTH_BIT_SET'
+  SWAP = 1,
+  COMPARE = 2,
+  MALLOC = 3,
+  MEMCPY = 4,
+  FREE = 5,
+  NTH_BIT_SET = 6
 }
 
 /**
@@ -70,14 +71,25 @@ export enum Direction {
   BACKWARD = 'BACKWARD'
 }
 
-export type CalculateMethod = (
+/**
+ * The signature for the worker's calculate method.
+ *
+ * The return value will consist of the array buffer representing the moves, the
+ * number of encoded moves in the array buffer, and the final state of the
+ * values array.
+ */
+export type WorkerCalculateMethod = (
   type: 'sort' | 'unsort',
   name: string,
   values: number[]
-) => [Move[], number[]]
+) => [ArrayBuffer, number, number[]]
 
-export type CalculateMethodAsync = (
+/**
+ * The signature for the main thread's calculate method, wrapping the worker.
+ */
+export type MainThreadCalculateMethod = (
   type: 'sort' | 'unsort',
   name: string,
-  values: number[]
-) => Promise<[Move[], number[]]>
+  valuesToSort: number[],
+  valuesToTrack: number[]
+) => Promise<[Untracker, number[]]>

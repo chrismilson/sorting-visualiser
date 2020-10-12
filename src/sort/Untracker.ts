@@ -1,5 +1,6 @@
 import { MoveType, Move, Direction } from './types'
 import StatTracker from './StatTracker'
+import { decodeMove } from './TransferableMovesList'
 
 /**
  * Just as the Tracker class is for recording the algorithms. The UnTracker is
@@ -11,12 +12,14 @@ export default class Untracker {
     [key: number]: number[]
   }
   private bufferIds: Set<number>
-  private moves: Move[]
+  private moves: ArrayBuffer
+  private numMoves: number
   private currentMove: number
   statistics: StatTracker
 
-  constructor(moves: Move[], values: number[]) {
+  constructor(moves: ArrayBuffer, numMoves: number, values: number[]) {
     this.moves = moves
+    this.numMoves = numMoves
     this.buffers = {
       0: values
     }
@@ -36,7 +39,7 @@ export default class Untracker {
 
   /** Returns true if there is a future move available to do. */
   private hasNext() {
-    return this.currentMove < this.moves.length
+    return this.currentMove < this.numMoves
   }
 
   /** Returns true if there is a previous move available to undo. */
@@ -47,7 +50,7 @@ export default class Untracker {
   next() {
     if (!this.hasNext()) return
 
-    const move = this.moves[this.currentMove++]
+    const move = decodeMove(this.moves, this.currentMove++)
 
     this.statistics.add(move)
 
@@ -88,7 +91,7 @@ export default class Untracker {
   previous() {
     if (!this.hasPrevious()) return
 
-    const move = this.moves[--this.currentMove]
+    const move = decodeMove(this.moves, --this.currentMove)
 
     this.statistics.subtract(move)
 
@@ -221,7 +224,7 @@ export default class Untracker {
   ) {
     const stepsRemaining =
       direction === Direction.FORWARD
-        ? this.moves.length - this.currentMove
+        ? this.numMoves - this.currentMove
         : this.currentMove
 
     // there are 0.06 frames per millisecond

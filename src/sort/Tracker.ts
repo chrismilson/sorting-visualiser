@@ -1,4 +1,5 @@
-import { MoveType, Move, Index } from './types'
+import { TransferableMovesBuilder } from './TransferableMovesList'
+import { MoveType, Index } from './types'
 
 class BufferIdPool {
   private _next = 1
@@ -40,7 +41,7 @@ export default class Tracker {
   /** An object that will give and keep track of unique keys. */
   private bufferIdPool: BufferIdPool
   /** The moves that have been done to the values. */
-  moves: Move[]
+  private moves: TransferableMovesBuilder
   /** The length of the values array. */
   readonly size: number
 
@@ -51,7 +52,7 @@ export default class Tracker {
     }
     this.bufferIdPool = new BufferIdPool()
     this.size = values.length
-    this.moves = []
+    this.moves = new TransferableMovesBuilder()
 
     this.swap = this.swap.bind(this)
     this.compare = this.compare.bind(this)
@@ -63,6 +64,10 @@ export default class Tracker {
 
   get values() {
     return this.buffers[0]
+  }
+
+  getMoves(): [ArrayBuffer, number] {
+    return [this.moves.buffer, this.moves.length]
   }
 
   /**
@@ -79,7 +84,7 @@ export default class Tracker {
     iBuffer[i.index] = j.value
     jBuffer[j.index] = i.value
 
-    this.moves.push({ type: MoveType.SWAP, i, j })
+    this.moves.addMove({ type: MoveType.SWAP, i, j })
   }
 
   /**
@@ -95,7 +100,7 @@ export default class Tracker {
 
     const result = Math.sign(i.value - j.value)
 
-    this.moves.push({ type: MoveType.COMPARE, i, j, result })
+    this.moves.addMove({ type: MoveType.COMPARE, i, j, result })
 
     return result
   }
@@ -110,7 +115,7 @@ export default class Tracker {
 
     this.buffers[buffer] = new Array(size)
 
-    this.moves.push({ type: MoveType.MALLOC, size, buffer })
+    this.moves.addMove({ type: MoveType.MALLOC, size, buffer })
 
     return buffer
   }
@@ -131,7 +136,7 @@ export default class Tracker {
     // paste
     this.buffers[to.buffer][to.index] = value
 
-    this.moves.push({ type: MoveType.MEMCPY, from, to, value, original })
+    this.moves.addMove({ type: MoveType.MEMCPY, from, to, value, original })
   }
 
   /**
@@ -144,7 +149,7 @@ export default class Tracker {
     if (buffer > 0) {
       delete this.buffers[buffer]
       this.bufferIdPool.free(buffer)
-      this.moves.push({ type: MoveType.FREE, buffer })
+      this.moves.addMove({ type: MoveType.FREE, buffer })
     }
   }
 
@@ -160,7 +165,7 @@ export default class Tracker {
 
     const result = Boolean(index.value & (1 << n))
 
-    this.moves.push({ type: MoveType.NTH_BIT_SET, index, result })
+    this.moves.addMove({ type: MoveType.NTH_BIT_SET, index, result })
 
     return result
   }

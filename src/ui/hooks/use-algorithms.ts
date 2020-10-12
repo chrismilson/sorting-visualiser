@@ -21,10 +21,9 @@ const useAlgorithms = (values: number[]) => {
       }
       if (block && unblock) block()
 
-      return calculate('unsort', name, values).then(
-        ([moves, unsortedValues]) => {
+      return calculate('unsort', name, values, values).then(
+        ([untracker, unsortedValues]) => {
           setUnsortedValues(unsortedValues)
-          const untracker = new Untracker(moves, values)
 
           untracker.animateUntilCompletion(500, Direction.FORWARD, {
             onCompletion: () => {
@@ -46,11 +45,8 @@ const useAlgorithms = (values: number[]) => {
   useEffect(() => {
     let invalid = false
 
-    calculate('sort', sortString, unsortedValues)
-      .then(([moves]) => {
-        return new Untracker(moves, values)
-      })
-      .then(untracker => !invalid && setSortUntracker(untracker))
+    calculate('sort', sortString, unsortedValues, values)
+      .then(([untracker]) => !invalid && setSortUntracker(untracker))
       .catch(console.error)
 
     return () => {
