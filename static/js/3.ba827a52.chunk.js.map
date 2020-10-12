@@ -1,1 +1,0 @@
-{"version":3,"sources":["sort/sort.worker.ts"],"names":["Worker"],"mappings":"+HAAA,OAAe,qBACb,OAAO,IAAIA,OAAO,IAA0B","file":"static/js/3.ba827a52.chunk.js","sourcesContent":["export default function() {\n  return new Worker(__webpack_public_path__ + \"static/js/sort.worker.e3461a1c.worker.js\");\n}\n"],"sourceRoot":""}

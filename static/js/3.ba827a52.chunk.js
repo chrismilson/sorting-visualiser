@@ -1,2 +1,0 @@
-(this["webpackJsonpsorting-visualiser"]=this["webpackJsonpsorting-visualiser"]||[]).push([[3],{31:function(s,r,t){"use strict";t.r(r),r.default=function(){return new Worker(t.p+"static/js/sort.worker.e3461a1c.worker.js")}}}]);
-//# sourceMappingURL=3.ba827a52.chunk.js.map
