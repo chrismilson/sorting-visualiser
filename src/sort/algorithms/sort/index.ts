@@ -2,6 +2,7 @@ import { Algorithm } from '../../types'
 import binaryInsertionSort from './binary-insertion-sort'
 import bubbleSort from './bubble-sort'
 import heapSort from './heap-sort'
+import introsort from './introsort'
 import mergeSort from './merge-sort'
 // import pancakeSort from './pancake-sort'
 import quickSort from './quick-sort'
@@ -14,6 +15,7 @@ export const algorithms: { [key: string]: Algorithm } = {
   binaryInsertionSort,
   bubbleSort,
   heapSort,
+  introsort,
   mergeSort,
   // pancakeSort,
   quickSort,
@@ -37,6 +39,7 @@ export const algorithmNames = [
   'binaryInsertionSort',
   'bubbleSort',
   'heapSort',
+  'introsort',
   'mergeSort',
   // 'pancakeSort',
   'quickSort',
