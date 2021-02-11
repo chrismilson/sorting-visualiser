@@ -12,6 +12,8 @@
 
   background-color: darken(rgb(87, 163, 207), 10%);
 
+  touch-action: manipulation;
+
   &:active {
     opacity: 0.7;
   }
