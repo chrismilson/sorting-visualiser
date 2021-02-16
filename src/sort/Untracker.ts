@@ -38,16 +38,16 @@ export default class Untracker {
   }
 
   /** Returns true if there is a future move available to do. */
-  private hasNext() {
+  private hasNext(): boolean {
     return this.currentMove < this.numMoves
   }
 
   /** Returns true if there is a previous move available to undo. */
-  private hasPrevious() {
+  private hasPrevious(): boolean {
     return this.currentMove > 0
   }
 
-  next() {
+  next(): Move | undefined {
     if (!this.hasNext()) return
 
     const move = decodeMove(this.moves, this.currentMove++)
@@ -88,7 +88,7 @@ export default class Untracker {
     return move
   }
 
-  previous() {
+  previous(): Move | undefined {
     if (!this.hasPrevious()) return
 
     const move = decodeMove(this.moves, --this.currentMove)
@@ -131,9 +131,9 @@ export default class Untracker {
   }
 
   /** Returns the values array to its original state. */
-  reset() {
+  reset(): void {
     // delete the extra buffers
-    this.bufferIds.forEach(id => {
+    this.bufferIds.forEach((id) => {
       delete this.buffers[id]
     })
 
@@ -145,7 +145,7 @@ export default class Untracker {
   }
 
   /** Advances the untracker in a direction determined by the reverse boolean */
-  step(direction: Direction) {
+  step(direction: Direction): Move | undefined {
     return direction === Direction.FORWARD ? this.next() : this.previous()
   }
 
@@ -153,7 +153,7 @@ export default class Untracker {
    * Returns true if the untracker has a valid move available in the determined
    * direction
    */
-  hasStep(direction: Direction) {
+  hasStep(direction: Direction): boolean {
     return direction === Direction.FORWARD ? this.hasNext() : this.hasPrevious()
   }
 
@@ -236,7 +236,7 @@ export default class Untracker {
   forEachInExtra(
     callback: (buffer: number, index: number, value: number) => void
   ) {
-    this.bufferIds.forEach(buffer => {
+    this.bufferIds.forEach((buffer) => {
       this.buffers[buffer].forEach((value, index) =>
         callback(buffer, index, value)
       )

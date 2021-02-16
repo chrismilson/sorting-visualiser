@@ -62,7 +62,7 @@ export default class Tracker {
     this.nthBitSet = this.nthBitSet.bind(this)
   }
 
-  get values() {
+  get values(): number[] {
     return this.buffers[0]
   }
 
@@ -94,7 +94,7 @@ export default class Tracker {
    * - **0** If the value at i is equal to the value at j; or,
    * - **1** If the value at i is greater than the value at j.
    */
-  compare(iIndex: Index | number, jIndex: Index | number) {
+  compare(iIndex: Index | number, jIndex: Index | number): number {
     const i = this.normaliseIndex(iIndex)
     const j = this.normaliseIndex(jIndex)
 
@@ -110,7 +110,7 @@ export default class Tracker {
    * to the allocated buffer, will return an id to the buffer that was
    * allocated.
    */
-  malloc(size: number) {
+  malloc(size: number): number {
     const buffer = this.bufferIdPool.next()
 
     this.buffers[buffer] = new Array(size)
@@ -123,7 +123,7 @@ export default class Tracker {
   /**
    * Copies a value from one buffer to another.
    */
-  memcpy(from: Index | number, to: Index | number) {
+  memcpy(from: Index | number, to: Index | number): void {
     from = this.normaliseIndex(from)
     to = this.normaliseIndex(to)
 
@@ -144,7 +144,7 @@ export default class Tracker {
    *
    * @param buffer The id of the buffer to free.
    */
-  free(buffer: number) {
+  free(buffer: number): void {
     // we cant free the main values
     if (buffer > 0) {
       delete this.buffers[buffer]
@@ -160,7 +160,7 @@ export default class Tracker {
    * @param givenIndex The index of the value to check.
    * @param n The bit (little endian) of the value to check.
    */
-  nthBitSet(givenIndex: Index | number, n: number) {
+  nthBitSet(givenIndex: Index | number, n: number): boolean {
     const index = this.normaliseIndex(givenIndex)
 
     const result = Boolean(index.value & (1 << n))

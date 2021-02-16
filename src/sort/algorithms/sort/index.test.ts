@@ -35,7 +35,7 @@ const shuffled = <T>(arr: T[]) => {
  */
 const examples = [1, 2, 5, 23, 117, 2097]
   .map(getExample)
-  .map(sorted => [shuffled(sorted), sorted])
+  .map((sorted) => [shuffled(sorted), sorted])
 
 describe.each(Object.entries(allSorts))('%s', (name, sort) => {
   it.each(examples)(`${name} should sort an array`, (unsorted, sorted) => {

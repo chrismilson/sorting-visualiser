@@ -9,11 +9,11 @@ const Display: React.FC<{
   values: number[]
   moveRef: React.MutableRefObject<Move | undefined>
   untracker?: Untracker
-}> = props => {
+}> = (props) => {
   const { values, moveRef, untracker } = props
 
   const draw = useCallback<DrawingMethod>(
-    ctx => {
+    (ctx) => {
       // resize the pixels, not just a maths transform
       ctx.canvas.width = ctx.canvas.height = values.length
       ctx.setTransform(1, 0, 0, -1, 0, values.length)

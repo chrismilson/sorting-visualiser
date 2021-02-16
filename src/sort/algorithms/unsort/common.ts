@@ -1,4 +1,4 @@
-export const randomNormal = (mean = 0, stddev = 1) => {
+export const randomNormal = (mean = 0, stddev = 1): number => {
   let u = 0
   let v = 0
   while (u === 0) u = Math.random()
@@ -7,6 +7,10 @@ export const randomNormal = (mean = 0, stddev = 1) => {
   return normal * stddev + mean
 }
 
-export const boundAndRound = (min: number, target: number, max: number) => {
+export const boundAndRound = (
+  min: number,
+  target: number,
+  max: number
+): number => {
   return Math.max(min, Math.min(max, Math.round(target)))
 }

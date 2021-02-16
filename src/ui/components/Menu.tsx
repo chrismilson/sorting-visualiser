@@ -107,7 +107,7 @@ const Menu: React.FC<{
         <div className="buttons">
           <div className="algorithms">
             <div className="unsort">
-              {unsort.list.map(camelCase => (
+              {unsort.list.map((camelCase) => (
                 <Button
                   key={camelCase}
                   handler={() => {
@@ -123,7 +123,7 @@ const Menu: React.FC<{
               ))}
             </div>
             <div className="sort">
-              {sort.list.map(camelCase => (
+              {sort.list.map((camelCase) => (
                 <Button
                   key={camelCase}
                   handler={() => {

@@ -7,7 +7,7 @@ function useToggle<A, B>(first: A, second: B): [A | B, (set?: A | B) => void] {
     (firstOrSecond?: A | B) => {
       if (firstOrSecond === first) setValue(true)
       else if (firstOrSecond === second) setValue(false)
-      else setValue(value => !value)
+      else setValue((value) => !value)
     },
     [first, second]
   )

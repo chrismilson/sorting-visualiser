@@ -27,9 +27,15 @@ const calculate: MainThreadCalculateMethod = async (
 
   console.log(`Main Thread: Deploying ${type}: ${name}`)
 
-  const [buffer, numMoves, calculatedValues] = await (proxy as Comlink.Remote<
-    WorkerCalculateMethod
-  >)(type, name, valuesToSort)
+  const [
+    buffer,
+    numMoves,
+    calculatedValues
+  ] = await (proxy as Comlink.Remote<WorkerCalculateMethod>)(
+    type,
+    name,
+    valuesToSort
+  )
 
   console.log(`Main Thread: Received ${type} data: ${name}`)
 

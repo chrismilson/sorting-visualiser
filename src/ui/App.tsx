@@ -34,7 +34,7 @@ const App: React.FC = () => {
 
   const { unsortWith, sort, setSort, sortString } = useAlgorithms(values)
 
-  const moveRef = useRef<Move | undefined>()
+  const moveRef = useRef<Move>()
   useEffect(() => {
     moveRef.current = undefined
     // Any blocking action occurring will refresh the current move.
@@ -59,7 +59,7 @@ const App: React.FC = () => {
     let cleaned = false
 
     if (play) {
-      navigator.wakeLock?.request('screen').then(sentinel => {
+      navigator.wakeLock?.request('screen').then((sentinel) => {
         if (cleaned) {
           sentinel.release()
         } else {
@@ -69,7 +69,7 @@ const App: React.FC = () => {
       })
     }
 
-    return () => {
+    return (): void => {
       cleaned = true
       if (lock) {
         lock.release()
@@ -79,7 +79,7 @@ const App: React.FC = () => {
   }, [play])
 
   const handleRestart = useCallback(
-    timeToRestart => {
+    (timeToRestart) => {
       // If we have nothing to reset, do nothing.
       if (!sort?.hasStep(Direction.BACKWARD)) {
         return Promise.resolve()
@@ -88,7 +88,7 @@ const App: React.FC = () => {
       setPlay(false)
       block()
 
-      return new Promise(resolve =>
+      return new Promise<void>((resolve) =>
         sort?.animateUntilCompletion(timeToRestart, Direction.BACKWARD, {
           onCompletion: () => {
             unblock()
@@ -158,7 +158,7 @@ const App: React.FC = () => {
         }}
         stats={{
           keyStr: 's',
-          handler: () => setDisplayStats(v => !v)
+          handler: () => setDisplayStats((v) => !v)
         }}
         sizeUp={{
           keyCode: 38,
@@ -183,7 +183,7 @@ const App: React.FC = () => {
         unsort={{
           disabled: blocking,
           list: unsortNames,
-          handler: algorithm => {
+          handler: (algorithm) => {
             if (unsortNames.includes(algorithm)) {
               setPlay(false)
               changeDirection(Direction.FORWARD)
@@ -195,7 +195,7 @@ const App: React.FC = () => {
         sort={{
           current: sortString,
           list: sortNames,
-          handler: algorithm => {
+          handler: (algorithm) => {
             if (algorithm !== sortString) {
               moveRef.current = undefined
               const wasPlaying = play

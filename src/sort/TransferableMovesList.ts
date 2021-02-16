@@ -10,15 +10,19 @@ import { Move, MoveType } from './types'
 export const BYTES_PER_MOVE = 26
 
 /**
- * Provides the bility to take a `Move` object and encode it as a sequence of
- * numbers, to add to the
+ * Provides the ability to take a `Move` object and encode it as a sequence of
+ * numbers.
  *
  * @param move The move to be encoded.
  * @param buffer The ArrayBuffer representing all of the moves.
  * @param idx The index to insert into the list of moves at. (Not the number of
  * bytes)
  */
-export const encodeMove = (move: Move, buffer: ArrayBuffer, idx: number) => {
+export const encodeMove = (
+  move: Move,
+  buffer: ArrayBuffer,
+  idx: number
+): void => {
   const offset = idx * BYTES_PER_MOVE
   const view = new DataView(buffer)
   // We encode the type into the first byte.
@@ -209,14 +213,14 @@ export class TransferableMovesBuilder {
    *
    * @param move The move to be encoded.
    */
-  addMove(move: Move) {
+  addMove(move: Move): void {
     // We want to add the encoded move to the array buffer
     this.growIfNeeded()
     encodeMove(move, this.buffer, this.size)
     this.size += 1
   }
 
-  get length() {
+  get length(): number {
     return this.size
   }
 }

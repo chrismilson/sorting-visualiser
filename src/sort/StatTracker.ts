@@ -29,11 +29,11 @@ export default class StatTracker {
     }
   }
 
-  add(move: Move) {
+  add(move: Move): void {
     this.modifyBy(move, 1)
   }
 
-  subtract(move: Move) {
+  subtract(move: Move): void {
     this.modifyBy(move, -1)
   }
 }
