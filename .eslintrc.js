@@ -15,9 +15,6 @@ module.exports = {
   settings: {
     react: { version: 'detect' }
   },
-  rules: {
-    '@typescript-eslint/explicit-function-return-type': 0
-  },
   overrides: [
     {
       "files": ["**/*.tsx"],
