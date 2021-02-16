@@ -5,7 +5,7 @@ import { useMemo } from 'react'
  *
  * The array reference will change when the size changes.
  */
-const useValues = (size: number) => {
+function useValues(size: number): number[] {
   return useMemo(() => {
     const values = []
 
