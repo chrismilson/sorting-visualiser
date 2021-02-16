@@ -19,7 +19,7 @@ expect.extend({
       }
     }
 
-    const message = () => {
+    const message = (): string => {
       return `Expected ${received} to ${pass ? 'not ' : ''}be sorted`
     }
 
