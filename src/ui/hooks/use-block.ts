@@ -1,6 +1,10 @@
 import { useState, useCallback, useMemo } from 'react'
 
-const useBlock = () => {
+function useBlock(): {
+  blocking: boolean
+  block: () => void
+  unblock: () => void
+} {
   const [count, setCount] = useState(0)
 
   const blocking = count > 0
