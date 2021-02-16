@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
 
 /** Toggles between two values */
-function useToggle<T>(first: T, second: T): [T, (set?: T) => void] {
+function useToggle<A, B>(first: A, second: B): [A | B, (set?: A | B) => void] {
   const [value, setValue] = useState(true)
   const toggle = useCallback(
-    (firstOrSecond?: T) => {
+    (firstOrSecond?: A | B) => {
       if (firstOrSecond === first) setValue(true)
       else if (firstOrSecond === second) setValue(false)
       else setValue(value => !value)
