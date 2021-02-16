@@ -3,7 +3,18 @@ import Untracker from '../../sort/Untracker'
 import { Direction } from '../../sort/types'
 import calculate from '../../sort'
 
-const useAlgorithms = (values: number[]) => {
+function useAlgorithms(
+  values: number[]
+): {
+  unsortWith: (
+    name: string,
+    block?: () => void,
+    unblock?: () => void
+  ) => Promise<void>
+  sort: Untracker
+  setSort: (name: string) => void
+  sortString: string
+} {
   /**
    * The state of the unsorted values before they have been sorted.
    *
@@ -40,7 +51,9 @@ const useAlgorithms = (values: number[]) => {
   const [sortString, setSortString] = useState('heapSort')
 
   /** The untracker for the sort */
-  const [sortUntracker, setSortUntracker] = useState<Untracker>()
+  const [sortUntracker, setSortUntracker] = useState<Untracker>(
+    new Untracker(new ArrayBuffer(0), 0, [])
+  )
 
   useEffect(() => {
     let invalid = false
