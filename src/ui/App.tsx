@@ -42,7 +42,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (play) {
-      return sort?.animateStepsPerFrame(Math.pow(1.3, speed), direction, {
+      return sort?.animateStepsPerMS(Math.pow(1.3, speed) * 0.06, direction, {
         onCompletion: () => {
           setPlay(false)
           changeDirection()

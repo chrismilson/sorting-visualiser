@@ -158,60 +158,71 @@ export default class Untracker {
   }
 
   /**
-   * Animates the advancement of steps in a given direction.
+   * Animates the sort in the specified direction until cancellation or
+   * completion. Attempts to animate a certain number of frames per millisecond.
    *
-   * @param stepsPerFrame The number of steps to be advanced per frame
-   * @param onCompletion A callback to be run if all of the steps have been
-   * completed.
+   * @param stepsPerMS The number of steps to complete per millisecond on average.
+   * @param direction The direction to animate in.
+   * @param options Optional parameters
+   * @param options.onCompletion A callback to fire once the sort has completed
+   * animating.
+   * @param options.moveRef A react ref object that will be updated to hold the
+   * last performed move on the data.
+   * @returns a callback to cancel the animation.
    */
-  animateStepsPerFrame(
-    stepsPerFrame: number,
+  animateStepsPerMS(
+    stepsPerMS: number,
     direction: Direction,
     options: {
       onCompletion?: () => void
       moveRef?: React.MutableRefObject<Move | undefined>
     } = {}
-  ) {
-    const { onCompletion, moveRef } = options
+  ): () => void {
+    const start: DOMHighResTimeStamp = performance.now()
+    let completeSteps = 0
+    let frameId: number
 
-    const base = (stepsPerFrame: number) => {
-      for (let i = 0; i < stepsPerFrame; i++) this.step(direction)
+    const doSteps = (numSteps: number): Move | undefined => {
+      let result: Move | undefined
+      for (let i = 0; i < numSteps; i++) {
+        result = this.step(direction)
+      }
+      return result
     }
 
-    // if the moveRef is defined then record the last move
-    const withRecord = moveRef
-      ? () => {
-          base(stepsPerFrame - 1)
-          moveRef.current = this.step(direction)
-        }
-      : () => base(stepsPerFrame)
+    const frame = (time: DOMHighResTimeStamp) => {
+      // how many miliseconds have elapsed since the start
+      const elapsed = time - start
+      // how many steps should we do on this frame?
+      const steps = Math.round(elapsed * stepsPerMS - completeSteps)
 
-    const withAnimationFrame = () => {
-      let frame: number
-      const run = () => {
-        withRecord()
-        if (this.hasStep(direction)) frame = requestAnimationFrame(run)
-        else if (onCompletion) onCompletion()
+      if (steps === 0) {
+        // no steps, so just ask for another frame and continue.
+        frameId = requestAnimationFrame(frame)
+        return
       }
-      run()
-      return () => {
-        cancelAnimationFrame(frame)
+
+      const lastMove = doSteps(steps)
+      completeSteps += steps
+
+      if (options.moveRef) {
+        options.moveRef.current = lastMove
       }
-    }
-    const withInterval = () => {
-      const interval = setInterval(() => {
-        withRecord()
-        if (!this.hasStep(direction)) {
-          clearInterval(interval)
-          if (onCompletion) onCompletion()
-        }
-      }, 1 / (0.06 * stepsPerFrame))
-      return () => {
-        clearInterval(interval)
+
+      if (this.hasStep(direction)) {
+        // we should ask for more frames if we have more moves to do.
+        frameId = requestAnimationFrame(frame)
+      } else if (options.onCompletion) {
+        // fire the callback if it was defined
+        options.onCompletion()
       }
     }
 
-    return stepsPerFrame >= 1 ? withAnimationFrame() : withInterval()
+    frameId = requestAnimationFrame(frame)
+
+    return () => {
+      cancelAnimationFrame(frameId)
+    }
   }
 
   animateUntilCompletion(
@@ -221,21 +232,20 @@ export default class Untracker {
       onCompletion?: () => void
       moveRef?: React.MutableRefObject<Move | undefined>
     } = {}
-  ) {
+  ): () => void {
     const stepsRemaining =
       direction === Direction.FORWARD
         ? this.numMoves - this.currentMove
         : this.currentMove
 
-    // there are 0.06 frames per millisecond
-    const stepsPerFrame = stepsRemaining / (timeUntilCompletion * 0.06)
+    const stepsPerMS = stepsRemaining / timeUntilCompletion
 
-    return this.animateStepsPerFrame(stepsPerFrame, direction, options)
+    return this.animateStepsPerMS(stepsPerMS, direction, options)
   }
 
   forEachInExtra(
     callback: (buffer: number, index: number, value: number) => void
-  ) {
+  ): void {
     this.bufferIds.forEach((buffer) => {
       this.buffers[buffer].forEach((value, index) =>
         callback(buffer, index, value)
