@@ -9748,17 +9748,10 @@ react-error-overlay@^6.0.9:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
   integrity sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==
 
-react-hooks-use-canvas-size@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-hooks-use-canvas-size/-/react-hooks-use-canvas-size-0.3.0.tgz#4359c2b13fdd2504a44109c9ba8540eff5f84ea6"
-  integrity sha512-bptkJUEoVi1by/lzA3SL2uFlKHvbD1ipT4qGnHsCspg8tdW+9X2dMJLC0ti3WdaZIqQIuj5FNobcSbeDqYZkpw==
-
-react-hooks-use-drawing-canvas@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-hooks-use-drawing-canvas/-/react-hooks-use-drawing-canvas-0.3.0.tgz#13c196e07d9eee6256c617663185b6148815cd9d"
-  integrity sha512-R2HerDEE5KutFJ5bNxA7SsNcpYP6Jp+WH+eIODB5hHYc71w2qBUWMih0S/piFw4fbSvRWTOxvRSXtWJKAh8ObQ==
-  dependencies:
-    react-hooks-use-canvas-size "^0.3.0"
+react-hooks-use-drawing-canvas@0.1:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/react-hooks-use-drawing-canvas/-/react-hooks-use-drawing-canvas-0.1.3.tgz#3fe1b0d042665ab6a9fe464dfdcb89cf234a026d"
+  integrity sha512-JGSHyf7JT7nvL1yZv/30ZUx0LywHeujmDaYoLvjX+bf+EPxE1NPI0JUkyEO+841t378I7LgjqVDMNjNurrDyCA==
 
 react-icons@^4.2.0:
   version "4.2.0"
